@@ -1,0 +1,709 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>gascoigne — agents read less, nothing gets lost</title>
+<meta name="description" content="A token optimizer for coding agents. It shrinks command output, tool results and web pages before they reach the model, and keeps every original one command away.">
+<meta property="og:title" content="gascoigne">
+<meta property="og:description" content="Agents read less. Nothing gets lost. A token optimizer for Claude Code, Codex, Gemini CLI, opencode, pi and Cursor.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23ECE4E2'/%3E%3Cpath d='M16 2A14 14 0 0 0 16 30A7 14 0 0 0 16 2Z' fill='%234A1A2C'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<svg width="0" height="0" class="defs" aria-hidden="true">
+  <defs>
+    <radialGradient id="moon-lit" cx="38%" cy="32%" r="72%"><stop offset="0" stop-color="#fffdfb"/><stop offset=".6" stop-color="#ece4e2"/><stop offset="1" stop-color="#c9bcbf"/></radialGradient>
+    <radialGradient id="moon-dark" cx="60%" cy="60%" r="70%"><stop offset="0" stop-color="#4a1a2c"/><stop offset="1" stop-color="#2a0c17"/></radialGradient>
+  </defs>
+</svg>
+
+<div class="night">
+<header class="top">
+  <a class="brand" href="#">
+    <svg class="moon" data-saved="0.8" width="28" height="28" aria-hidden="true"></svg>
+    gascoigne
+  </a>
+  <nav>
+    <a href="#install">Install</a>
+    <a href="#savings">Savings</a>
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/tree/master/docs">Docs</a>
+    <a href="https://github.com/gascoigne-ai">GitHub</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-text">
+    <h1><span>Agents read less.</span> <span>Nothing gets lost.</span></h1>
+    <p class="lede">A Swiss Army knife for your coding agent's context. One small binary, a blade for
+      every kind of output: it shrinks command output, tool results and web pages before they reach
+      the model, and keeps every original one command away.</p>
+    <div class="oneliner">
+      <code id="quick">go install github.com/gascoigne-ai/gascoigne-cli/cmd/gascoigne@latest &amp;&amp; gascoigne wrap claude</code>
+      <button class="copy" data-copy="quick" type="button">Copy</button>
+    </div>
+    <p class="fine">Claude Code starts with gascoigne for this run only. No config files are touched.
+      Swap <code>claude</code> for <code>codex</code>, <code>gemini</code>, <code>opencode</code> or <code>pi</code>.</p>
+  </div>
+
+  <figure class="demo" id="demo" data-view="raw">
+    <div class="demo-bar">
+      <svg class="moon demo-moon" data-saved="0" width="40" height="40" aria-hidden="true"></svg>
+      <div class="demo-count">
+        <strong id="count">7,478</strong> tokens
+        <span id="count-note">the model would read</span>
+      </div>
+      <button class="toggle" id="toggle" type="button" aria-pressed="false">Show what the agent reads</button>
+    </div>
+    <div class="term" tabindex="0" aria-label="Terminal output">
+      <div class="prompt">$ go test ./sync/</div>
+<pre class="out raw" id="raw-out">=== RUN   TestSyncOrders
+panic: test timed out after 10m0s
+	running tests:
+		TestSyncOrders (10m0s)
+
+goroutine 52 [running]:
+testing.(*M).startAlarm.func1()
+	/usr/local/go/src/testing/testing.go:2484 +0x394
+created by time.goFunc
+	/usr/local/go/src/time/sleep.go:215 +0x2d
+
+goroutine 1 [chan receive, 9 minutes]:
+testing.(*T).Run(0xc0001a6820, {0x6f1a2e?, 0x0?}, 0x7182c0)
+	/usr/local/go/src/testing/testing.go:1859 +0x431
+testing.runTests.func1(0xc0001a6820)
+	/usr/local/go/src/testing/testing.go:2279 +0x37
+testing.tRunner(0xc0001a6820, 0xc000117c70)
+	/usr/local/go/src/testing/testing.go:1792 +0xf4
+testing.runTests(0xc0001300a8, {0x9b2f40, 0x6, 0x6}, {0x0?, 0x0?, 0x9bb2a0?})
+	/usr/local/go/src/testing/testing.go:2277 +0x4b4
+testing.(*M).Run(0xc0001aa0a0)
+	/usr/local/go/src/testing/testing.go:2142 +0x64a
+main.main()
+	_testmain.go:57 +0x9b
+
+goroutine 18 [select, 9 minutes]:
+example.com/shop/sync.(*Syncer).Run(0xc0001c4000, {0x71c5a8, 0xc0001b6000})
+	/home/user/src/shop/sync/syncer.go:74 +0x1b8
+example.com/shop/sync.TestSyncOrders(0xc0001a69c0)
+	/home/user/src/shop/sync/syncer_test.go:31 +0x2f1
+testing.tRunner(0xc0001a69c0, 0x7182c0)
+	/usr/local/go/src/testing/testing.go:1792 +0xf4
+created by testing.(*T).Run in goroutine 1
+	/usr/local/go/src/testing/testing.go:1851 +0x413
+
+goroutine 60 [chan receive, 9 minutes]:
+example.com/shop/sync.(*worker).loop(0xc000200000)
+	/home/user/src/shop/sync/worker.go:52 +0x7c
+created by example.com/shop/sync.(*Syncer).start in goroutine 18
+	/home/user/src/shop/sync/syncer.go:41 +0x9e
+
+goroutine 61 [chan receive, 9 minutes]:
+example.com/shop/sync.(*worker).loop(0xc000201000)
+	/home/user/src/shop/sync/worker.go:52 +0x7c
+created by example.com/shop/sync.(*Syncer).start in goroutine 18
+	/home/user/src/shop/sync/syncer.go:41 +0x9e
+
+goroutine 62 [chan receive, 9 minutes]:
+example.com/shop/sync.(*worker).loop(0xc000202000)
+	/home/user/src/shop/sync/worker.go:52 +0x7c
+created by example.com/shop/sync.(*Syncer).start in goroutine 18
+	/home/user/src/shop/sync/syncer.go:41 +0x9e
+
+goroutine 63 [chan receive, 9 minutes]:
+example.com/shop/sync.(*worker).loop(0xc000203000)
+	/home/user/src/shop/sync/worker.go:52 +0x7c
+created by example.com/shop/sync.(*Syncer).start in goroutine 18
+	/home/user/src/shop/sync/syncer.go:41 +0x9e
+
+goroutine 64 [chan receive, 9 minutes]:
+example.com/shop/sync.(*worker).loop(0xc000204000)
+	/home/user/src/shop/sync/worker.go:52 +0x7c
+created by example.com/shop/sync.(*Syncer).start in goroutine 18
+	/home/user/src/shop/sync/syncer.go:41 +0x9e
+
+goroutine 65 [chan receive, 9 minutes]:
+example.com/shop/sync.(*worker).loop(0xc000205000)
+	/home/user/src/shop/sync/worker.go:52 +0x7c
+created by example.com/shop/sync.(*Syncer).start in goroutine 18
+	/home/user/src/shop/sync/syncer.go:41 +0x9e
+
+goroutine 66 [chan receive, 9 minutes]:
+example.com/shop/sync.(*worker).loop(0xc000206000)
+	/home/user/src/shop/sync/worker.go:52 +0x7c
+created by example.com/shop/sync.(*Syncer).start in goroutine 18
+	/home/user/src/shop/sync/syncer.go:41 +0x9e
+
+goroutine 67 [chan receive, 9 minutes]:
+example.com/shop/sync.(*worker).loop(0xc000207000)
+	/home/user/src/shop/sync/worker.go:52 +0x7c
+created by example.com/shop/sync.(*Syncer).start in goroutine 18
+	/home/user/src/shop/sync/syncer.go:41 +0x9e
+
+goroutine 68 [chan receive, 9 minutes]:
+example.com/shop/sync.(*worker).loop(0xc000208000)
+	/home/user/src/shop/sync/worker.go:52 +0x7c
+created by example.com/shop/sync.(*Syncer).start in goroutine 18
+	/home/user/src/shop/sync/syncer.go:41 +0x9e
+
+goroutine 69 [chan receive, 9 minutes]:
+example.com/shop/sync.(*worker).loop(0xc000209000)
+	/home/user/src/shop/sync/worker.go:52 +0x7c
+created by example.com/shop/sync.(*Syncer).start in goroutine 18
+	/home/user/src/shop/sync/syncer.go:41 +0x9e
+
+goroutine 70 [chan receive, 9 minutes]:
+example.com/shop/sync.(*worker).loop(0xc00020a000)
+	/home/user/src/shop/sync/worker.go:52 +0x7c
+created by example.com/shop/sync.(*Syncer).start in goroutine 18
+	/home/user/src/shop/sync/syncer.go:41 +0x9e
+
+goroutine 71 [chan receive, 9 minutes]:
+example.com/shop/sync.(*worker).loop(0xc00020b000)
+	/home/user/src/shop/sync/worker.go:52 +0x7c
+created by example.com/shop/sync.(*Syncer).start in goroutine 18
+	/home/user/src/shop/sync/syncer.go:41 +0x9e
+
+goroutine 72 [chan receive, 9 minutes]:
+example.com/shop/sync.(*worker).loop(0xc00020c000)
+	/home/user/src/shop/sync/worker.go:52 +0x7c
+created by example.com/shop/sync.(*Syncer).start in goroutine 18
+	/home/user/src/shop/sync/syncer.go:41 +0x9e
+
+goroutine 73 [chan receive, 9 minutes]:
+example.com/shop/sync.(*worker).loop(0xc00020d000)
+	/home/user/src/shop/sync/worker.go:52 +0x7c
+created by example.com/shop/sync.(*Syncer).start in goroutine 18
+	/home/user/src/shop/sync/syncer.go:41 +0x9e
+
+goroutine 74 [chan receive, 9 minutes]:
+example.com/shop/sync.(*worker).loop(0xc00020e000)
+	/home/user/src/shop/sync/worker.go:52 +0x7c
+created by example.com/shop/sync.(*Syncer).start in goroutine 18
+	/home/user/src/shop/sync/syncer.go:41 +0x9e
+
+goroutine 75 [chan receive, 9 minutes]:
+example.com/shop/sync.(*worker).loop(0xc00020f000)
+	/home/user/src/shop/sync/worker.go:52 +0x7c
+created by example.com/shop/sync.(*Syncer).start in goroutine 18
+	/home/user/src/shop/sync/syncer.go:41 +0x9e
+
+goroutine 76 [chan receive, 9 minutes]:
+example.com/shop/sync.(*worker).loop(0xc000210000)
+	/home/user/src/shop/sync/worker.go:52 +0x7c
+created by example.com/shop/sync.(*Syncer).start in goroutine 18
+	/home/user/src/shop/sync/syncer.go:41 +0x9e
+
+goroutine 77 [chan receive, 9 minutes]:
+example.com/shop/sync.(*worker).loop(0xc000211000)
+	/home/user/src/shop/sync/worker.go:52 +0x7c
+created by example.com/shop/sync.(*Syncer).start in goroutine 18
+	/home/user/src/shop/sync/syncer.go:41 +0x9e
+
+goroutine 78 [chan receive, 9 minutes]:
+example.com/shop/sync.(*worker).loop(0xc000212000)
+	/home/user/src/shop/sync/worker.go:52 +0x7c
+created by example.com/shop/sync.(*Syncer).start in goroutine 18
+	/home/user/src/shop/sync/syncer.go:41 +0x9e
+
+goroutine 79 [chan receive, 9 minutes]:
+example.com/shop/sync.(*worker).loop(0xc000213000)
+	/home/user/src/shop/sync/worker.go:52 +0x7c
+created by example.com/shop/sync.(*Syncer).start in goroutine 18
+	/home/user/src/shop/sync/syncer.go:41 +0x9e
+
+goroutine 80 [chan receive, 9 minutes]:
+example.com/shop/sync.(*worker).loop(0xc000214000)
+	/home/user/src/shop/sync/worker.go:52 +0x7c
+created by example.com/shop/sync.(*Syncer).start in goroutine 18
+	/home/user/src/shop/sync/syncer.go:41 +0x9e
+
+goroutine 81 [chan receive, 9 minutes]:
+example.com/shop/sync.(*worker).loop(0xc000215000)
+	/home/user/src/shop/sync/worker.go:52 +0x7c
+created by example.com/shop/sync.(*Syncer).start in goroutine 18
+	/home/user/src/shop/sync/syncer.go:41 +0x9e
+
+goroutine 82 [chan receive, 9 minutes]:
+example.com/shop/sync.(*worker).loop(0xc000216000)
+	/home/user/src/shop/sync/worker.go:52 +0x7c
+created by example.com/shop/sync.(*Syncer).start in goroutine 18
+	/home/user/src/shop/sync/syncer.go:41 +0x9e
+
+goroutine 83 [chan receive, 9 minutes]:
+example.com/shop/sync.(*worker).loop(0xc000217000)
+	/home/user/src/shop/sync/worker.go:52 +0x7c
+created by example.com/shop/sync.(*Syncer).start in goroutine 18
+	/home/user/src/shop/sync/syncer.go:41 +0x9e
+
+goroutine 84 [chan receive, 9 minutes]:
+example.com/shop/sync.(*worker).loop(0xc000218000)
+	/home/user/src/shop/sync/worker.go:52 +0x7c
+created by example.com/shop/sync.(*Syncer).start in goroutine 18
+	/home/user/src/shop/sync/syncer.go:41 +0x9e
+
+goroutine 85 [chan receive, 9 minutes]:
+example.com/shop/sync.(*worker).loop(0xc000219000)
+	/home/user/src/shop/sync/worker.go:52 +0x7c
+created by example.com/shop/sync.(*Syncer).start in goroutine 18
+	/home/user/src/shop/sync/syncer.go:41 +0x9e
+
+goroutine 86 [chan receive, 9 minutes]:
+example.com/shop/sync.(*worker).loop(0xc00021a000)
+	/home/user/src/shop/sync/worker.go:52 +0x7c
+created by example.com/shop/sync.(*Syncer).start in goroutine 18
+	/home/user/src/shop/sync/syncer.go:41 +0x9e
+
+goroutine 87 [chan receive, 9 minutes]:
+example.com/shop/sync.(*worker).loop(0xc00021b000)
+	/home/user/src/shop/sync/worker.go:52 +0x7c
+created by example.com/shop/sync.(*Syncer).start in goroutine 18
+	/home/user/src/shop/sync/syncer.go:41 +0x9e
+
+goroutine 88 [chan receive, 9 minutes]:
+example.com/shop/sync.(*worker).loop(0xc00021c000)
+	/home/user/src/shop/sync/worker.go:52 +0x7c
+created by example.com/shop/sync.(*Syncer).start in goroutine 18
+	/home/user/src/shop/sync/syncer.go:41 +0x9e
+
+goroutine 89 [chan receive, 9 minutes]:
+example.com/shop/sync.(*worker).loop(0xc00021d000)
+	/home/user/src/shop/sync/worker.go:52 +0x7c
+created by example.com/shop/sync.(*Syncer).start in goroutine 18
+	/home/user/src/shop/sync/syncer.go:41 +0x9e
+
+goroutine 90 [chan receive, 8 minutes]:
+example.com/shop/sync.(*worker).loop(0xc00021e000)
+	/home/user/src/shop/sync/worker.go:52 +0x7c
+created by example.com/shop/sync.(*Syncer).start in goroutine 18
+	/home/user/src/shop/sync/syncer.go:41 +0x9e
+
+goroutine 91 [chan receive, 8 minutes]:
+example.com/shop/sync.(*worker).loop(0xc00021f000)
+	/home/user/src/shop/sync/worker.go:52 +0x7c
+created by example.com/shop/sync.(*Syncer).start in goroutine 18
+	/home/user/src/shop/sync/syncer.go:41 +0x9e
+
+goroutine 92 [chan receive, 8 minutes]:
+example.com/shop/sync.(*worker).loop(0xc000220000)
+	/home/user/src/shop/sync/worker.go:52 +0x7c
+created by example.com/shop/sync.(*Syncer).start in goroutine 18
+	/home/user/src/shop/sync/syncer.go:41 +0x9e
+
+goroutine 93 [chan receive, 8 minutes]:
+example.com/shop/sync.(*worker).loop(0xc000221000)
+	/home/user/src/shop/sync/worker.go:52 +0x7c
+created by example.com/shop/sync.(*Syncer).start in goroutine 18
+	/home/user/src/shop/sync/syncer.go:41 +0x9e
+
+goroutine 94 [chan receive, 8 minutes]:
+example.com/shop/sync.(*worker).loop(0xc000222000)
+	/home/user/src/shop/sync/worker.go:52 +0x7c
+created by example.com/shop/sync.(*Syncer).start in goroutine 18
+	/home/user/src/shop/sync/syncer.go:41 +0x9e
+
+goroutine 95 [chan receive, 8 minutes]:
+example.com/shop/sync.(*worker).loop(0xc000223000)
+	/home/user/src/shop/sync/worker.go:52 +0x7c
+created by example.com/shop/sync.(*Syncer).start in goroutine 18
+	/home/user/src/shop/sync/syncer.go:41 +0x9e
+
+goroutine 96 [chan receive, 8 minutes]:
+example.com/shop/sync.(*worker).loop(0xc000224000)
+	/home/user/src/shop/sync/worker.go:52 +0x7c
+created by example.com/shop/sync.(*Syncer).start in goroutine 18
+	/home/user/src/shop/sync/syncer.go:41 +0x9e
+
+goroutine 97 [chan receive, 8 minutes]:
+example.com/shop/sync.(*worker).loop(0xc000225000)
+	/home/user/src/shop/sync/worker.go:52 +0x7c
+created by example.com/shop/sync.(*Syncer).start in goroutine 18
+	/home/user/src/shop/sync/syncer.go:41 +0x9e
+
+goroutine 98 [chan receive, 8 minutes]:
+example.com/shop/sync.(*worker).loop(0xc000226000)
+	/home/user/src/shop/sync/worker.go:52 +0x7c
+created by example.com/shop/sync.(*Syncer).start in goroutine 18
+	/home/user/src/shop/sync/syncer.go:41 +0x9e
+
+goroutine 99 [chan receive, 8 minutes]:
+example.com/shop/sync.(*worker).loop(0xc000227000)
+	/home/user/src/shop/sync/worker.go:52 +0x7c
+created by example.com/shop/sync.(*Syncer).start in goroutine 18
+	/home/user/src/shop/sync/syncer.go:41 +0x9e
+
+goroutine 120 [IO wait, 9 minutes]:
+internal/poll.runtime_pollWait(0x7f3a1c5e0000, 0x72)
+	/usr/local/go/src/runtime/netpoll.go:351 +0x85
+internal/poll.(*pollDesc).wait(0xc0003000a0?, 0xc0004000000?, 0x0)
+	/usr/local/go/src/internal/poll/fd_poll_runtime.go:84 +0x27
+net.(*conn).Read(0xc000124038, {0xc000400000?, 0x0?, 0x0?})
+	/usr/local/go/src/net/net.go:194 +0x45
+example.com/shop/sync.(*client).readLoop(0xc0001d2000)
+	/home/user/src/shop/sync/client.go:118 +0x8e
+created by example.com/shop/sync.dial in goroutine 18
+	/home/user/src/shop/sync/client.go:60 +0x1b5
+
+goroutine 121 [IO wait, 9 minutes]:
+internal/poll.runtime_pollWait(0x7f3a1c5e0010, 0x72)
+	/usr/local/go/src/runtime/netpoll.go:351 +0x85
+internal/poll.(*pollDesc).wait(0xc0003010a0?, 0xc0004001000?, 0x0)
+	/usr/local/go/src/internal/poll/fd_poll_runtime.go:84 +0x27
+net.(*conn).Read(0xc000124038, {0xc000400000?, 0x0?, 0x0?})
+	/usr/local/go/src/net/net.go:194 +0x45
+example.com/shop/sync.(*client).readLoop(0xc0001d2000)
+	/home/user/src/shop/sync/client.go:118 +0x8e
+created by example.com/shop/sync.dial in goroutine 18
+	/home/user/src/shop/sync/client.go:60 +0x1b5
+
+goroutine 122 [IO wait, 9 minutes]:
+internal/poll.runtime_pollWait(0x7f3a1c5e0020, 0x72)
+	/usr/local/go/src/runtime/netpoll.go:351 +0x85
+internal/poll.(*pollDesc).wait(0xc0003020a0?, 0xc0004002000?, 0x0)
+	/usr/local/go/src/internal/poll/fd_poll_runtime.go:84 +0x27
+net.(*conn).Read(0xc000124038, {0xc000400000?, 0x0?, 0x0?})
+	/usr/local/go/src/net/net.go:194 +0x45
+example.com/shop/sync.(*client).readLoop(0xc0001d2000)
+	/home/user/src/shop/sync/client.go:118 +0x8e
+created by example.com/shop/sync.dial in goroutine 18
+	/home/user/src/shop/sync/client.go:60 +0x1b5
+
+goroutine 123 [IO wait, 9 minutes]:
+internal/poll.runtime_pollWait(0x7f3a1c5e0030, 0x72)
+	/usr/local/go/src/runtime/netpoll.go:351 +0x85
+internal/poll.(*pollDesc).wait(0xc0003030a0?, 0xc0004003000?, 0x0)
+	/usr/local/go/src/internal/poll/fd_poll_runtime.go:84 +0x27
+net.(*conn).Read(0xc000124038, {0xc000400000?, 0x0?, 0x0?})
+	/usr/local/go/src/net/net.go:194 +0x45
+example.com/shop/sync.(*client).readLoop(0xc0001d2000)
+	/home/user/src/shop/sync/client.go:118 +0x8e
+created by example.com/shop/sync.dial in goroutine 18
+	/home/user/src/shop/sync/client.go:60 +0x1b5
+
+goroutine 124 [IO wait, 9 minutes]:
+internal/poll.runtime_pollWait(0x7f3a1c5e0040, 0x72)
+	/usr/local/go/src/runtime/netpoll.go:351 +0x85
+internal/poll.(*pollDesc).wait(0xc0003040a0?, 0xc0004004000?, 0x0)
+	/usr/local/go/src/internal/poll/fd_poll_runtime.go:84 +0x27
+net.(*conn).Read(0xc000124038, {0xc000400000?, 0x0?, 0x0?})
+	/usr/local/go/src/net/net.go:194 +0x45
+example.com/shop/sync.(*client).readLoop(0xc0001d2000)
+	/home/user/src/shop/sync/client.go:118 +0x8e
+created by example.com/shop/sync.dial in goroutine 18
+	/home/user/src/shop/sync/client.go:60 +0x1b5
+
+goroutine 125 [IO wait, 9 minutes]:
+internal/poll.runtime_pollWait(0x7f3a1c5e0050, 0x72)
+	/usr/local/go/src/runtime/netpoll.go:351 +0x85
+internal/poll.(*pollDesc).wait(0xc0003050a0?, 0xc0004005000?, 0x0)
+	/usr/local/go/src/internal/poll/fd_poll_runtime.go:84 +0x27
+net.(*conn).Read(0xc000124038, {0xc000400000?, 0x0?, 0x0?})
+	/usr/local/go/src/net/net.go:194 +0x45
+example.com/shop/sync.(*client).readLoop(0xc0001d2000)
+	/home/user/src/shop/sync/client.go:118 +0x8e
+created by example.com/shop/sync.dial in goroutine 18
+	/home/user/src/shop/sync/client.go:60 +0x1b5
+
+goroutine 126 [IO wait, 9 minutes]:
+internal/poll.runtime_pollWait(0x7f3a1c5e0060, 0x72)
+	/usr/local/go/src/runtime/netpoll.go:351 +0x85
+internal/poll.(*pollDesc).wait(0xc0003060a0?, 0xc0004006000?, 0x0)
+	/usr/local/go/src/internal/poll/fd_poll_runtime.go:84 +0x27
+net.(*conn).Read(0xc000124038, {0xc000400000?, 0x0?, 0x0?})
+	/usr/local/go/src/net/net.go:194 +0x45
+example.com/shop/sync.(*client).readLoop(0xc0001d2000)
+	/home/user/src/shop/sync/client.go:118 +0x8e
+created by example.com/shop/sync.dial in goroutine 18
+	/home/user/src/shop/sync/client.go:60 +0x1b5
+
+goroutine 127 [IO wait, 9 minutes]:
+internal/poll.runtime_pollWait(0x7f3a1c5e0070, 0x72)
+	/usr/local/go/src/runtime/netpoll.go:351 +0x85
+internal/poll.(*pollDesc).wait(0xc0003070a0?, 0xc0004007000?, 0x0)
+	/usr/local/go/src/internal/poll/fd_poll_runtime.go:84 +0x27
+net.(*conn).Read(0xc000124038, {0xc000400000?, 0x0?, 0x0?})
+	/usr/local/go/src/net/net.go:194 +0x45
+example.com/shop/sync.(*client).readLoop(0xc0001d2000)
+	/home/user/src/shop/sync/client.go:118 +0x8e
+created by example.com/shop/sync.dial in goroutine 18
+	/home/user/src/shop/sync/client.go:60 +0x1b5
+
+goroutine 128 [IO wait, 9 minutes]:
+internal/poll.runtime_pollWait(0x7f3a1c5e0080, 0x72)
+	/usr/local/go/src/runtime/netpoll.go:351 +0x85
+internal/poll.(*pollDesc).wait(0xc0003080a0?, 0xc0004008000?, 0x0)
+	/usr/local/go/src/internal/poll/fd_poll_runtime.go:84 +0x27
+net.(*conn).Read(0xc000124038, {0xc000400000?, 0x0?, 0x0?})
+	/usr/local/go/src/net/net.go:194 +0x45
+example.com/shop/sync.(*client).readLoop(0xc0001d2000)
+	/home/user/src/shop/sync/client.go:118 +0x8e
+created by example.com/shop/sync.dial in goroutine 18
+	/home/user/src/shop/sync/client.go:60 +0x1b5
+
+goroutine 129 [IO wait, 9 minutes]:
+internal/poll.runtime_pollWait(0x7f3a1c5e0090, 0x72)
+	/usr/local/go/src/runtime/netpoll.go:351 +0x85
+internal/poll.(*pollDesc).wait(0xc0003090a0?, 0xc0004009000?, 0x0)
+	/usr/local/go/src/internal/poll/fd_poll_runtime.go:84 +0x27
+net.(*conn).Read(0xc000124038, {0xc000400000?, 0x0?, 0x0?})
+	/usr/local/go/src/net/net.go:194 +0x45
+example.com/shop/sync.(*client).readLoop(0xc0001d2000)
+	/home/user/src/shop/sync/client.go:118 +0x8e
+created by example.com/shop/sync.dial in goroutine 18
+	/home/user/src/shop/sync/client.go:60 +0x1b5
+
+goroutine 130 [IO wait, 9 minutes]:
+internal/poll.runtime_pollWait(0x7f3a1c5e00a0, 0x72)
+	/usr/local/go/src/runtime/netpoll.go:351 +0x85
+internal/poll.(*pollDesc).wait(0xc00030a0a0?, 0xc000400a000?, 0x0)
+	/usr/local/go/src/internal/poll/fd_poll_runtime.go:84 +0x27
+net.(*conn).Read(0xc000124038, {0xc000400000?, 0x0?, 0x0?})
+	/usr/local/go/src/net/net.go:194 +0x45
+example.com/shop/sync.(*client).readLoop(0xc0001d2000)
+	/home/user/src/shop/sync/client.go:118 +0x8e
+created by example.com/shop/sync.dial in goroutine 18
+	/home/user/src/shop/sync/client.go:60 +0x1b5
+
+goroutine 131 [IO wait, 9 minutes]:
+internal/poll.runtime_pollWait(0x7f3a1c5e00b0, 0x72)
+	/usr/local/go/src/runtime/netpoll.go:351 +0x85
+internal/poll.(*pollDesc).wait(0xc00030b0a0?, 0xc000400b000?, 0x0)
+	/usr/local/go/src/internal/poll/fd_poll_runtime.go:84 +0x27
+net.(*conn).Read(0xc000124038, {0xc000400000?, 0x0?, 0x0?})
+	/usr/local/go/src/net/net.go:194 +0x45
+example.com/shop/sync.(*client).readLoop(0xc0001d2000)
+	/home/user/src/shop/sync/client.go:118 +0x8e
+created by example.com/shop/sync.dial in goroutine 18
+	/home/user/src/shop/sync/client.go:60 +0x1b5
+
+FAIL	example.com/shop/sync	600.021s
+FAIL</pre>
+<pre class="out agent" id="agent-out" hidden>[paths: §1=/home/user/src/shop/sync]
+panic: test timed out after 10m0s
+	running tests:
+		TestSyncOrders (10m0s)
+
+goroutine 52 [running]:
+
+goroutine 1 [chan receive, 9 minutes]:
+
+goroutine 18 [select, 9 minutes]:
+example.com/shop/sync.(*Syncer).Run(0xc0001c4000, {0x71c5a8, 0xc0001b6000})
+	§1/syncer.go:74 +0x1b8
+example.com/shop/sync.TestSyncOrders(0xc0001a69c0)
+	§1/syncer_test.go:31 +0x2f1
+
+goroutine 60 [chan receive, 9 minutes]: +39 more on this stack: 61 62 63 64 65 66 67 68 69 70 …29 more
+example.com/shop/sync.(*worker).loop(0xc000200000)
+	§1/worker.go:52 +0x7c
+created by example.com/shop/sync.(*Syncer).start in goroutine 18
+	§1/syncer.go:41 +0x9e
+
+goroutine 120 [IO wait, 9 minutes]: +11 more on this stack: 121 122 123 124 125 126 127 128 129 130 …1 more
+example.com/shop/sync.(*client).readLoop(0xc0001d2000)
+	§1/client.go:118 +0x8e
+created by example.com/shop/sync.dial in goroutine 18
+	§1/client.go:60 +0x1b5
+
+… 13 standard library frames omitted
+FAIL	example.com/shop/sync	600.021s
+<span class="hint">[gascoigne: optimized 7478→388 tokens · full: gascoigne raw 17415a92]</span></pre>
+    </div>
+    <figcaption>A test hangs and Go prints a 421-line goroutine dump. The agent gets the diagnosis:
+      stuck in <code>Syncer.Run</code>, 40 workers waiting on a channel, 12 clients on network reads.</figcaption>
+  </figure>
+</section>
+</div>
+
+<main>
+
+<section class="band" id="lossless">
+  <h2>The original is one command away</h2>
+  <div class="split">
+    <p>Every original goes to a local ledger before anything is shortened, and each shortened
+      output ends with its id. When the agent needs a detail that was folded away, it asks for just
+      that part instead of re-running the command.</p>
+<pre class="snippet">$ gascoigne raw 17415a92 -grep 'goroutine 7[0-9] ' -C 1
+95-
+96:goroutine 70 [chan receive, 9 minutes]:
+117-example.com/shop/sync.(*worker).loop(0xc00020a000)
+…</pre>
+  </div>
+  <p class="aside">On a re-run after the fix, failures already seen in the session become one line:
+    <code>[↑ 5 lines as in the previous run, from "--- FAIL: TestParse"]</code>.</p>
+</section>
+
+<section id="savings">
+  <h2>What it saves</h2>
+  <p class="intro">Agents burn context on progress bars, passing tests, <code>managedFields</code>,
+    pagination tokens and license boilerplate. gascoigne knows what each kind of output is for, keeps
+    what an agent acts on — failures, diffs, errors, summaries — and folds the rest. The darker the
+    moon, the more your agent skipped.</p>
+  <div class="table-wrap">
+  <table class="savings">
+    <thead><tr><th scope="col"><span class="sr">Phase</span></th><th scope="col">Output</th><th scope="col" class="n">Before</th><th scope="col" class="n">After</th><th scope="col" class="n">Saved</th></tr></thead>
+    <tbody>
+      <tr><td><svg class="moon" data-saved="0.997" width="26" height="26" aria-hidden="true"></svg></td><td><code>npm install --verbose</code></td><td class="n">24,655</td><td class="n">76</td><td class="n">99.7%</td></tr>
+      <tr><td><svg class="moon" data-saved="0.994" width="26" height="26" aria-hidden="true"></svg></td><td>nginx access log</td><td class="n">73,148</td><td class="n">436</td><td class="n">99.4%</td></tr>
+      <tr><td><svg class="moon" data-saved="0.991" width="26" height="26" aria-hidden="true"></svg></td><td>Python <code>RecursionError</code> trace</td><td class="n">25,543</td><td class="n">218</td><td class="n">99.1%</td></tr>
+      <tr><td><svg class="moon" data-saved="0.989" width="26" height="26" aria-hidden="true"></svg></td><td><code>go test -json ./...</code></td><td class="n">16,208</td><td class="n">175</td><td class="n">98.9%</td></tr>
+      <tr><td><svg class="moon" data-saved="0.956" width="26" height="26" aria-hidden="true"></svg></td><td><code>cat churn.ipynb</code> (notebook)</td><td class="n">20,144</td><td class="n">896</td><td class="n">95.6%</td></tr>
+      <tr><td><svg class="moon" data-saved="0.948" width="26" height="26" aria-hidden="true"></svg></td><td><code>go test</code> timeout (goroutine dump)</td><td class="n">7,478</td><td class="n">388</td><td class="n">94.8%</td></tr>
+      <tr><td><svg class="moon" data-saved="0.932" width="26" height="26" aria-hidden="true"></svg></td><td>CodeQL SARIF report</td><td class="n">15,590</td><td class="n">1,065</td><td class="n">93.2%</td></tr>
+      <tr><td><svg class="moon" data-saved="0.907" width="26" height="26" aria-hidden="true"></svg></td><td><code>kubectl logs</code> (JSON)</td><td class="n">23,171</td><td class="n">2,156</td><td class="n">90.7%</td></tr>
+      <tr><td><svg class="moon" data-saved="0.873" width="26" height="26" aria-hidden="true"></svg></td><td><code>aws ec2 describe-instances</code></td><td class="n">33,835</td><td class="n">4,301</td><td class="n">87.3%</td></tr>
+      <tr><td><svg class="moon" data-saved="0.841" width="26" height="26" aria-hidden="true"></svg></td><td><code>terraform plan</code></td><td class="n">10,663</td><td class="n">1,697</td><td class="n">84.1%</td></tr>
+      <tr><td><svg class="moon" data-saved="0.743" width="26" height="26" aria-hidden="true"></svg></td><td><code>kubectl get pods -o yaml</code></td><td class="n">37,330</td><td class="n">9,609</td><td class="n">74.3%</td></tr>
+      <tr><td><svg class="moon" data-saved="0.724" width="26" height="26" aria-hidden="true"></svg></td><td><code>git log</code></td><td class="n">4,173</td><td class="n">1,151</td><td class="n">72.4%</td></tr>
+      <tr><td><svg class="moon" data-saved="0.604" width="26" height="26" aria-hidden="true"></svg></td><td>browser snapshot (accessibility tree)</td><td class="n">6,569</td><td class="n">2,601</td><td class="n">60.4%</td></tr>
+      <tr><td><svg class="moon" data-saved="0.562" width="26" height="26" aria-hidden="true"></svg></td><td><code>cat lib/benchmark.rb</code> (comments)</td><td class="n">6,390</td><td class="n">2,800</td><td class="n">56.2%</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="fine">Tokens on the eval fixtures in <code>testdata/eval</code>, measured with <code>make eval</code>.</p>
+</section>
+
+<section id="agents">
+  <h2>Hook up your agent</h2>
+  <p class="intro">Try it for one run with <code>wrap</code>. When you like it, <code>install</code>
+    keeps it on for the project, or for every project with <code>-g</code>.</p>
+  <div class="table-wrap">
+  <table class="agents">
+    <thead><tr><th scope="col">Agent</th><th scope="col">One run</th><th scope="col">Keep it on</th></tr></thead>
+    <tbody>
+      <tr><td>Claude Code</td><td><code>gascoigne wrap claude</code></td><td><code>gascoigne install claude</code></td></tr>
+      <tr><td>Codex</td><td><code>gascoigne wrap codex</code></td><td><code>gascoigne install codex</code></td></tr>
+      <tr><td>Gemini CLI</td><td><code>gascoigne wrap gemini</code></td><td><code>gascoigne install gemini</code></td></tr>
+      <tr><td>opencode</td><td><code>gascoigne wrap opencode</code></td><td><code>gascoigne install opencode</code></td></tr>
+      <tr><td>pi</td><td><code>gascoigne wrap pi</code></td><td><code>gascoigne install pi</code></td></tr>
+      <tr><td>Cursor</td><td class="none">—</td><td><code>gascoigne install cursor</code></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="fine">Shell commands run through <code>gascoigne exec</code>, results from other MCP servers
+    are shortened through <code>gascoigne mcp-proxy</code>, and agents get <code>fetch</code>,
+    <code>compress</code>, <code>show</code> and <code>retrieve</code> as MCP tools.</p>
+</section>
+
+<section id="dashboard" class="band">
+  <h2>Watch it work</h2>
+  <p class="intro"><code>gascoigne dashboard</code> opens a live view in your browser: savings per day,
+    command and optimizer, every run as it happens, and any run's original side by side with what the
+    agent read. Its moon shows your savings rate.</p>
+  <picture>
+    <source srcset="assets/dashboard-dark.png" media="(prefers-color-scheme: dark)">
+    <img class="shot" src="assets/dashboard-light.png" width="1600" height="1319" loading="lazy"
+      alt="The gascoigne dashboard: savings over time, top commands and optimizers, and a list of recent runs.">
+  </picture>
+</section>
+
+<section id="families">
+  <h2>One knife, sixteen blades</h2>
+  <p class="intro">Like a Swiss Army knife, gascoigne carries a blade for each job and folds out the
+    right one on its own. Output is recognized by family and tool, more than 110 of them, and shaped by
+    the engine that knows what that output is for. Stack traces fold the same way in every family.</p>
+  <dl class="families">
+    <div><dt>test</dt><dd><span class="does">keeps failures and the summary, counts the passes.</span> <span class="tools">go, jest, vitest, bun, mocha, deno, pytest, cargo, rspec, maven, dotnet, JUnit XML, coverage</span></dd></div>
+    <div><dt>build</dt><dd><span class="does">groups diagnostics by file and rule.</span> <span class="tools">go, tsc, eslint, golangci, ruff, mypy, rustc, gcc, clang, javac, dotnet, vite, webpack, docker, SARIF</span></dd></div>
+    <div><dt>pkg</dt><dd><span class="does">drops progress and downloads, folds warnings by kind.</span> <span class="tools">npm, pnpm, yarn, bun, pip, uv, poetry, go mod, cargo, apt, dnf, brew</span></dd></div>
+    <div><dt>task</dt><dd><span class="does">folds tasks that passed or came from cache.</span> <span class="tools">nx, turbo, make, just, gradle, compose, CI logs</span></dd></div>
+    <div><dt>vcs</dt><dd><span class="does">shows edits as word diffs, folds lockfiles and moved blocks.</span> <span class="tools">git status, log, diff, blame and branch; gh</span></dd></div>
+    <div><dt>search</dt><dd><span class="does">groups matches by file and merges identical lines.</span> <span class="tools">grep, rg, ag, git grep</span></dd></div>
+    <div><dt>fs</dt><dd><span class="does">summarizes listings, drops comments and outlines big source files.</span> <span class="tools">ls, tree, find, du, df, source files</span></dd></div>
+    <div><dt>table</dt><dd><span class="does">hoists constant columns, keeps unhealthy rows.</span> <span class="tools">ps, ss, lsof, top, systemctl, docker, any aligned or boxed table</span></dd></div>
+    <div><dt>data</dt><dd><span class="does">compacts JSON and YAML, samples repeated records.</span> <span class="tools">JSON, NDJSON, YAML, CSV, XML, TOML lockfiles, Jupyter notebooks</span></dd></div>
+    <div><dt>log</dt><dd><span class="does">folds lines into templates with counts, keeps errors and outliers.</span> <span class="tools">app, journald, syslog, docker, kubectl, access logs, CloudWatch, GCP, Azure</span></dd></div>
+    <div><dt>doc</dt><dd><span class="does">drops badges and tables of contents, keeps whole sections.</span> <span class="tools">markdown, rst, man, <code>--help</code></span></dd></div>
+    <div><dt>web</dt><dd><span class="does">keeps the article, drops menus and chrome.</span> <span class="tools">HTML to markdown, HTTP responses, browser accessibility snapshots</span></dd></div>
+    <div><dt>db</dt><dd><span class="does">prunes EXPLAIN to its costly nodes, results as tables.</span> <span class="tools">psql, mysql, sqlite, EXPLAIN, redis, mongosh, migrations</span></dd></div>
+    <div><dt>k8s</dt><dd><span class="does">prunes <code>managedFields</code> and defaults, keeps unhealthy items.</span> <span class="tools">kubectl, helm</span></dd></div>
+    <div><dt>infra</dt><dd><span class="does">folds refresh and progress, keeps what a plan changes.</span> <span class="tools">terraform, tofu, pulumi, ansible, cdk</span></dd></div>
+    <div><dt>cloud</dt><dd><span class="does">strips pagination tokens, metadata and etags.</span> <span class="tools">aws, gcloud, az</span></dd></div>
+  </dl>
+</section>
+
+<section id="promises">
+  <h2>What you can rely on</h2>
+  <dl class="promises">
+    <dt>Lossless by retrieval</dt>
+    <dd>Originals are stored first and every shortened output carries its <code>raw</code> id.
+      Output that would save less than its own hint costs is left as it is.</dd>
+    <dt>Deterministic</dt>
+    <dd>Same input, same output, so prompt caches stay warm.</dd>
+    <dt>Safe to edit from</dt>
+    <dd>Source files only lose whole lines: comments and outlined bodies. Kept lines are byte-exact and
+      every gap names the lines it stands for, like <code>// … comments L12-30</code>.</dd>
+    <dt>Self-correcting</dt>
+    <dd>When agents keep fetching a source's originals, that source is passed through next time.</dd>
+    <dt>Local</dt>
+    <dd>The ledger and dashboard stay on your machine. Nothing is sent anywhere.</dd>
+  </dl>
+</section>
+
+<section id="inspirations">
+  <h2>Standing on good ideas</h2>
+  <p class="intro">gascoigne borrows from projects that showed what agents waste and how to win it back.
+    Each is worth a look on its own.</p>
+  <ul class="credits">
+    <li><a href="https://github.com/rtk-ai/rtk">rtk</a>
+      <p>Filtering command output through an agent hook, and a <code>gain</code> report of what it saved.</p></li>
+    <li><a href="https://github.com/headroomlabs-ai/headroom">Headroom</a>
+      <p>Reversible compression: originals kept locally for the model to retrieve, and a proxy in front of the LLM API.</p></li>
+    <li><a href="https://github.com/mksglu/context-mode">context-mode</a>
+      <p>Keeping large tool output out of the context window, with a local index the agent can search instead.</p></li>
+    <li><a href="https://github.com/JuliusBrussee/caveman">caveman</a>
+      <p>Tokens the agent writes count too: terse replies, technical detail intact.</p></li>
+  </ul>
+</section>
+
+<section id="install" class="band">
+  <h2>Install</h2>
+  <div class="steps">
+    <div>
+      <h3>With Go 1.27+</h3>
+      <div class="oneliner">
+        <code id="i-go">go install github.com/gascoigne-ai/gascoigne-cli/cmd/gascoigne@latest</code>
+        <button class="copy" data-copy="i-go" type="button">Copy</button>
+      </div>
+      <p class="fine">The binary lands in <code>$(go env GOPATH)/bin</code>.</p>
+    </div>
+    <div>
+      <h3>From a checkout</h3>
+      <div class="oneliner">
+        <code id="i-src">git clone https://github.com/gascoigne-ai/gascoigne-cli &amp;&amp; cd gascoigne-cli &amp;&amp; make install</code>
+        <button class="copy" data-copy="i-src" type="button">Copy</button>
+      </div>
+      <p class="fine">Installs to <code>~/.local/bin</code>; set <code>PREFIX</code> for elsewhere.</p>
+    </div>
+    <div>
+      <h3>Remove it</h3>
+      <div class="oneliner">
+        <code id="i-rm">gascoigne uninstall</code>
+        <button class="copy" data-copy="i-rm" type="button">Copy</button>
+      </div>
+      <p class="fine">Takes gascoigne out of your agents' configs, stops the server and deletes the ledger,
+        config, caches and the binary. It lists everything and asks first.</p>
+    </div>
+  </div>
+  <p class="aside">One static binary in pure Go. The background server starts itself when needed
+    and exits after 30 minutes idle.</p>
+</section>
+
+</main>
+
+<footer>
+  <svg class="moon" data-saved="0.95" width="22" height="22" aria-hidden="true"></svg>
+  <p>gascoigne is open source under the <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/LICENSE">Apache License 2.0</a>.
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli">Source</a>,
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/docs/getting-started.md">getting started</a>,
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/docs/cli.md">CLI reference</a> and
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/docs/configuration.md">configuration</a>.</p>
+</footer>
+
+<script src="assets/site.js"></script>
+</body>
+</html>
