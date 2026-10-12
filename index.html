@@ -32,6 +32,7 @@
     <a href="#install">Install</a>
     <a href="#savings">Savings</a>
     <a href="#changelog">Changelog</a>
+    <a href="releases/0.3.0/">0.3.0</a>
     <a href="https://github.com/gascoigne-ai/gascoigne-cli/tree/master/docs">Docs</a>
     <a href="https://github.com/gascoigne-ai">GitHub</a>
   </nav>
@@ -660,7 +661,9 @@ FAIL	example.com/shop/sync	600.021s
     <dt>Self-correcting</dt>
     <dd>When agents keep fetching a source's originals, that source is passed through next time.</dd>
     <dt>Local</dt>
-    <dd>The ledger and dashboard stay on your machine. Nothing is sent anywhere.</dd>
+    <dd>The ledger and dashboard stay on your machine. Nothing is sent anywhere, except one optional
+      request a day for a small release file from this site, which you can
+      <a href="releases/0.3.0/#notice">turn off</a>.</dd>
   </dl>
 </section>
 
@@ -715,6 +718,22 @@ FAIL	example.com/shop/sync	600.021s
 
 <section id="changelog">
   <h2>Changelog</h2>
+  <article class="release">
+    <header>
+      <h3>0.3.0</h3>
+      <p class="fine"><time datetime="2026-10-12">12 October 2026</time>, setting up and keeping up to date</p>
+    </header>
+    <ul>
+      <li>A setup page in your browser (and <code>gascoigne setup</code> in the terminal): nothing that changes how your agents are set up happens before you answer.</li>
+      <li><code>gascoigne upgrade</code> after a new version: stale or lost hooks, rules and commands written again, <code>config.yaml</code> moved onto the new template, open choices asked.</li>
+      <li><code>gascoigne doctor</code> in plain words; <code>install -permissions</code>, <code>-guide</code> and <code>-autosync</code>; agents found on your machine are offered, not installed.</li>
+      <li>Experimental <code>continuity</code>, <code>learn</code> and <code>prompts</code>, turned on from setup with an example and the impact of each.</li>
+      <li>Dashboard: savings by model family, every table sorts and filters. A once-a-day release notice, off with one switch.</li>
+    </ul>
+    <p class="fine"><a href="releases/0.3.0/">What's new in 0.3.0</a>,
+      <a href="https://github.com/gascoigne-ai/gascoigne-cli/releases/tag/v0.3.0">release notes and downloads</a>
+      or the full <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/CHANGELOG.md">changelog</a>.</p>
+  </article>
   <article class="release">
     <header>
       <h3>0.2.1</h3>
