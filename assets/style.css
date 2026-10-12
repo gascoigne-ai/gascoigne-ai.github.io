@@ -219,6 +219,7 @@ td { padding: 0.55rem 0.9rem; border-bottom: 1px solid var(--border); vertical-a
 .none { color: var(--faint); }
 
 /* Dashboard */
+#dashboard picture { display: block; }
 .shot {
   display: block; width: 100%; height: auto;
   border-radius: 12px; border: 1px solid var(--border);
