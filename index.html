@@ -32,7 +32,7 @@
     <a href="#install">Install</a>
     <a href="#savings">Savings</a>
     <a href="#changelog">Changelog</a>
-    <a href="releases/0.4.1/">0.4.1</a>
+    <a href="releases/0.5.0/">0.5.0</a>
     <a href="https://github.com/gascoigne-ai/gascoigne-cli/tree/master/docs">Docs</a>
     <a href="https://github.com/gascoigne-ai">GitHub</a>
   </nav>
@@ -614,7 +614,8 @@ FAIL	example.com/shop/sync	600.021s
   <h2>Watch it work</h2>
   <p class="intro"><code>gascoigne dashboard</code> opens a live view in your browser: savings per day,
     command and optimizer, every run as it happens, and any run's original side by side with what the
-    agent read. Its moon shows your savings rate.</p>
+    agent read. Tables are grouped into tabs, and experimental features that are on get their own panel.
+    Its moon shows your savings rate.</p>
   <picture>
     <source srcset="assets/dashboard-dark.png" media="(prefers-color-scheme: dark)">
     <img class="shot" src="assets/dashboard-light.png" width="1600" height="1319" loading="lazy"
@@ -645,6 +646,15 @@ FAIL	example.com/shop/sync	600.021s
     <div><dt>infra</dt><dd><span class="does">folds refresh and progress, keeps what a plan changes.</span> <span class="tools">terraform, tofu, pulumi, ansible, cdk</span></dd></div>
     <div><dt>cloud</dt><dd><span class="does">strips pagination tokens, metadata and etags.</span> <span class="tools">aws, gcloud, az</span></dd></div>
   </dl>
+</section>
+
+<section id="prose">
+  <h2>Long prose, shortened by a local model</h2>
+  <p class="intro">New in 0.5, and an experiment: a small language model on your own GPU or CPU drops the
+    words in long paragraphs that carry least, keeps every number, path, flag and line of code, and leaves
+    tables, lists and command output untouched. About 8–10% fewer tokens on prose-heavy text. It is off until
+    you say yes in <code>gascoigne setup</code>, which downloads it with checksums shown, and the original
+    is one <code>gascoigne raw</code> away. <a href="releases/0.5.0/">See it work</a>.</p>
 </section>
 
 <section id="promises">
@@ -738,6 +748,20 @@ FAIL	example.com/shop/sync	600.021s
 
 <section id="changelog">
   <h2>Changelog</h2>
+  <article class="release">
+    <header>
+      <h3>0.5.0</h3>
+      <p class="fine"><time datetime="2026-10-13">13 October 2026</time>, prose compression with a local model</p>
+    </header>
+    <ul>
+      <li>Experimental prose compression: a local model drops low-value words from long paragraphs of text and markdown, on CUDA, CoreML or the CPU, with no Python and no cgo. Numbers, paths, flags, code and links stay; the original stays in the ledger.</li>
+      <li><code>gascoigne prose install</code> and <code>status</code>; setup downloads the model (601 MB) with pinned checksums shown.</li>
+      <li>Dashboard: a <code>prose −N</code> tag on shortened runs, an Experiments panel, and tables grouped into two tabbed panels.</li>
+      <li><code>eval -record</code> and <code>make eval-experimental</code> put eval runs in the dashboard.</li>
+    </ul>
+    <p class="fine"><a href="releases/0.5.0/">What's new in 0.5.0</a>,
+      <a href="https://github.com/gascoigne-ai/gascoigne-cli/releases/tag/v0.5.0">release notes and downloads</a></p>
+  </article>
   <article class="release">
     <header>
       <h3>0.4.1</h3>
