@@ -573,7 +573,7 @@ FAIL	example.com/shop/sync	600.021s
   </table>
   </div>
   <p class="aside">Across all 268 eval cases the median output shrinks by 69%, and 82% of all tokens
-    go, because the largest outputs are also the noisiest; 9 cases are left as they are. Outputs under
+    go, because the largest outputs are also the noisiest; 9 cases are not shortened at all. Outputs under
     200 tokens pass through untouched. The fixtures are real-shaped samples of the tools gascoigne
     knows, so read them as an upper bound for those tools, not a forecast for your sessions.</p>
   <h3 class="realuse">In real use</h3>
@@ -625,9 +625,9 @@ FAIL	example.com/shop/sync	600.021s
 
 <section id="families">
   <h2>One knife, sixteen blades</h2>
-  <p class="intro">Like a Swiss Army knife, gascoigne carries a blade for each job and folds out the
-    right one on its own. Output is recognized by family and tool, more than 110 of them, and shaped by
-    the engine that knows what that output is for. Stack traces fold the same way in every family.</p>
+  <p class="intro">gascoigne carries a blade for each job and folds out the right one on its own. It
+    recognizes output by family and tool (more than 110 tools), then hands it to the engine that knows
+    what that output is for. Stack traces fold the same way in every family.</p>
   <dl class="families">
     <div><dt>test</dt><dd><span class="does">keeps failures and the summary, counts the passes.</span> <span class="tools">go, jest, vitest, bun, mocha, deno, pytest, cargo, rspec, maven, dotnet, JUnit XML, coverage</span></dd></div>
     <div><dt>build</dt><dd><span class="does">groups diagnostics by file and rule.</span> <span class="tools">go, tsc, eslint, golangci, ruff, mypy, rustc, gcc, clang, javac, dotnet, vite, webpack, docker, SARIF</span></dd></div>
@@ -669,7 +669,7 @@ FAIL	example.com/shop/sync	600.021s
     <dd>Source files only lose whole lines: comments and outlined bodies. Kept lines are byte-exact and
       every gap names the lines it stands for, like <code>// … comments L12-30</code>.</dd>
     <dt>Self-correcting</dt>
-    <dd>When agents keep fetching a source's originals, that source is passed through next time.</dd>
+    <dd>When agents keep fetching a source's originals, that source reaches the agent whole next time.</dd>
     <dt>Local</dt>
     <dd>The ledger and dashboard stay on your machine. Nothing is sent anywhere, except one optional
       request a day for a small release file from this site, which you can
@@ -679,7 +679,7 @@ FAIL	example.com/shop/sync	600.021s
 
 <section id="inspirations">
   <h2>Standing on good ideas</h2>
-  <p class="intro">gascoigne borrows from projects that showed what agents waste and how to win it back.
+  <p class="intro">gascoigne takes inspiration and uplifts techniques from projects that showed what agents waste and how to win it back.
     Each is worth a look on its own.</p>
   <ul class="credits">
     <li><a href="https://github.com/rtk-ai/rtk">rtk</a>
@@ -748,11 +748,11 @@ FAIL	example.com/shop/sync	600.021s
 
 <section id="changelog">
   <h2>Changelog</h2>
-  <article class="release">
-    <header>
+  <details class="release" open>
+    <summary>
       <h3>0.5.0</h3>
       <p class="fine"><time datetime="2026-10-13">13 October 2026</time>, prose compression with a local model</p>
-    </header>
+    </summary>
     <ul>
       <li>Experimental prose compression: a local model drops low-value words from long paragraphs of text and markdown, on CUDA, CoreML or the CPU, with no Python and no cgo. Numbers, paths, flags, code and links stay; the original stays in the ledger.</li>
       <li><code>gascoigne prose install</code> and <code>status</code>; setup downloads the model (601 MB) with pinned checksums shown.</li>
@@ -761,23 +761,23 @@ FAIL	example.com/shop/sync	600.021s
     </ul>
     <p class="fine"><a href="releases/0.5.0/">What's new in 0.5.0</a>,
       <a href="https://github.com/gascoigne-ai/gascoigne-cli/releases/tag/v0.5.0">release notes and downloads</a></p>
-  </article>
-  <article class="release">
-    <header>
+  </details>
+  <details class="release">
+    <summary>
       <h3>0.4.1</h3>
       <p class="fine"><time datetime="2026-10-13">13 October 2026</time>, the release notice works again</p>
-    </header>
+    </summary>
     <ul>
       <li>The once-a-day release check read the website at its old address and never signalled an update; it reads the new one.</li>
     </ul>
     <p class="fine"><a href="releases/0.4.1/">What's new in 0.4.1</a>,
       <a href="https://github.com/gascoigne-ai/gascoigne-cli/releases/tag/v0.4.1">release notes and downloads</a></p>
-  </article>
-  <article class="release">
-    <header>
+  </details>
+  <details class="release">
+    <summary>
       <h3>0.4.0</h3>
       <p class="fine"><time datetime="2026-10-13">13 October 2026</time>, binaries for every system</p>
-    </header>
+    </summary>
     <ul>
       <li>Prebuilt archives for Linux, macOS and Windows (amd64, arm64) with <code>checksums.txt</code> on every GitHub release.</li>
       <li><code>gascoigne context</code> and a dashboard page: where conversation size and cache rewrites cost money.</li>
@@ -785,12 +785,12 @@ FAIL	example.com/shop/sync	600.021s
     </ul>
     <p class="fine"><a href="releases/0.4.0/">What's new in 0.4.0</a>,
       <a href="https://github.com/gascoigne-ai/gascoigne-cli/releases/tag/v0.4.0">release notes and downloads</a></p>
-  </article>
-  <article class="release">
-    <header>
+  </details>
+  <details class="release">
+    <summary>
       <h3>0.3.0</h3>
       <p class="fine"><time datetime="2026-10-12">12 October 2026</time>, setting up and keeping up to date</p>
-    </header>
+    </summary>
     <ul>
       <li>A setup page in your browser (and <code>gascoigne setup</code> in the terminal): nothing that changes how your agents are set up happens before you answer.</li>
       <li><code>gascoigne upgrade</code> after a new version: stale or lost hooks, rules and commands written again, <code>config.yaml</code> moved onto the new template, open choices asked.</li>
@@ -801,12 +801,12 @@ FAIL	example.com/shop/sync	600.021s
     <p class="fine"><a href="releases/0.3.0/">What's new in 0.3.0</a>,
       <a href="https://github.com/gascoigne-ai/gascoigne-cli/releases/tag/v0.3.0">release notes and downloads</a>
       or the full <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/CHANGELOG.md">changelog</a>.</p>
-  </article>
-  <article class="release">
-    <header>
+  </details>
+  <details class="release">
+    <summary>
       <h3>0.2.1</h3>
       <p class="fine"><time datetime="2026-10-12">12 October 2026</time>, first release</p>
-    </header>
+    </summary>
     <ul>
       <li>16 family engines across 110+ tools and formats: verbose output shrinks 70–99%, a typical coding session's tool output 4–27%.</li>
       <li><code>wrap</code> and <code>install</code> for Claude Code, Codex, Gemini CLI, opencode, pi and Cursor;
@@ -818,7 +818,7 @@ FAIL	example.com/shop/sync	600.021s
     </ul>
     <p class="fine"><a href="https://github.com/gascoigne-ai/gascoigne-cli/releases/tag/v0.2.1">Release notes and downloads</a>
       or the full <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/CHANGELOG.md">changelog</a>.</p>
-  </article>
+  </details>
 </section>
 
 </main>

@@ -281,9 +281,13 @@ footer p { margin: 0; }
 
 /* Changelog */
 .release { max-width: var(--measure); border-left: 3px solid var(--accent); padding-left: 1.4rem; }
-.release header { display: flex; align-items: baseline; gap: 1rem; flex-wrap: wrap; }
+.release summary { display: flex; align-items: baseline; gap: 1rem; flex-wrap: wrap; cursor: pointer; list-style: none; }
+.release summary::-webkit-details-marker { display: none; }
+.release summary::after { content: "+"; margin-left: auto; font-weight: 600; color: var(--accent); }
+.release[open] summary::after { content: "−"; }
+.release + .release { margin-top: 1rem; }
 .release h3 { font-size: 1.8rem; font-weight: 800; margin: 0; }
-.release header .fine { margin: 0; }
+.release summary .fine { margin: 0; }
 .release ul { margin: 1rem 0; padding-left: 1.2rem; }
 .release li { margin-bottom: 0.4rem; }
 .realuse { font-size: 1.35rem; font-weight: 800; margin: 2.5rem 0 0.8rem; }
