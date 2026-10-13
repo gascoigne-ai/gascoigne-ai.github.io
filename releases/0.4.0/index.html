@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>gascoigne 0.4.0 — binaries for every system</title>
+<meta name="description" content="gascoigne 0.4.0 ships prebuilt binaries for Linux, macOS and Windows, with a checksum file and install one-liners, plus a page for what conversation size costs and a weekly MCP review.">
+<meta property="og:title" content="gascoigne 0.4.0">
+<meta property="og:description" content="Setting up and keeping up to date: a setup page, gascoigne upgrade, gascoigne doctor and a release notice.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23ECE4E2'/%3E%3Cpath d='M16 2A14 14 0 0 0 16 30A7 14 0 0 0 16 2Z' fill='%234A1A2C'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+
+<svg width="0" height="0" class="defs" aria-hidden="true">
+  <defs>
+    <radialGradient id="moon-lit" cx="38%" cy="32%" r="72%"><stop offset="0" stop-color="#fffdfb"/><stop offset=".6" stop-color="#ece4e2"/><stop offset="1" stop-color="#c9bcbf"/></radialGradient>
+    <radialGradient id="moon-dark" cx="60%" cy="60%" r="70%"><stop offset="0" stop-color="#4a1a2c"/><stop offset="1" stop-color="#2a0c17"/></radialGradient>
+  </defs>
+</svg>
+
+<div class="night">
+<header class="top">
+  <a class="brand" href="../../">
+    <svg class="moon" data-saved="0.8" width="28" height="28" aria-hidden="true"></svg>
+    gascoigne
+  </a>
+  <nav>
+    <a href="#new">What's new</a>
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/CHANGELOG.md">Changelog</a>
+    <a href="https://github.com/gascoigne-ai">GitHub</a>
+  </nav>
+</header>
+
+
+<section class="hero release-hero">
+  <div class="hero-text">
+    <p class="fine"><time datetime="2026-10-13">13 October 2026</time></p>
+    <h1><span>gascoigne 0.4.0</span> <span>Binaries for every system.</span></h1>
+    <p class="lede">Every release now carries ready-made archives for Linux, macOS and Windows (amd64 and arm64)
+      and a checksum file. No Go toolchain needed.</p>
+    <p class="fine">Install commands that check the checksum are in the <a href="../../#install">install section</a>.
+      Already using gascoigne? Run the same command again, then <code>gascoigne upgrade</code>.</p>
+  </div>
+</section>
+</div>
+
+<main>
+
+<section id="new" class="band">
+  <h2>What's new</h2>
+  <div class="steps">
+    <div>
+      <h3>Prebuilt binaries</h3>
+      <p>Six archives and <code>checksums.txt</code> on each
+        <a href="https://github.com/gascoigne-ai/gascoigne-cli/releases/latest">GitHub release</a>.
+        The binaries are not signed or notarized: on macOS run
+        <code>xattr -d com.apple.quarantine</code> on the file once; Windows SmartScreen may ask to confirm.</p>
+    </div>
+    <div>
+      <h3>Where context costs money</h3>
+      <p><code>gascoigne context</code> and a dashboard page show what conversation size and cache rewrites cost,
+        and what compacting saves.</p>
+    </div>
+    <div>
+      <h3>A weekly MCP review</h3>
+      <p>A browser page shows which MCP servers you use, where each is configured and how to switch it off.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <svg class="moon" data-saved="0.95" width="22" height="22" aria-hidden="true"></svg>
+  <p>gascoigne is open source under the <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/LICENSE">Apache License 2.0</a>.
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli">Source</a>,
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/docs/agents.md">agents guide</a> and
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/docs/cli.md">CLI reference</a>.</p>
+</footer>
+
+<script src="../../assets/site.js"></script>
+</body>
+</html>
