@@ -35,7 +35,7 @@
     <a href="#savings">Savings</a>
     <a href="#install">Install</a>
     <a href="#changelog">Changelog</a>
-    <a href="releases/0.5.0/">0.5.0</a>
+    <a href="releases/0.6.0/">0.6.0</a>
     <a href="https://github.com/gascoigne-ai/gascoigne-cli/tree/master/docs">Docs</a>
     <a href="https://github.com/gascoigne-ai">GitHub</a>
   </nav>
@@ -1140,6 +1140,19 @@ Gascoigne gascoigne = Gascoigne.<span class="tk-fn">builder</span>().<span class
 <section id="changelog">
   <h2>Changelog</h2>
   <details class="release" open>
+    <summary>
+      <h3>0.6.0</h3>
+      <p class="fine"><time datetime="2026-10-14">14 October 2026</time>, pick your prose model</p>
+    </summary>
+    <ul>
+      <li>Two prose models: <code>kompress-v2-base</code> (274 MB, general prose) and <code>ctxprune-small</code> (563 MB, tool output, logs and code). Setup asks which one, downloads it and checks its files.</li>
+      <li>A progress bar while models and the runtime download in a terminal. Models install into directories of their own, so run <code data-lang="sh" data-hl><span class="tk-cmd">gascoigne</span> prose install</code> once more if you used 0.5.0.</li>
+      <li>The <code>/sdk/v1</code> API for the agent framework SDKs, a minimal Alpine Docker image, and plainer labels in the dashboard.</li>
+    </ul>
+    <p class="fine"><a href="releases/0.6.0/">What's new in 0.6.0</a>,
+      <a href="https://github.com/gascoigne-ai/gascoigne-cli/releases/tag/v0.6.0">release notes and downloads</a></p>
+  </details>
+  <details class="release">
     <summary>
       <h3>0.5.0</h3>
       <p class="fine"><time datetime="2026-10-13">13 October 2026</time>, prose compression with a local model</p>

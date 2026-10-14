@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>gascoigne 0.6.0 — choose your prose model</title>
+<meta name="description" content="gascoigne 0.6.0 lets you pick between two prose models in setup, shows a progress bar while they download, and adds an API for agent framework SDKs.">
+<meta property="og:title" content="gascoigne 0.6.0">
+<meta property="og:description" content="Pick your prose model in setup, a download progress bar, and an API for SDKs.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23ECE4E2'/%3E%3Cpath d='M16 2A14 14 0 0 0 16 30A7 14 0 0 0 16 2Z' fill='%234A1A2C'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css?v=20261014d">
+</head>
+<body>
+
+<svg width="0" height="0" class="defs" aria-hidden="true">
+  <defs>
+    <radialGradient id="moon-lit" cx="38%" cy="32%" r="72%"><stop offset="0" stop-color="#fffdfb"/><stop offset=".6" stop-color="#ece4e2"/><stop offset="1" stop-color="#c9bcbf"/></radialGradient>
+    <radialGradient id="moon-dark" cx="60%" cy="60%" r="70%"><stop offset="0" stop-color="#4a1a2c"/><stop offset="1" stop-color="#2a0c17"/></radialGradient>
+  </defs>
+</svg>
+
+<div class="night">
+<header class="top">
+  <a class="brand" href="../../">
+    <svg class="moon" data-saved="0.8" width="28" height="28" aria-hidden="true"></svg>
+    gascoigne
+  </a>
+  <nav>
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/CHANGELOG.md">Changelog</a>
+    <a href="https://github.com/gascoigne-ai">GitHub</a>
+  </nav>
+</header>
+
+
+<section class="hero release-hero">
+  <div class="hero-text">
+    <p class="fine"><time datetime="2026-10-14">14 October 2026</time></p>
+    <h1><span>gascoigne 0.6.0</span> <span>Pick the model that reads your prose.</span></h1>
+    <p class="lede">Prose compression now comes with two local models, and setup asks which one you want,
+      downloads it with a progress bar and checks its files. The background server also speaks an API the
+      agent framework SDKs use. Still an experiment, off until you say yes.</p>
+    <div class="oneliner">
+      <code id="up1">go install github.com/gascoigne-ai/gascoigne-cli/cmd/gascoigne@latest &amp;&amp; gascoigne setup -experimental</code>
+      <button class="copy" data-copy="up1" type="button">Copy</button>
+    </div>
+    <p class="fine">Starting fresh? <a href="../../#install">Install it</a> first. Coming from 0.4:
+      <a href="../0.5.0/">prose compression</a> and <a href="../0.4.0/">prebuilt binaries</a>.</p>
+  </div>
+</section>
+</div>
+
+<main>
+
+<section id="new">
+  <h2>What's new</h2>
+
+  <h3>Two prose models, one question in setup</h3>
+  <p class="intro"><code>gascoigne setup</code> now asks which model the prose experiment runs, and with
+    prose on it downloads the one you pick and checks its files. Change your mind later with
+    <code>optimizers.prose.model</code> or <code>gascoigne prose install -name</code>; the ONNX Runtime is
+    shared, so the second model only adds its own files.</p>
+  <ul>
+    <li><code>kompress-v2-base</code>, 274 MB: trained on general prose. It drops articles and fillers and
+      keeps the meaning of the test fixtures at the default threshold. This is the default, now as an
+      int8 graph: less than half the earlier download, the same savings, identical output on CPU and CUDA.</li>
+    <li><code>ctxprune-small</code>, 563 MB: trained on tool output, logs, code and web text. About three
+      times faster on the CPU, and at the same threshold it keeps fewer words on prose.</li>
+  </ul>
+  <p class="intro">Each model lives in a directory named after it, so files and checksums never mix.
+    The <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/docs/prose-model.md">guide</a>
+    has the comparison and how to try both on your own text.</p>
+
+  <h3>A progress bar for the download</h3>
+  <p class="intro">Models are hundreds of megabytes. In a terminal, <code>prose install</code> and setup
+    now draw a bar with percent and megabytes instead of staying silent. Pipes, CI and the background
+    server keep the plain output.</p>
+<pre class="snippet">  [###############---------------]  50%  137/274 MB</pre>
+
+  <h3>An API for agent framework SDKs</h3>
+  <p class="intro">The background server serves <code>/sdk/v1</code>, the API that the
+    <a href="../../#sdk">SDKs</a> use to shorten tool results inside agent frameworks.</p>
+
+  <h3>Smaller things</h3>
+  <ul>
+    <li>A minimal Alpine Docker image: a static build and a non-root user.</li>
+    <li>The dashboard shows live status on every page, explains the prose step in plain words and uses
+      plainer labels in run details.</li>
+    <li>Maven errors keep their symbol and location lines, and a repeated finding lists every line.</li>
+    <li>Unpacking the ONNX Runtime archive cannot write outside its directory.</li>
+  </ul>
+</section>
+
+<section id="upgrade" class="band">
+  <h2>Upgrade</h2>
+  <div class="steps">
+    <div>
+      <h3>1. Install the new version</h3>
+      <div class="oneliner">
+        <code id="u-go">go install github.com/gascoigne-ai/gascoigne-cli/cmd/gascoigne@latest</code>
+        <button class="copy" data-copy="u-go" type="button">Copy</button>
+      </div>
+      <p class="fine">Or download an archive from the <a href="https://github.com/gascoigne-ai/gascoigne-cli/releases/tag/v0.6.0">release</a>.
+        The background server notices the new binary and restarts itself.</p>
+    </div>
+    <div>
+      <h3>2. Bring your setup current</h3>
+      <div class="oneliner">
+        <code id="u-up">gascoigne upgrade</code>
+        <button class="copy" data-copy="u-up" type="button">Copy</button>
+      </div>
+      <p class="fine">Your <code>config.yaml</code> moves onto the new template, settings kept.</p>
+    </div>
+    <div>
+      <h3>3. Download the model again if you use prose</h3>
+      <div class="oneliner">
+        <code id="u-pr">gascoigne setup -experimental</code>
+        <button class="copy" data-copy="u-pr" type="button">Copy</button>
+      </div>
+      <p class="fine">Models now install into directories of their own, so a 0.5.0 download is not found. Setup asks which model you want and fetches it.</p>
+    </div>
+  </div>
+</section>
+
+<section id="more">
+  <h2>More</h2>
+  <p class="intro">The full list is in the
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/CHANGELOG.md">changelog</a>, and
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/releases/tag/v0.6.0">release notes and downloads</a>
+    are on GitHub. Both models are Apache 2.0; their attribution is in the
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/docs/prose-model.md">prose guide</a>.
+    Back to the <a href="../../">gascoigne home page</a>.</p>
+</section>
+
+</main>
+
+<footer>
+  <svg class="moon" data-saved="0.95" width="22" height="22" aria-hidden="true"></svg>
+  <p>gascoigne is open source under the <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/LICENSE">Apache License 2.0</a>.
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli">Source</a>,
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/docs/agents.md">agents guide</a> and
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/docs/cli.md">CLI reference</a>.</p>
+</footer>
+
+<script src="../../assets/site.js?v=20261014d"></script>
+</body>
+</html>
