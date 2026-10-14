@@ -3,15 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>gascoigne — agents read less, nothing gets lost</title>
+<title>gascoigne — telemetry first: agents read less, nothing gets lost</title>
 <meta name="description" content="A token optimizer for coding agents. It shrinks command output, tool results and web pages before they reach the model, and keeps every original one command away.">
-<meta property="og:title" content="gascoigne">
+<meta property="og:title" content="gascoigne: telemetry first">
 <meta property="og:description" content="Agents read less. Nothing gets lost. A token optimizer for Claude Code, Codex, Gemini CLI, opencode, pi and Cursor.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23ECE4E2'/%3E%3Cpath d='M16 2A14 14 0 0 0 16 30A7 14 0 0 0 16 2Z' fill='%234A1A2C'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=20261014d">
+<link rel="stylesheet" href="assets/style.css?v=20261014e">
 </head>
 <body>
 
@@ -43,6 +43,7 @@
 
 <section class="hero">
   <div class="hero-text">
+    <p class="kicker">Telemetry first</p>
     <h1><span>Agents read less.</span> <span>Nothing gets lost.</span></h1>
     <p class="lede">A Swiss Army knife for your coding agent's context. One small binary, a blade for
       every kind of output: it shrinks command output, tool results and web pages before they reach
@@ -370,6 +371,8 @@ Use the aws_s3_bucket_acl <span class="tk-kw">resource</span> instead
 
 <section id="benefits" class="benefits-sec" aria-labelledby="benefits-h">
   <h2 id="benefits-h">What your agent gets</h2>
+  <p class="slogan"><b>Telemetry first.</b> Every saving is measured before it is claimed: the ledger records each
+    original and each optimized result, and the local dashboard and <code>gascoigne tokens</code> show the numbers.</p>
   <ul class="benefits">
     <li><strong>70–99%</strong><b>Fewer tokens</b>
       <span>off verbose output: installs, test runs, logs, traces. The median eval case shrinks by 69%.</span></li>

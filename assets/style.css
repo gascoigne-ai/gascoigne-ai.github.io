@@ -682,3 +682,13 @@ html:not(.js) .ex .raw-part { order: 3; margin-top: 1rem; padding-top: 0.8rem; b
 /* Commands never wrap mid-line: inline code stays whole, long ones scroll in their own block. */
 p code, li code, dd code, td code, figcaption code, h3 code { white-space: nowrap; }
 code.cmd { display: block; width: max-content; max-width: 100%; overflow-x: auto; margin: 0.4rem 0; padding: 0.5rem 0.8rem; }
+
+/* Slogan: telemetry first */
+.kicker {
+  display: inline-block; margin: 0 0 1rem; padding: 0.2rem 0.7rem;
+  font: 600 0.8rem var(--font-mono); letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--night-text); border: 1px solid var(--night-muted); border-radius: 999px;
+}
+.kicker::before { content: ""; display: inline-block; width: 0.5em; height: 0.5em; margin-right: 0.6em; border-radius: 50%; background: var(--term-hint); }
+.slogan { max-width: var(--measure); margin: 0 0 1.5rem; color: var(--muted); }
+.slogan b { color: var(--accent); font-family: var(--font-display); }
