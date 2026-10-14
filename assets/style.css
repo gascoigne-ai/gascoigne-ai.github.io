@@ -618,7 +618,7 @@ html:not(.js) .sdk-code:not([data-lang="python"]), html:not(.js) .sdk-meta:not([
 .sdk-install .tag { font: 600 0.8rem var(--font-mono); background: var(--accent-soft); color: var(--accent); padding: 0.1rem 0.45rem; border-radius: 5px; margin-left: 0.3rem; }
 .sdk-install code {
   display: block; background: var(--term-bg); color: var(--term-fg); border-radius: 8px;
-  padding: 0.6rem 0.9rem; font-size: 0.85rem; white-space: normal; overflow-wrap: anywhere;
+  padding: 0.6rem 0.9rem; font-size: 0.85rem; white-space: nowrap; overflow-x: auto;
 }
 .sdk-install .how { font-size: 0.9rem; color: var(--muted); }
 .fw { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
@@ -643,7 +643,7 @@ html:not(.js) .sdk-code:not([data-lang="python"]), html:not(.js) .sdk-meta:not([
 .sdk-side .sdk-strip { margin-top: 0; }
 .sdk-side .sdk-strip .row { grid-template-columns: 6.2rem minmax(0, 1fr) 8.6rem; }
 .sdk-strip .val { white-space: nowrap; }
-.sdk-code pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+.sdk-code pre { white-space: pre; overflow-x: auto; overflow-wrap: normal; }
 @media (max-width: 960px) { .sdk-panel { grid-template-columns: minmax(0, 1fr); } }
 
 /* Savings: table beside its notes */
@@ -678,3 +678,7 @@ html:not(.js) .ex { display: flex; flex-direction: column; }
 html:not(.js) .ex .agent-label { order: 1; margin-top: 0.2rem; }
 html:not(.js) .ex .out.agent { order: 2; }
 html:not(.js) .ex .raw-part { order: 3; margin-top: 1rem; padding-top: 0.8rem; border-top: 1px dashed rgba(246, 236, 240, 0.25); }
+
+/* Commands never wrap mid-line: inline code stays whole, long ones scroll in their own block. */
+p code, li code, dd code, td code, figcaption code, h3 code { white-space: nowrap; }
+code.cmd { display: block; width: max-content; max-width: 100%; overflow-x: auto; margin: 0.4rem 0; padding: 0.5rem 0.8rem; }
