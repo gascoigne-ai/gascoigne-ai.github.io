@@ -35,7 +35,7 @@
     <a href="#savings">Savings</a>
     <a href="#install">Install</a>
     <a href="#changelog">Changelog</a>
-    <a href="releases/0.6.0/">0.6.0</a>
+    <a href="releases/0.6.1/">0.6.1</a>
     <a href="https://github.com/gascoigne-ai/gascoigne-cli/tree/master/docs">Docs</a>
     <a href="https://github.com/gascoigne-ai">GitHub</a>
   </nav>
@@ -1140,6 +1140,19 @@ Gascoigne gascoigne = Gascoigne.<span class="tk-fn">builder</span>().<span class
 <section id="changelog">
   <h2>Changelog</h2>
   <details class="release" open>
+    <summary>
+      <h3>0.6.1</h3>
+      <p class="fine"><time datetime="2026-10-14">14 October 2026</time>, savings net of rerequests</p>
+    </summary>
+    <ul>
+      <li>A run the agent re-asked about (fetched the original, or reran it raw) is stored as <code>rerequested</code>, not optimized, and costs the result plus the original in your savings. Old history is converted on first start.</li>
+      <li>The dashboard charts optimizing against rerequesting per day and filters the feed by Optimized, Bypassed, Unchanged, Rerequested, Raw and Failed.</li>
+      <li>Originals stay 30 days, runs and MCP stats a year (<code>ledger.raw_ttl</code>, <code>events_ttl</code>, <code>stats_ttl</code>). Fixes for <code data-lang="sh" data-hl><span class="tk-cmd">gascoigne</span> tokens</code> hanging and a git branch crash.</li>
+    </ul>
+    <p class="fine"><a href="releases/0.6.1/">What's new in 0.6.1</a>,
+      <a href="https://github.com/gascoigne-ai/gascoigne-cli/releases/tag/v0.6.1">release notes and downloads</a></p>
+  </details>
+  <details class="release">
     <summary>
       <h3>0.6.0</h3>
       <p class="fine"><time datetime="2026-10-14">14 October 2026</time>, pick your prose model</p>

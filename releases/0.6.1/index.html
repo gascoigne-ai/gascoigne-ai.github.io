@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>gascoigne 0.6.1 — real savings, net of rerequests</title>
+<meta name="description" content="gascoigne 0.6.1 stops counting a run as a saving when the agent then asks for the original, and charts optimizing against rerequesting on the dashboard.">
+<meta property="og:title" content="gascoigne 0.6.1">
+<meta property="og:description" content="Savings net of rerequests, a dashboard chart of optimizing vs rerequesting, and longer retention.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23ECE4E2'/%3E%3Cpath d='M16 2A14 14 0 0 0 16 30A7 14 0 0 0 16 2Z' fill='%234A1A2C'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css?v=20261014d">
+</head>
+<body>
+
+<svg width="0" height="0" class="defs" aria-hidden="true">
+  <defs>
+    <radialGradient id="moon-lit" cx="38%" cy="32%" r="72%"><stop offset="0" stop-color="#fffdfb"/><stop offset=".6" stop-color="#ece4e2"/><stop offset="1" stop-color="#c9bcbf"/></radialGradient>
+    <radialGradient id="moon-dark" cx="60%" cy="60%" r="70%"><stop offset="0" stop-color="#4a1a2c"/><stop offset="1" stop-color="#2a0c17"/></radialGradient>
+  </defs>
+</svg>
+
+<div class="night">
+<header class="top">
+  <a class="brand" href="../../">
+    <svg class="moon" data-saved="0.8" width="28" height="28" aria-hidden="true"></svg>
+    gascoigne
+  </a>
+  <nav>
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/CHANGELOG.md">Changelog</a>
+    <a href="https://github.com/gascoigne-ai">GitHub</a>
+  </nav>
+</header>
+
+
+<section class="hero release-hero">
+  <div class="hero-text">
+    <p class="fine"><time datetime="2026-10-14">14 October 2026</time></p>
+    <h1><span>gascoigne 0.6.1</span> <span>Savings you can believe.</span></h1>
+    <p class="lede">When an agent reads an optimized result and then asks for the original, the optimization
+      did not help: it cost the result and the original. gascoigne now records that run as
+      <em>rerequested</em>, subtracts it from your savings and charts optimizing against rerequesting on the dashboard.</p>
+    <div class="oneliner">
+      <code id="up1">go install github.com/gascoigne-ai/gascoigne-cli/cmd/gascoigne@latest</code>
+      <button class="copy" data-copy="up1" type="button">Copy</button>
+    </div>
+    <p class="fine">Starting fresh? <a href="../../#install">Install it</a> first. Coming from 0.5:
+      <a href="../0.6.0/">prose model choice</a>.</p>
+  </div>
+</section>
+</div>
+
+<main>
+
+<section id="new">
+  <h2>What's new</h2>
+
+  <h3>Rerequested runs are not savings</h3>
+  <p class="intro">A run is stored as <code>rerequested</code> instead of <code>optimized</code> when the agent
+    fetches its original in full (<code>gascoigne raw</code>, MCP retrieve) or runs the same source raw
+    right after. It counts as the agent read it: the optimized result plus the original, so
+    <code>gain</code>, the dashboard totals and the cost section subtract it. Runs recorded before are
+    converted once, the first time the ledger starts.</p>
+  <ul>
+    <li><strong>Optimized</strong>: the agent was happy with the shorter version.</li>
+    <li><strong>Unchanged</strong> and <strong>Bypassed</strong>: untouched, no effect on savings.</li>
+    <li><strong>Rerequested</strong>: a token penalty. <strong>Raw</strong>: the agent asked for the original at once.</li>
+    <li><strong>Failed</strong>: optimizer errors, as before.</li>
+  </ul>
+  <p class="intro">Fetching only part of an original (<code>-grep</code>, <code>-lines</code>) is not
+    tracked yet, so the real rerequest rate is probably a little higher than shown.</p>
+
+  <h3>Optimizing vs rerequesting, on the dashboard</h3>
+  <p class="intro">A new chart shows, per day, the tokens saved by optimized runs against the tokens read
+    twice because of rerequests, with net saved and the rerequest rate. The run feed filters by
+    Optimized, Bypassed, Unchanged, Rerequested, Raw and Failed, and Bypassed has its own color.</p>
+
+  <h3>Retention you can set</h3>
+  <p class="intro">Originals now stay 30 days (<code>ledger.raw_ttl</code>, was 24 hours). Runs, API usage and
+    failure history stay a year (<code>ledger.events_ttl</code>, new, were forever), and the MCP tool stats
+    a year (<code>ledger.stats_ttl</code>, was two weeks). Set any of them to <code>0</code> to keep it forever.</p>
+
+  <h3>Fixes</h3>
+  <ul>
+    <li><code>gascoigne tokens</code> with no file on a terminal waited for input forever; it now tells you what to do.</li>
+    <li><code>gascoigne tokens</code> no longer stalls on long text without spaces, and its downloads time out after 30 seconds.</li>
+    <li>Groups in <code>gain</code> are ordered by net savings, not gross.</li>
+    <li>Blank lines in <code>git branch</code> output no longer crash the git optimizer.</li>
+  </ul>
+</section>
+
+<section id="upgrade" class="band">
+  <h2>Upgrade</h2>
+  <div class="steps">
+    <div>
+      <h3>1. Install the new version</h3>
+      <div class="oneliner">
+        <code id="u-go">go install github.com/gascoigne-ai/gascoigne-cli/cmd/gascoigne@latest</code>
+        <button class="copy" data-copy="u-go" type="button">Copy</button>
+      </div>
+      <p class="fine">Or download an archive from the <a href="https://github.com/gascoigne-ai/gascoigne-cli/releases/tag/v0.6.1">release</a>.
+        The background server notices the new binary and restarts itself.</p>
+    </div>
+    <div>
+      <h3>2. Open the dashboard</h3>
+      <div class="oneliner">
+        <code id="u-db">gascoigne dashboard</code>
+        <button class="copy" data-copy="u-db" type="button">Copy</button>
+      </div>
+      <p class="fine">Your history is converted on the first start: runs the agent re-asked about show as rerequested, and your savings total may drop a little. Nothing is lost.</p>
+    </div>
+  </div>
+</section>
+
+<section id="more">
+  <h2>More</h2>
+  <p class="intro">The full list is in the
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/CHANGELOG.md">changelog</a>, and
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/releases/tag/v0.6.1">release notes and downloads</a>
+    are on GitHub. Both models are Apache 2.0; their attribution is in the
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/docs/prose-model.md">prose guide</a>.
+    Back to the <a href="../../">gascoigne home page</a>.</p>
+</section>
+
+</main>
+
+<footer>
+  <svg class="moon" data-saved="0.95" width="22" height="22" aria-hidden="true"></svg>
+  <p>gascoigne is open source under the <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/LICENSE">Apache License 2.0</a>.
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli">Source</a>,
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/docs/agents.md">agents guide</a> and
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/docs/cli.md">CLI reference</a>.</p>
+</footer>
+
+<script src="../../assets/site.js?v=20261014d"></script>
+</body>
+</html>
