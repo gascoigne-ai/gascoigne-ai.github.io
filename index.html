@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/style.css?v=20261014c">
 </head>
 <body>
 
@@ -28,9 +28,12 @@
     <svg class="moon" data-saved="0.8" width="28" height="28" aria-hidden="true"></svg>
     gascoigne
   </a>
-  <nav>
-    <a href="#install">Install</a>
+  <nav aria-label="Main">
+    <a href="#how">How it works</a>
+    <a href="#features">Features</a>
+    <a href="#sdk">SDK</a>
     <a href="#savings">Savings</a>
+    <a href="#install">Install</a>
     <a href="#changelog">Changelog</a>
     <a href="releases/0.5.0/">0.5.0</a>
     <a href="https://github.com/gascoigne-ai/gascoigne-cli/tree/master/docs">Docs</a>
@@ -45,499 +48,908 @@
       every kind of output: it shrinks command output, tool results and web pages before they reach
       the model, and keeps every original one command away.</p>
     <div class="oneliner">
-      <code id="quick">go install github.com/gascoigne-ai/gascoigne-cli/cmd/gascoigne@latest &amp;&amp; gascoigne wrap claude</code>
+      <code id="quick" data-lang="sh" data-hl><span class="tk-cmd">go</span> install github.com/gascoigne-ai/gascoigne-cli/cmd/gascoigne@latest &amp;&amp; <span class="tk-cmd">gascoigne</span> wrap claude</code>
       <button class="copy" data-copy="quick" type="button">Copy</button>
     </div>
     <p class="fine">Claude Code starts with gascoigne for this run only. No config files are touched.
       Swap <code>claude</code> for <code>codex</code>, <code>gemini</code>, <code>opencode</code> or <code>pi</code>.</p>
+    <ul class="badges" aria-label="License and privacy">
+      <li>Free &amp; open source</li>
+      <li><a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/LICENSE">Apache-2.0</a></li>
+      <li>Runs locally</li>
+    </ul>
   </div>
 
-  <figure class="demo" id="demo" data-view="raw">
+  <figure class="demo" id="demo" data-view="raw" aria-label="Demo: real tool output before and after gascoigne, from the eval fixtures.">
+    <div class="ex-picker" role="tablist" aria-label="Example output">
+      <button role="tab" type="button" id="exb-go" data-ex="go" aria-controls="ex-go" aria-selected="true">go test timeout</button>
+      <button role="tab" type="button" id="exb-npm" data-ex="npm" aria-controls="ex-npm" aria-selected="false">npm install</button>
+      <button role="tab" type="button" id="exb-nginx" data-ex="nginx" aria-controls="ex-nginx" aria-selected="false">nginx access log</button>
+      <button role="tab" type="button" id="exb-tf" data-ex="tf" aria-controls="ex-tf" aria-selected="false">terraform plan</button>
+    </div>
     <div class="demo-bar">
-      <svg class="moon demo-moon" data-saved="0" width="40" height="40" aria-hidden="true"></svg>
+      <svg class="moon demo-moon" data-saved="0.948" width="40" height="40" aria-hidden="true"></svg>
       <div class="demo-count">
-        <strong id="count">7,478</strong> tokens
-        <span id="count-note">the model would read</span>
+        <strong id="count">388</strong>
+        <span id="count-note">tokens the agent reads, 95% fewer</span>
       </div>
-      <button class="toggle" id="toggle" type="button" aria-pressed="false">Show what the agent reads</button>
+      <button class="replay off" id="replay" type="button">↻ Replay</button>
     </div>
-    <div class="term" tabindex="0" aria-label="Terminal output">
-      <div class="prompt">$ go test ./sync/</div>
-<pre class="out raw" id="raw-out">=== RUN   TestSyncOrders
-panic: test timed out after 10m0s
+    <div class="seg" role="group" aria-label="Choose what to show">
+      <button type="button" data-show="raw" aria-pressed="true">Raw output <b id="seg-raw">7,478</b></button>
+      <button type="button" data-show="agent" aria-pressed="false">What the agent reads <b id="seg-agent">388</b></button>
+      <span class="chip"><span id="pct">95%</span> fewer</span>
+    </div>
+    <div class="term-wrap">
+    <div class="term" tabindex="0" aria-label="Terminal output, scrollable">
+      <div class="ex" id="ex-go" role="tabpanel" aria-labelledby="exb-go" data-ex="go" data-raw="7478" data-agent="388" data-lines="421">
+        <div class="prompt">$ go test ./sync/</div>
+        <div class="raw-part">
+<pre class="out raw" data-lang="godump" data-hl><span class="tk-com">=== RUN   TestSyncOrders</span>
+<span class="tk-err">panic: test timed out after 10m0s</span>
 	running tests:
 		TestSyncOrders (10m0s)
 
-goroutine 52 [running]:
-testing.(*M).startAlarm.func1()
-	/usr/local/go/src/testing/testing.go:2484 +0x394
-created by time.goFunc
-	/usr/local/go/src/time/sleep.go:215 +0x2d
+<span class="tk-kw">goroutine 52 [running]:</span>
+testing.(*M).startAlarm.<span class="tk-fn">func1</span>()
+	<span class="tk-path">/usr/local/go/src/testing/testing.go:2484</span> <span class="tk-com">+0x394</span>
+<span class="tk-com">created by</span> time.goFunc
+	<span class="tk-path">/usr/local/go/src/time/sleep.go:215</span> <span class="tk-com">+0x2d</span>
 
-goroutine 1 [chan receive, 9 minutes]:
-testing.(*T).Run(0xc0001a6820, {0x6f1a2e?, 0x0?}, 0x7182c0)
-	/usr/local/go/src/testing/testing.go:1859 +0x431
-testing.runTests.func1(0xc0001a6820)
-	/usr/local/go/src/testing/testing.go:2279 +0x37
-testing.tRunner(0xc0001a6820, 0xc000117c70)
-	/usr/local/go/src/testing/testing.go:1792 +0xf4
-testing.runTests(0xc0001300a8, {0x9b2f40, 0x6, 0x6}, {0x0?, 0x0?, 0x9bb2a0?})
-	/usr/local/go/src/testing/testing.go:2277 +0x4b4
-testing.(*M).Run(0xc0001aa0a0)
-	/usr/local/go/src/testing/testing.go:2142 +0x64a
-main.main()
-	_testmain.go:57 +0x9b
-
-goroutine 18 [select, 9 minutes]:
-example.com/shop/sync.(*Syncer).Run(0xc0001c4000, {0x71c5a8, 0xc0001b6000})
-	/home/user/src/shop/sync/syncer.go:74 +0x1b8
-example.com/shop/sync.TestSyncOrders(0xc0001a69c0)
-	/home/user/src/shop/sync/syncer_test.go:31 +0x2f1
-testing.tRunner(0xc0001a69c0, 0x7182c0)
-	/usr/local/go/src/testing/testing.go:1792 +0xf4
-created by testing.(*T).Run in goroutine 1
-	/usr/local/go/src/testing/testing.go:1851 +0x413
-
-goroutine 60 [chan receive, 9 minutes]:
-example.com/shop/sync.(*worker).loop(0xc000200000)
-	/home/user/src/shop/sync/worker.go:52 +0x7c
-created by example.com/shop/sync.(*Syncer).start in goroutine 18
-	/home/user/src/shop/sync/syncer.go:41 +0x9e
-
-goroutine 61 [chan receive, 9 minutes]:
-example.com/shop/sync.(*worker).loop(0xc000201000)
-	/home/user/src/shop/sync/worker.go:52 +0x7c
-created by example.com/shop/sync.(*Syncer).start in goroutine 18
-	/home/user/src/shop/sync/syncer.go:41 +0x9e
-
-goroutine 62 [chan receive, 9 minutes]:
-example.com/shop/sync.(*worker).loop(0xc000202000)
-	/home/user/src/shop/sync/worker.go:52 +0x7c
-created by example.com/shop/sync.(*Syncer).start in goroutine 18
-	/home/user/src/shop/sync/syncer.go:41 +0x9e
-
-goroutine 63 [chan receive, 9 minutes]:
-example.com/shop/sync.(*worker).loop(0xc000203000)
-	/home/user/src/shop/sync/worker.go:52 +0x7c
-created by example.com/shop/sync.(*Syncer).start in goroutine 18
-	/home/user/src/shop/sync/syncer.go:41 +0x9e
-
-goroutine 64 [chan receive, 9 minutes]:
-example.com/shop/sync.(*worker).loop(0xc000204000)
-	/home/user/src/shop/sync/worker.go:52 +0x7c
-created by example.com/shop/sync.(*Syncer).start in goroutine 18
-	/home/user/src/shop/sync/syncer.go:41 +0x9e
-
-goroutine 65 [chan receive, 9 minutes]:
-example.com/shop/sync.(*worker).loop(0xc000205000)
-	/home/user/src/shop/sync/worker.go:52 +0x7c
-created by example.com/shop/sync.(*Syncer).start in goroutine 18
-	/home/user/src/shop/sync/syncer.go:41 +0x9e
-
-goroutine 66 [chan receive, 9 minutes]:
-example.com/shop/sync.(*worker).loop(0xc000206000)
-	/home/user/src/shop/sync/worker.go:52 +0x7c
-created by example.com/shop/sync.(*Syncer).start in goroutine 18
-	/home/user/src/shop/sync/syncer.go:41 +0x9e
-
-goroutine 67 [chan receive, 9 minutes]:
-example.com/shop/sync.(*worker).loop(0xc000207000)
-	/home/user/src/shop/sync/worker.go:52 +0x7c
-created by example.com/shop/sync.(*Syncer).start in goroutine 18
-	/home/user/src/shop/sync/syncer.go:41 +0x9e
-
-goroutine 68 [chan receive, 9 minutes]:
-example.com/shop/sync.(*worker).loop(0xc000208000)
-	/home/user/src/shop/sync/worker.go:52 +0x7c
-created by example.com/shop/sync.(*Syncer).start in goroutine 18
-	/home/user/src/shop/sync/syncer.go:41 +0x9e
-
-goroutine 69 [chan receive, 9 minutes]:
-example.com/shop/sync.(*worker).loop(0xc000209000)
-	/home/user/src/shop/sync/worker.go:52 +0x7c
-created by example.com/shop/sync.(*Syncer).start in goroutine 18
-	/home/user/src/shop/sync/syncer.go:41 +0x9e
-
-goroutine 70 [chan receive, 9 minutes]:
-example.com/shop/sync.(*worker).loop(0xc00020a000)
-	/home/user/src/shop/sync/worker.go:52 +0x7c
-created by example.com/shop/sync.(*Syncer).start in goroutine 18
-	/home/user/src/shop/sync/syncer.go:41 +0x9e
-
-goroutine 71 [chan receive, 9 minutes]:
-example.com/shop/sync.(*worker).loop(0xc00020b000)
-	/home/user/src/shop/sync/worker.go:52 +0x7c
-created by example.com/shop/sync.(*Syncer).start in goroutine 18
-	/home/user/src/shop/sync/syncer.go:41 +0x9e
-
-goroutine 72 [chan receive, 9 minutes]:
-example.com/shop/sync.(*worker).loop(0xc00020c000)
-	/home/user/src/shop/sync/worker.go:52 +0x7c
-created by example.com/shop/sync.(*Syncer).start in goroutine 18
-	/home/user/src/shop/sync/syncer.go:41 +0x9e
-
-goroutine 73 [chan receive, 9 minutes]:
-example.com/shop/sync.(*worker).loop(0xc00020d000)
-	/home/user/src/shop/sync/worker.go:52 +0x7c
-created by example.com/shop/sync.(*Syncer).start in goroutine 18
-	/home/user/src/shop/sync/syncer.go:41 +0x9e
-
-goroutine 74 [chan receive, 9 minutes]:
-example.com/shop/sync.(*worker).loop(0xc00020e000)
-	/home/user/src/shop/sync/worker.go:52 +0x7c
-created by example.com/shop/sync.(*Syncer).start in goroutine 18
-	/home/user/src/shop/sync/syncer.go:41 +0x9e
-
-goroutine 75 [chan receive, 9 minutes]:
-example.com/shop/sync.(*worker).loop(0xc00020f000)
-	/home/user/src/shop/sync/worker.go:52 +0x7c
-created by example.com/shop/sync.(*Syncer).start in goroutine 18
-	/home/user/src/shop/sync/syncer.go:41 +0x9e
-
-goroutine 76 [chan receive, 9 minutes]:
-example.com/shop/sync.(*worker).loop(0xc000210000)
-	/home/user/src/shop/sync/worker.go:52 +0x7c
-created by example.com/shop/sync.(*Syncer).start in goroutine 18
-	/home/user/src/shop/sync/syncer.go:41 +0x9e
-
-goroutine 77 [chan receive, 9 minutes]:
-example.com/shop/sync.(*worker).loop(0xc000211000)
-	/home/user/src/shop/sync/worker.go:52 +0x7c
-created by example.com/shop/sync.(*Syncer).start in goroutine 18
-	/home/user/src/shop/sync/syncer.go:41 +0x9e
-
-goroutine 78 [chan receive, 9 minutes]:
-example.com/shop/sync.(*worker).loop(0xc000212000)
-	/home/user/src/shop/sync/worker.go:52 +0x7c
-created by example.com/shop/sync.(*Syncer).start in goroutine 18
-	/home/user/src/shop/sync/syncer.go:41 +0x9e
-
-goroutine 79 [chan receive, 9 minutes]:
-example.com/shop/sync.(*worker).loop(0xc000213000)
-	/home/user/src/shop/sync/worker.go:52 +0x7c
-created by example.com/shop/sync.(*Syncer).start in goroutine 18
-	/home/user/src/shop/sync/syncer.go:41 +0x9e
-
-goroutine 80 [chan receive, 9 minutes]:
-example.com/shop/sync.(*worker).loop(0xc000214000)
-	/home/user/src/shop/sync/worker.go:52 +0x7c
-created by example.com/shop/sync.(*Syncer).start in goroutine 18
-	/home/user/src/shop/sync/syncer.go:41 +0x9e
-
-goroutine 81 [chan receive, 9 minutes]:
-example.com/shop/sync.(*worker).loop(0xc000215000)
-	/home/user/src/shop/sync/worker.go:52 +0x7c
-created by example.com/shop/sync.(*Syncer).start in goroutine 18
-	/home/user/src/shop/sync/syncer.go:41 +0x9e
-
-goroutine 82 [chan receive, 9 minutes]:
-example.com/shop/sync.(*worker).loop(0xc000216000)
-	/home/user/src/shop/sync/worker.go:52 +0x7c
-created by example.com/shop/sync.(*Syncer).start in goroutine 18
-	/home/user/src/shop/sync/syncer.go:41 +0x9e
-
-goroutine 83 [chan receive, 9 minutes]:
-example.com/shop/sync.(*worker).loop(0xc000217000)
-	/home/user/src/shop/sync/worker.go:52 +0x7c
-created by example.com/shop/sync.(*Syncer).start in goroutine 18
-	/home/user/src/shop/sync/syncer.go:41 +0x9e
-
-goroutine 84 [chan receive, 9 minutes]:
-example.com/shop/sync.(*worker).loop(0xc000218000)
-	/home/user/src/shop/sync/worker.go:52 +0x7c
-created by example.com/shop/sync.(*Syncer).start in goroutine 18
-	/home/user/src/shop/sync/syncer.go:41 +0x9e
-
-goroutine 85 [chan receive, 9 minutes]:
-example.com/shop/sync.(*worker).loop(0xc000219000)
-	/home/user/src/shop/sync/worker.go:52 +0x7c
-created by example.com/shop/sync.(*Syncer).start in goroutine 18
-	/home/user/src/shop/sync/syncer.go:41 +0x9e
-
-goroutine 86 [chan receive, 9 minutes]:
-example.com/shop/sync.(*worker).loop(0xc00021a000)
-	/home/user/src/shop/sync/worker.go:52 +0x7c
-created by example.com/shop/sync.(*Syncer).start in goroutine 18
-	/home/user/src/shop/sync/syncer.go:41 +0x9e
-
-goroutine 87 [chan receive, 9 minutes]:
-example.com/shop/sync.(*worker).loop(0xc00021b000)
-	/home/user/src/shop/sync/worker.go:52 +0x7c
-created by example.com/shop/sync.(*Syncer).start in goroutine 18
-	/home/user/src/shop/sync/syncer.go:41 +0x9e
-
-goroutine 88 [chan receive, 9 minutes]:
-example.com/shop/sync.(*worker).loop(0xc00021c000)
-	/home/user/src/shop/sync/worker.go:52 +0x7c
-created by example.com/shop/sync.(*Syncer).start in goroutine 18
-	/home/user/src/shop/sync/syncer.go:41 +0x9e
-
-goroutine 89 [chan receive, 9 minutes]:
-example.com/shop/sync.(*worker).loop(0xc00021d000)
-	/home/user/src/shop/sync/worker.go:52 +0x7c
-created by example.com/shop/sync.(*Syncer).start in goroutine 18
-	/home/user/src/shop/sync/syncer.go:41 +0x9e
-
-goroutine 90 [chan receive, 8 minutes]:
-example.com/shop/sync.(*worker).loop(0xc00021e000)
-	/home/user/src/shop/sync/worker.go:52 +0x7c
-created by example.com/shop/sync.(*Syncer).start in goroutine 18
-	/home/user/src/shop/sync/syncer.go:41 +0x9e
-
-goroutine 91 [chan receive, 8 minutes]:
-example.com/shop/sync.(*worker).loop(0xc00021f000)
-	/home/user/src/shop/sync/worker.go:52 +0x7c
-created by example.com/shop/sync.(*Syncer).start in goroutine 18
-	/home/user/src/shop/sync/syncer.go:41 +0x9e
-
-goroutine 92 [chan receive, 8 minutes]:
-example.com/shop/sync.(*worker).loop(0xc000220000)
-	/home/user/src/shop/sync/worker.go:52 +0x7c
-created by example.com/shop/sync.(*Syncer).start in goroutine 18
-	/home/user/src/shop/sync/syncer.go:41 +0x9e
-
-goroutine 93 [chan receive, 8 minutes]:
-example.com/shop/sync.(*worker).loop(0xc000221000)
-	/home/user/src/shop/sync/worker.go:52 +0x7c
-created by example.com/shop/sync.(*Syncer).start in goroutine 18
-	/home/user/src/shop/sync/syncer.go:41 +0x9e
-
-goroutine 94 [chan receive, 8 minutes]:
-example.com/shop/sync.(*worker).loop(0xc000222000)
-	/home/user/src/shop/sync/worker.go:52 +0x7c
-created by example.com/shop/sync.(*Syncer).start in goroutine 18
-	/home/user/src/shop/sync/syncer.go:41 +0x9e
-
-goroutine 95 [chan receive, 8 minutes]:
-example.com/shop/sync.(*worker).loop(0xc000223000)
-	/home/user/src/shop/sync/worker.go:52 +0x7c
-created by example.com/shop/sync.(*Syncer).start in goroutine 18
-	/home/user/src/shop/sync/syncer.go:41 +0x9e
-
-goroutine 96 [chan receive, 8 minutes]:
-example.com/shop/sync.(*worker).loop(0xc000224000)
-	/home/user/src/shop/sync/worker.go:52 +0x7c
-created by example.com/shop/sync.(*Syncer).start in goroutine 18
-	/home/user/src/shop/sync/syncer.go:41 +0x9e
-
-goroutine 97 [chan receive, 8 minutes]:
-example.com/shop/sync.(*worker).loop(0xc000225000)
-	/home/user/src/shop/sync/worker.go:52 +0x7c
-created by example.com/shop/sync.(*Syncer).start in goroutine 18
-	/home/user/src/shop/sync/syncer.go:41 +0x9e
-
-goroutine 98 [chan receive, 8 minutes]:
-example.com/shop/sync.(*worker).loop(0xc000226000)
-	/home/user/src/shop/sync/worker.go:52 +0x7c
-created by example.com/shop/sync.(*Syncer).start in goroutine 18
-	/home/user/src/shop/sync/syncer.go:41 +0x9e
-
-goroutine 99 [chan receive, 8 minutes]:
-example.com/shop/sync.(*worker).loop(0xc000227000)
-	/home/user/src/shop/sync/worker.go:52 +0x7c
-created by example.com/shop/sync.(*Syncer).start in goroutine 18
-	/home/user/src/shop/sync/syncer.go:41 +0x9e
-
-goroutine 120 [IO wait, 9 minutes]:
-internal/poll.runtime_pollWait(0x7f3a1c5e0000, 0x72)
-	/usr/local/go/src/runtime/netpoll.go:351 +0x85
-internal/poll.(*pollDesc).wait(0xc0003000a0?, 0xc0004000000?, 0x0)
-	/usr/local/go/src/internal/poll/fd_poll_runtime.go:84 +0x27
-net.(*conn).Read(0xc000124038, {0xc000400000?, 0x0?, 0x0?})
-	/usr/local/go/src/net/net.go:194 +0x45
-example.com/shop/sync.(*client).readLoop(0xc0001d2000)
-	/home/user/src/shop/sync/client.go:118 +0x8e
-created by example.com/shop/sync.dial in goroutine 18
-	/home/user/src/shop/sync/client.go:60 +0x1b5
-
-goroutine 121 [IO wait, 9 minutes]:
-internal/poll.runtime_pollWait(0x7f3a1c5e0010, 0x72)
-	/usr/local/go/src/runtime/netpoll.go:351 +0x85
-internal/poll.(*pollDesc).wait(0xc0003010a0?, 0xc0004001000?, 0x0)
-	/usr/local/go/src/internal/poll/fd_poll_runtime.go:84 +0x27
-net.(*conn).Read(0xc000124038, {0xc000400000?, 0x0?, 0x0?})
-	/usr/local/go/src/net/net.go:194 +0x45
-example.com/shop/sync.(*client).readLoop(0xc0001d2000)
-	/home/user/src/shop/sync/client.go:118 +0x8e
-created by example.com/shop/sync.dial in goroutine 18
-	/home/user/src/shop/sync/client.go:60 +0x1b5
-
-goroutine 122 [IO wait, 9 minutes]:
-internal/poll.runtime_pollWait(0x7f3a1c5e0020, 0x72)
-	/usr/local/go/src/runtime/netpoll.go:351 +0x85
-internal/poll.(*pollDesc).wait(0xc0003020a0?, 0xc0004002000?, 0x0)
-	/usr/local/go/src/internal/poll/fd_poll_runtime.go:84 +0x27
-net.(*conn).Read(0xc000124038, {0xc000400000?, 0x0?, 0x0?})
-	/usr/local/go/src/net/net.go:194 +0x45
-example.com/shop/sync.(*client).readLoop(0xc0001d2000)
-	/home/user/src/shop/sync/client.go:118 +0x8e
-created by example.com/shop/sync.dial in goroutine 18
-	/home/user/src/shop/sync/client.go:60 +0x1b5
-
-goroutine 123 [IO wait, 9 minutes]:
-internal/poll.runtime_pollWait(0x7f3a1c5e0030, 0x72)
-	/usr/local/go/src/runtime/netpoll.go:351 +0x85
-internal/poll.(*pollDesc).wait(0xc0003030a0?, 0xc0004003000?, 0x0)
-	/usr/local/go/src/internal/poll/fd_poll_runtime.go:84 +0x27
-net.(*conn).Read(0xc000124038, {0xc000400000?, 0x0?, 0x0?})
-	/usr/local/go/src/net/net.go:194 +0x45
-example.com/shop/sync.(*client).readLoop(0xc0001d2000)
-	/home/user/src/shop/sync/client.go:118 +0x8e
-created by example.com/shop/sync.dial in goroutine 18
-	/home/user/src/shop/sync/client.go:60 +0x1b5
-
-goroutine 124 [IO wait, 9 minutes]:
-internal/poll.runtime_pollWait(0x7f3a1c5e0040, 0x72)
-	/usr/local/go/src/runtime/netpoll.go:351 +0x85
-internal/poll.(*pollDesc).wait(0xc0003040a0?, 0xc0004004000?, 0x0)
-	/usr/local/go/src/internal/poll/fd_poll_runtime.go:84 +0x27
-net.(*conn).Read(0xc000124038, {0xc000400000?, 0x0?, 0x0?})
-	/usr/local/go/src/net/net.go:194 +0x45
-example.com/shop/sync.(*client).readLoop(0xc0001d2000)
-	/home/user/src/shop/sync/client.go:118 +0x8e
-created by example.com/shop/sync.dial in goroutine 18
-	/home/user/src/shop/sync/client.go:60 +0x1b5
-
-goroutine 125 [IO wait, 9 minutes]:
-internal/poll.runtime_pollWait(0x7f3a1c5e0050, 0x72)
-	/usr/local/go/src/runtime/netpoll.go:351 +0x85
-internal/poll.(*pollDesc).wait(0xc0003050a0?, 0xc0004005000?, 0x0)
-	/usr/local/go/src/internal/poll/fd_poll_runtime.go:84 +0x27
-net.(*conn).Read(0xc000124038, {0xc000400000?, 0x0?, 0x0?})
-	/usr/local/go/src/net/net.go:194 +0x45
-example.com/shop/sync.(*client).readLoop(0xc0001d2000)
-	/home/user/src/shop/sync/client.go:118 +0x8e
-created by example.com/shop/sync.dial in goroutine 18
-	/home/user/src/shop/sync/client.go:60 +0x1b5
-
-goroutine 126 [IO wait, 9 minutes]:
-internal/poll.runtime_pollWait(0x7f3a1c5e0060, 0x72)
-	/usr/local/go/src/runtime/netpoll.go:351 +0x85
-internal/poll.(*pollDesc).wait(0xc0003060a0?, 0xc0004006000?, 0x0)
-	/usr/local/go/src/internal/poll/fd_poll_runtime.go:84 +0x27
-net.(*conn).Read(0xc000124038, {0xc000400000?, 0x0?, 0x0?})
-	/usr/local/go/src/net/net.go:194 +0x45
-example.com/shop/sync.(*client).readLoop(0xc0001d2000)
-	/home/user/src/shop/sync/client.go:118 +0x8e
-created by example.com/shop/sync.dial in goroutine 18
-	/home/user/src/shop/sync/client.go:60 +0x1b5
-
-goroutine 127 [IO wait, 9 minutes]:
-internal/poll.runtime_pollWait(0x7f3a1c5e0070, 0x72)
-	/usr/local/go/src/runtime/netpoll.go:351 +0x85
-internal/poll.(*pollDesc).wait(0xc0003070a0?, 0xc0004007000?, 0x0)
-	/usr/local/go/src/internal/poll/fd_poll_runtime.go:84 +0x27
-net.(*conn).Read(0xc000124038, {0xc000400000?, 0x0?, 0x0?})
-	/usr/local/go/src/net/net.go:194 +0x45
-example.com/shop/sync.(*client).readLoop(0xc0001d2000)
-	/home/user/src/shop/sync/client.go:118 +0x8e
-created by example.com/shop/sync.dial in goroutine 18
-	/home/user/src/shop/sync/client.go:60 +0x1b5
-
-goroutine 128 [IO wait, 9 minutes]:
-internal/poll.runtime_pollWait(0x7f3a1c5e0080, 0x72)
-	/usr/local/go/src/runtime/netpoll.go:351 +0x85
-internal/poll.(*pollDesc).wait(0xc0003080a0?, 0xc0004008000?, 0x0)
-	/usr/local/go/src/internal/poll/fd_poll_runtime.go:84 +0x27
-net.(*conn).Read(0xc000124038, {0xc000400000?, 0x0?, 0x0?})
-	/usr/local/go/src/net/net.go:194 +0x45
-example.com/shop/sync.(*client).readLoop(0xc0001d2000)
-	/home/user/src/shop/sync/client.go:118 +0x8e
-created by example.com/shop/sync.dial in goroutine 18
-	/home/user/src/shop/sync/client.go:60 +0x1b5
-
-goroutine 129 [IO wait, 9 minutes]:
-internal/poll.runtime_pollWait(0x7f3a1c5e0090, 0x72)
-	/usr/local/go/src/runtime/netpoll.go:351 +0x85
-internal/poll.(*pollDesc).wait(0xc0003090a0?, 0xc0004009000?, 0x0)
-	/usr/local/go/src/internal/poll/fd_poll_runtime.go:84 +0x27
-net.(*conn).Read(0xc000124038, {0xc000400000?, 0x0?, 0x0?})
-	/usr/local/go/src/net/net.go:194 +0x45
-example.com/shop/sync.(*client).readLoop(0xc0001d2000)
-	/home/user/src/shop/sync/client.go:118 +0x8e
-created by example.com/shop/sync.dial in goroutine 18
-	/home/user/src/shop/sync/client.go:60 +0x1b5
-
-goroutine 130 [IO wait, 9 minutes]:
-internal/poll.runtime_pollWait(0x7f3a1c5e00a0, 0x72)
-	/usr/local/go/src/runtime/netpoll.go:351 +0x85
-internal/poll.(*pollDesc).wait(0xc00030a0a0?, 0xc000400a000?, 0x0)
-	/usr/local/go/src/internal/poll/fd_poll_runtime.go:84 +0x27
-net.(*conn).Read(0xc000124038, {0xc000400000?, 0x0?, 0x0?})
-	/usr/local/go/src/net/net.go:194 +0x45
-example.com/shop/sync.(*client).readLoop(0xc0001d2000)
-	/home/user/src/shop/sync/client.go:118 +0x8e
-created by example.com/shop/sync.dial in goroutine 18
-	/home/user/src/shop/sync/client.go:60 +0x1b5
-
-goroutine 131 [IO wait, 9 minutes]:
-internal/poll.runtime_pollWait(0x7f3a1c5e00b0, 0x72)
-	/usr/local/go/src/runtime/netpoll.go:351 +0x85
-internal/poll.(*pollDesc).wait(0xc00030b0a0?, 0xc000400b000?, 0x0)
-	/usr/local/go/src/internal/poll/fd_poll_runtime.go:84 +0x27
-net.(*conn).Read(0xc000124038, {0xc000400000?, 0x0?, 0x0?})
-	/usr/local/go/src/net/net.go:194 +0x45
-example.com/shop/sync.(*client).readLoop(0xc0001d2000)
-	/home/user/src/shop/sync/client.go:118 +0x8e
-created by example.com/shop/sync.dial in goroutine 18
-	/home/user/src/shop/sync/client.go:60 +0x1b5
-
-FAIL	example.com/shop/sync	600.021s
-FAIL</pre>
-<pre class="out agent" id="agent-out" hidden>[paths: §1=/home/user/src/shop/sync]
-panic: test timed out after 10m0s
+<span class="tk-kw">goroutine 1 [chan receive, 9 minutes]:</span>
+testing.(*T).<span class="tk-fn">Run</span>(0xc0001a6820, {0x6f1a2e?, 0x0?}, 0x7182c0)
+	<span class="tk-path">/usr/local/go/src/testing/testing.go:1859</span> <span class="tk-com">+0x431</span>
+testing.runTests.<span class="tk-fn">func1</span>(0xc0001a6820)
+	<span class="tk-path">/usr/local/go/src/testing/testing.go:2279</span> <span class="tk-com">+0x37</span>
+testing.<span class="tk-fn">tRunner</span>(0xc0001a6820, 0xc000117c70)
+	<span class="tk-path">/usr/local/go/src/testing/testing.go:1792</span> <span class="tk-com">+0xf4</span>
+testing.<span class="tk-fn">runTests</span>(0xc0001300a8, {0x9b2f40, 0x6, 0x6}, {0x0?, 0x0?, 0x9bb2a0?})
+	<span class="tk-path">/usr/local/go/src/testing/testing.go:2277</span> <span class="tk-com">+0x4b4</span></pre>
+          <p class="cut">… 401 more lines · 7,478 tokens in all</p>
+        </div>
+        <p class="agent-label">What the agent reads (388 tokens):</p>
+<pre class="out agent" data-lang="godump" data-hl><span class="tk-com">[paths: §1=/home/user/src/shop/sync]</span>
+<span class="tk-err">panic: test timed out after 10m0s</span>
 	running tests:
 		TestSyncOrders (10m0s)
 
-goroutine 52 [running]:
+<span class="tk-kw">goroutine 52 [running]:</span>
 
-goroutine 1 [chan receive, 9 minutes]:
+<span class="tk-kw">goroutine 1 [chan receive, 9 minutes]:</span>
 
-goroutine 18 [select, 9 minutes]:
-example.com/shop/sync.(*Syncer).Run(0xc0001c4000, {0x71c5a8, 0xc0001b6000})
-	§1/syncer.go:74 +0x1b8
-example.com/shop/sync.TestSyncOrders(0xc0001a69c0)
-	§1/syncer_test.go:31 +0x2f1
+<span class="tk-kw">goroutine 18 [select, 9 minutes]:</span>
+<span class="hl">example.com/shop/sync.(*Syncer).<span class="tk-fn">Run</span>(0xc0001c4000, {0x71c5a8, 0xc0001b6000})
+	<span class="tk-path">§1/syncer.go:74</span> <span class="tk-com">+0x1b8</span></span>
+example.com/shop/sync.<span class="tk-fn">TestSyncOrders</span>(0xc0001a69c0)
+	<span class="tk-path">§1/syncer_test.go:31</span> <span class="tk-com">+0x2f1</span>
 
-goroutine 60 [chan receive, 9 minutes]: +39 more on this stack: 61 62 63 64 65 66 67 68 69 70 …29 more
-example.com/shop/sync.(*worker).loop(0xc000200000)
-	§1/worker.go:52 +0x7c
-created by example.com/shop/sync.(*Syncer).start in goroutine 18
-	§1/syncer.go:41 +0x9e
+<span class="hl"><span class="tk-kw">goroutine 60 [chan receive, 9 minutes]:</span> <span class="tk-num">+39 more on this stack</span>: 61 62 63 64 65 66 67 68 69 70 …29 more</span>
+example.com/shop/sync.(*worker).<span class="tk-fn">loop</span>(0xc000200000)
+	<span class="tk-path">§1/worker.go:52</span> <span class="tk-com">+0x7c</span>
+<span class="tk-com">created by</span> example.com/shop/sync.(*Syncer).start in goroutine 18
+	<span class="tk-path">§1/syncer.go:41</span> <span class="tk-com">+0x9e</span>
 
-goroutine 120 [IO wait, 9 minutes]: +11 more on this stack: 121 122 123 124 125 126 127 128 129 130 …1 more
-example.com/shop/sync.(*client).readLoop(0xc0001d2000)
-	§1/client.go:118 +0x8e
-created by example.com/shop/sync.dial in goroutine 18
-	§1/client.go:60 +0x1b5
+<span class="hl"><span class="tk-kw">goroutine 120 [IO wait, 9 minutes]:</span> <span class="tk-num">+11 more on this stack</span>: 121 122 123 124 125 126 127 128 129 130 …1 more</span>
+example.com/shop/sync.(*client).<span class="tk-fn">readLoop</span>(0xc0001d2000)
+	<span class="tk-path">§1/client.go:118</span> <span class="tk-com">+0x8e</span>
+<span class="tk-com">created by</span> example.com/shop/sync.dial in goroutine 18
+	<span class="tk-path">§1/client.go:60</span> <span class="tk-com">+0x1b5</span>
 
-… 13 standard library frames omitted
-FAIL	example.com/shop/sync	600.021s
-<span class="hint">[gascoigne: optimized 7478→388 tokens · full: gascoigne raw 17415a92]</span></pre>
+<span class="tk-com">… 13 standard library frames omitted</span>
+<span class="tk-err">FAIL	example.com/shop/sync	600.021s</span>
+<span class="hint hl">[gascoigne: optimized 7478→388 tokens · full: gascoigne raw 17415a92]</span></pre>
+      </div>
+      <div class="ex" id="ex-npm" role="tabpanel" aria-labelledby="exb-npm" data-ex="npm" data-raw="24655" data-agent="76" data-lines="823">
+        <div class="prompt">$ npm install --loglevel=http</div>
+        <div class="raw-part">
+<pre class="out raw" data-lang="npm" data-hl><span class="tk-cmd">npm</span> <span class="tk-kw">http</span> <span class="tk-kw">cache</span> <span class="tk-path">https://registry.npmjs.org/express</span> <span class="tk-num">6ms</span> <span class="tk-com">(cache hit)</span>
+<span class="tk-cmd">npm</span> <span class="tk-kw">http</span> <span class="tk-kw">cache</span> <span class="tk-path">https://registry.npmjs.org/jest</span> <span class="tk-num">2ms</span> <span class="tk-com">(cache hit)</span>
+<span class="tk-cmd">npm</span> <span class="tk-kw">http</span> <span class="tk-kw">cache</span> <span class="tk-path">https://registry.npmjs.org/node-notifier</span> <span class="tk-num">1ms</span> <span class="tk-com">(cache hit)</span>
+<span class="tk-cmd">npm</span> <span class="tk-kw">http</span> <span class="tk-kw">cache</span> <span class="tk-path">https://registry.npmjs.org/request</span> <span class="tk-num">2ms</span> <span class="tk-com">(cache hit)</span>
+<span class="tk-cmd">npm</span> <span class="tk-kw">http</span> <span class="tk-kw">cache</span> <span class="tk-path">https://registry.npmjs.org/typescript</span> <span class="tk-num">13ms</span> <span class="tk-com">(cache hit)</span>
+<span class="tk-cmd">npm</span> <span class="tk-kw">http</span> <span class="tk-kw">cache</span> <span class="tk-path">https://registry.npmjs.org/qs</span> <span class="tk-num">9ms</span> <span class="tk-com">(cache hit)</span>
+<span class="tk-cmd">npm</span> <span class="tk-kw">http</span> <span class="tk-kw">cache</span> <span class="tk-path">https://registry.npmjs.org/etag</span> <span class="tk-num">10ms</span> <span class="tk-com">(cache hit)</span>
+<span class="tk-cmd">npm</span> <span class="tk-kw">http</span> <span class="tk-kw">cache</span> <span class="tk-path">https://registry.npmjs.org/depd</span> <span class="tk-num">11ms</span> <span class="tk-com">(cache hit)</span>
+<span class="tk-cmd">npm</span> <span class="tk-kw">http</span> <span class="tk-kw">cache</span> <span class="tk-path">https://registry.npmjs.org/send</span> <span class="tk-num">12ms</span> <span class="tk-com">(cache hit)</span>
+<span class="tk-cmd">npm</span> <span class="tk-kw">http</span> <span class="tk-kw">cache</span> <span class="tk-path">https://registry.npmjs.org/accepts</span> <span class="tk-num">12ms</span> <span class="tk-com">(cache hit)</span>
+<span class="tk-cmd">npm</span> <span class="tk-kw">http</span> <span class="tk-kw">cache</span> <span class="tk-path">https://registry.npmjs.org/debug</span> <span class="tk-num">13ms</span> <span class="tk-com">(cache hit)</span>
+<span class="tk-cmd">npm</span> <span class="tk-kw">http</span> <span class="tk-kw">cache</span> <span class="tk-path">https://registry.npmjs.org/methods</span> <span class="tk-num">14ms</span> <span class="tk-com">(cache hit)</span>
+<span class="tk-cmd">npm</span> <span class="tk-kw">http</span> <span class="tk-kw">cache</span> <span class="tk-path">https://registry.npmjs.org/cookie</span> <span class="tk-num">14ms</span> <span class="tk-com">(cache hit)</span>
+<span class="tk-cmd">npm</span> <span class="tk-kw">http</span> <span class="tk-kw">cache</span> <span class="tk-path">https://registry.npmjs.org/encodeurl</span> <span class="tk-num">15ms</span> <span class="tk-com">(cache hit)</span>
+<span class="tk-cmd">npm</span> <span class="tk-kw">http</span> <span class="tk-kw">cache</span> <span class="tk-path">https://registry.npmjs.org/type-is</span> <span class="tk-num">16ms</span> <span class="tk-com">(cache hit)</span>
+<span class="tk-cmd">npm</span> <span class="tk-kw">http</span> <span class="tk-kw">cache</span> <span class="tk-path">https://registry.npmjs.org/fresh</span> <span class="tk-num">17ms</span> <span class="tk-com">(cache hit)</span>
+<span class="tk-cmd">npm</span> <span class="tk-kw">http</span> <span class="tk-kw">cache</span> <span class="tk-path">https://registry.npmjs.org/parseurl</span> <span class="tk-num">17ms</span> <span class="tk-com">(cache hit)</span>
+<span class="tk-cmd">npm</span> <span class="tk-kw">http</span> <span class="tk-kw">cache</span> <span class="tk-path">https://registry.npmjs.org/vary</span> <span class="tk-num">19ms</span> <span class="tk-com">(cache hit)</span>
+<span class="tk-cmd">npm</span> <span class="tk-kw">http</span> <span class="tk-kw">cache</span> <span class="tk-path">https://registry.npmjs.org/proxy-addr</span> <span class="tk-num">17ms</span> <span class="tk-com">(cache hit)</span>
+<span class="tk-cmd">npm</span> <span class="tk-kw">http</span> <span class="tk-kw">cache</span> <span class="tk-path">https://registry.npmjs.org/statuses</span> <span class="tk-num">19ms</span> <span class="tk-com">(cache hit)</span></pre>
+          <p class="cut">… 803 more lines · 24,655 tokens in all</p>
+        </div>
+        <p class="agent-label">What the agent reads (76 tokens):</p>
+<pre class="out agent" data-lang="npm" data-hl><span class="tk-cmd">npm</span> <span class="tk-err">warn</span> <span class="tk-kw">deprecated</span> (<span class="tk-num">5</span>): <span class="tk-fn">inflight@1.0.6</span>, <span class="tk-fn">har-validator@5.1.5</span>, <span class="tk-fn">glob@7.2.3</span>, <span class="tk-fn">uuid@3.4.0</span>, <span class="tk-fn">request@2.88.2</span>
+
+<span class="hl"><span class="tk-ok">added 378 packages</span>, and audited <span class="tk-num">379</span> packages in 1s</span>
+
+<span class="hl"><span class="tk-err">38 vulnerabilities (8 moderate, 28 high, 2 critical)</span></span>
+
+<span class="hint hl">[gascoigne: optimized 24655→76 tokens · full: gascoigne raw 9049cab3]</span></pre>
+      </div>
+      <div class="ex" id="ex-nginx" role="tabpanel" aria-labelledby="exb-nginx" data-ex="nginx" data-raw="73148" data-agent="436" data-lines="900">
+        <div class="prompt">$ cat /var/log/nginx/access.log</div>
+        <div class="raw-part">
+<pre class="out raw" data-lang="nginx" data-hl><span class="tk-path">203.0.113.7</span> - - <span class="tk-com">[10/Oct/2026:07:00:00 +0000]</span> <span class="tk-str">"GET /api/products?page=8 HTTP/1.1"</span> <span class="tk-ok">200</span> 38783 "-" "curl<span class="tk-path">/8.10.1</span>" 0.339
+<span class="tk-path">10.0.0.133</span> - - <span class="tk-com">[10/Oct/2026:07:00:01 +0000]</span> <span class="tk-str">"GET /api/products?page=7 HTTP/1.1"</span> <span class="tk-ok">200</span> 1651 "-" "Go-http-client<span class="tk-path">/2.0</span>" 0.167
+<span class="tk-path">10.0.1.160</span> - - <span class="tk-com">[10/Oct/2026:07:00:02 +0000]</span> <span class="tk-str">"GET /api/products/2166 HTTP/1.1"</span> <span class="tk-ok">200</span> 34786 "-" "Mozilla<span class="tk-path">/5.0</span> (X11; Linux x86_64) AppleWebKit<span class="tk-path">/537.36</span> (KHTML, like Gecko) Chrome<span class="tk-path">/129.0</span> Safari<span class="tk-path">/537.36</span>" 0.666
+<span class="tk-path">10.0.1.160</span> - - <span class="tk-com">[10/Oct/2026:07:00:03 +0000]</span> <span class="tk-str">"GET /healthz HTTP/1.1"</span> <span class="tk-ok">200</span> 19469 "-" "kube-probe<span class="tk-path">/1.31</span>" 0.436
+<span class="tk-path">10.0.2.230</span> - - <span class="tk-com">[10/Oct/2026:07:00:03 +0000]</span> <span class="tk-str">"GET /api/products/4439 HTTP/1.1"</span> <span class="tk-ok">200</span> 22282 "-" "curl<span class="tk-path">/8.10.1</span>" 0.387
+<span class="tk-path">10.0.1.160</span> - - <span class="tk-com">[10/Oct/2026:07:00:04 +0000]</span> <span class="tk-str">"GET /healthz HTTP/1.1"</span> <span class="tk-ok">200</span> 19636 "-" "kube-probe<span class="tk-path">/1.31</span>" 0.272
+<span class="tk-path">10.0.1.160</span> - - <span class="tk-com">[10/Oct/2026:07:00:04 +0000]</span> <span class="tk-str">"GET /api/products/2796 HTTP/1.1"</span> <span class="tk-ok">200</span> 18343 "-" "curl<span class="tk-path">/8.10.1</span>" 0.708
+<span class="tk-path">10.0.3.109</span> - - <span class="tk-com">[10/Oct/2026:07:00:05 +0000]</span> <span class="tk-str">"GET /static/js/app.88e0d1aa.js HTTP/1.1"</span> <span class="tk-ok">200</span> 37164 "-" "Mozilla<span class="tk-path">/5.0</span> (X11; Linux x86_64) AppleWebKit<span class="tk-path">/537.36</span> (KHTML, like Gecko) Chrome<span class="tk-path">/129.0</span> Safari<span class="tk-path">/537.36</span>" 0.151
+<span class="tk-path">10.0.1.250</span> - - <span class="tk-com">[10/Oct/2026:07:00:07 +0000]</span> <span class="tk-str">"GET /api/products/986 HTTP/1.1"</span> <span class="tk-ok">200</span> 3231 "-" "curl<span class="tk-path">/8.10.1</span>" 0.842
+<span class="tk-path">10.0.0.54</span> - - <span class="tk-com">[10/Oct/2026:07:00:07 +0000]</span> <span class="tk-str">"GET /api/products?page=24 HTTP/1.1"</span> <span class="tk-ok">200</span> 43353 "-" "curl<span class="tk-path">/8.10.1</span>" 0.654
+<span class="tk-path">10.0.0.54</span> - - <span class="tk-com">[10/Oct/2026:07:00:08 +0000]</span> <span class="tk-str">"GET /api/products/3502 HTTP/1.1"</span> <span class="tk-ok">200</span> 11465 "-" "curl<span class="tk-path">/8.10.1</span>" 0.409
+<span class="tk-path">10.0.0.133</span> - - <span class="tk-com">[10/Oct/2026:07:00:09 +0000]</span> <span class="tk-str">"GET /api/orders/a3184c3b-61e8-4412-a0e9-08bcbcb11d48 HTTP/1.1"</span> <span class="tk-ok">200</span> 23074 "-" "Go-http-client<span class="tk-path">/2.0</span>" 0.759
+<span class="tk-path">10.0.3.47</span> - - <span class="tk-com">[10/Oct/2026:07:00:11 +0000]</span> <span class="tk-str">"GET /api/products/554 HTTP/1.1"</span> <span class="tk-ok">200</span> 34208 "-" "Mozilla<span class="tk-path">/5.0</span> (X11; Linux x86_64) AppleWebKit<span class="tk-path">/537.36</span> (KHTML, like Gecko) Chrome<span class="tk-path">/129.0</span> Safari<span class="tk-path">/537.36</span>" 0.621
+<span class="tk-path">10.0.3.232</span> - - <span class="tk-com">[10/Oct/2026:07:00:12 +0000]</span> <span class="tk-str">"POST /api/cart/items HTTP/1.1"</span> <span class="tk-ok">200</span> 7381 "-" "curl<span class="tk-path">/8.10.1</span>" 0.848
+<span class="tk-path">10.0.3.232</span> - - <span class="tk-com">[10/Oct/2026:07:00:13 +0000]</span> <span class="tk-str">"POST /api/orders HTTP/1.1"</span> <span class="tk-ok">200</span> 122 "-" "Mozilla<span class="tk-path">/5.0</span> (X11; Linux x86_64) AppleWebKit<span class="tk-path">/537.36</span> (KHTML, like Gecko) Chrome<span class="tk-path">/129.0</span> Safari<span class="tk-path">/537.36</span>" 0.615
+<span class="tk-path">10.0.3.174</span> - - <span class="tk-com">[10/Oct/2026:07:00:14 +0000]</span> <span class="tk-str">"GET /api/products?page=1 HTTP/1.1"</span> <span class="tk-ok">200</span> 11028 "-" "Mozilla<span class="tk-path">/5.0</span> (X11; Linux x86_64) AppleWebKit<span class="tk-path">/537.36</span> (KHTML, like Gecko) Chrome<span class="tk-path">/129.0</span> Safari<span class="tk-path">/537.36</span>" 0.213
+<span class="tk-path">10.0.3.232</span> - - <span class="tk-com">[10/Oct/2026:07:00:15 +0000]</span> <span class="tk-str">"GET /api/products/1404 HTTP/1.1"</span> <span class="tk-ok">200</span> 43165 "-" "Mozilla<span class="tk-path">/5.0</span> (X11; Linux x86_64) AppleWebKit<span class="tk-path">/537.36</span> (KHTML, like Gecko) Chrome<span class="tk-path">/129.0</span> Safari<span class="tk-path">/537.36</span>" 0.615
+<span class="tk-path">10.0.0.183</span> - - <span class="tk-com">[10/Oct/2026:07:00:16 +0000]</span> <span class="tk-str">"GET /api/products/2030 HTTP/1.1"</span> <span class="tk-ok">200</span> 2632 "-" "Mozilla<span class="tk-path">/5.0</span> (X11; Linux x86_64) AppleWebKit<span class="tk-path">/537.36</span> (KHTML, like Gecko) Chrome<span class="tk-path">/129.0</span> Safari<span class="tk-path">/537.36</span>" 0.578
+<span class="tk-path">10.0.2.174</span> - - <span class="tk-com">[10/Oct/2026:07:00:18 +0000]</span> <span class="tk-str">"GET /api/products/2176 HTTP/1.1"</span> <span class="tk-ok">200</span> 31578 "-" "Go-http-client<span class="tk-path">/2.0</span>" 0.809
+<span class="tk-path">10.0.2.249</span> - - <span class="tk-com">[10/Oct/2026:07:00:19 +0000]</span> <span class="tk-str">"GET /api/products/1202 HTTP/1.1"</span> <span class="tk-ok">200</span> 45975 "-" "Go-http-client<span class="tk-path">/2.0</span>" 0.148</pre>
+          <p class="cut">… 880 more lines · 73,148 tokens in all</p>
+        </div>
+        <p class="agent-label">What the agent reads (436 tokens):</p>
+<pre class="out agent" data-lang="nginx" data-hl>900 requests 10<span class="tk-path">/Oct/2026:07:00:00</span> +0000 – 10<span class="tk-path">/Oct/2026:07:14:03</span> +0000: <span class="tk-ok">2xx</span> 870, <span class="tk-num">4xx</span> 24, <span class="tk-err">5xx</span> 6
+<span class="tk-kw">routes:</span>
+  <span class="tk-kw">GET</span> <span class="tk-path">/api/products/:id</span> <span class="tk-num">×369</span> (<span class="tk-ok">200</span> 350, <span class="tk-num">404</span> 19)
+  <span class="tk-kw">GET</span> <span class="tk-path">/api/products</span> <span class="tk-num">×176</span> (<span class="tk-ok">200</span> 176)
+  <span class="tk-kw">GET</span> <span class="tk-path">/healthz</span> <span class="tk-num">×124</span> (<span class="tk-ok">200</span> 124)
+  <span class="tk-kw">POST</span> <span class="tk-path">/api/cart/items</span> <span class="tk-num">×78</span> (<span class="tk-ok">200</span> 73, <span class="tk-num">422</span> 5)
+  <span class="tk-kw">GET</span> <span class="tk-path">/static/js/app.3f9a1c2b.js</span> <span class="tk-num">×53</span> (<span class="tk-ok">200</span> 53)
+  <span class="tk-kw">GET</span> <span class="tk-path">/api/orders/:id</span> <span class="tk-num">×39</span> (<span class="tk-ok">200</span> 39)
+  <span class="tk-kw">POST</span> <span class="tk-path">/api/orders</span> <span class="tk-num">×37</span> (<span class="tk-ok">200</span> 31, <span class="tk-err">502</span> 5, <span class="tk-err">504</span> 1)
+  <span class="tk-kw">GET</span> <span class="tk-path">/static/js/app.88e0d1aa.js</span> <span class="tk-num">×24</span> (<span class="tk-ok">200</span> 24)
+<span class="tk-kw">clients:</span> <span class="tk-path">10.0.1.160</span> <span class="tk-num">×70</span>, <span class="tk-ok">203</span>.0.113.7 <span class="tk-num">×52</span>, <span class="tk-path">10.0.0.133</span> <span class="tk-num">×36</span>, <span class="tk-path">10.0.1.250</span> <span class="tk-num">×35</span>, <span class="tk-path">10.0.1.70</span> <span class="tk-num">×33</span>, … 25 more
+<span class="hl"><span class="tk-kw">server errors:</span></span>
+<span class="tk-path">10.0.3.232</span> - - <span class="tk-com">[10/Oct/2026:07:07:07 +0000]</span> <span class="tk-str">"POST /api/orders HTTP/1.1"</span> <span class="tk-err">502</span> <span class="tk-ok">277</span> "-" "Mozilla<span class="tk-path">/5.0</span> (X11; Linux x86_64) AppleWebKit<span class="tk-path">/537.36</span> (KHTML, like Gecko) Chrome<span class="tk-path">/129.0</span> Safari<span class="tk-path">/537.36</span>" 0.851 (<span class="tk-num">×5</span>)
+<span class="tk-path">10.0.1.250</span> - - <span class="tk-com">[10/Oct/2026:07:08:27 +0000]</span> <span class="tk-str">"POST /api/orders HTTP/1.1"</span> <span class="tk-err">502</span> <span class="tk-ok">260</span> "-" "curl<span class="tk-path">/8.10.1</span>" 0.880
+<span class="hint hl">[gascoigne: optimized 73148→436 tokens · full: gascoigne raw d5cfebc8]</span></pre>
+      </div>
+      <div class="ex" id="ex-tf" role="tabpanel" aria-labelledby="exb-tf" data-ex="tf" data-raw="10663" data-agent="1697" data-lines="826">
+        <div class="prompt">$ terraform plan</div>
+        <div class="raw-part">
+<pre class="out raw" data-lang="tf" data-hl>aws_s3_bucket.assets[0]: <span class="tk-com">Refreshing state...</span> <span class="tk-com">[id=subnet-c5bc8fbbcbde5c099]</span>
+aws_s3_bucket.assets[1]: <span class="tk-com">Refreshing state...</span> <span class="tk-com">[id=c77330bdbd7210dff]</span>
+aws_s3_bucket.assets[2]: <span class="tk-com">Refreshing state...</span> <span class="tk-com">[id=sg-e0d464138a6233255]</span>
+aws_s3_bucket.assets[3]: <span class="tk-com">Refreshing state...</span> <span class="tk-com">[id=sg-75f2dd97f1cfb10f6]</span>
+aws_iam_role_policy_attachment.lambda[0]: <span class="tk-com">Refreshing state...</span> <span class="tk-com">[id=sg-18b33e968617959ce]</span>
+aws_iam_role_policy_attachment.lambda[1]: <span class="tk-com">Refreshing state...</span> <span class="tk-com">[id=sg-3bb2edb20035b7399]</span>
+aws_iam_role_policy_attachment.lambda[2]: <span class="tk-com">Refreshing state...</span> <span class="tk-com">[id=rtbassoc-e2e9c82b1478c281d]</span>
+aws_iam_role_policy_attachment.lambda[3]: <span class="tk-com">Refreshing state...</span> <span class="tk-com">[id=rtbassoc-cc30d8b7628dbd25e]</span>
+aws_iam_role_policy_attachment.lambda[4]: <span class="tk-com">Refreshing state...</span> <span class="tk-com">[id=99e30691c238642ea]</span>
+aws_iam_role_policy_attachment.lambda[5]: <span class="tk-com">Refreshing state...</span> <span class="tk-com">[id=rtbassoc-021da8978206f5c66]</span>
+aws_iam_role_policy_attachment.lambda[6]: <span class="tk-com">Refreshing state...</span> <span class="tk-com">[id=3c60a3cab359eeefb]</span>
+aws_iam_role_policy_attachment.lambda[7]: <span class="tk-com">Refreshing state...</span> <span class="tk-com">[id=sg-42a9eba0cdf561d80]</span>
+aws_iam_role_policy_attachment.lambda[8]: <span class="tk-com">Refreshing state...</span> <span class="tk-com">[id=subnet-832ea6928f6236bf2]</span>
+aws_iam_role_policy_attachment.lambda[9]: <span class="tk-com">Refreshing state...</span> <span class="tk-com">[id=sg-ff0e3cd972e81d66d]</span>
+aws_iam_role_policy_attachment.lambda[10]: <span class="tk-com">Refreshing state...</span> <span class="tk-com">[id=sg-ef7108e96f770c226]</span>
+aws_iam_role_policy_attachment.lambda[11]: <span class="tk-com">Refreshing state...</span> <span class="tk-com">[id=rtbassoc-50585a01c4c7d6df0]</span>
+aws_cloudwatch_log_group.fn[<span class="tk-str">"orders"</span>]: <span class="tk-com">Refreshing state...</span> <span class="tk-com">[id=rtbassoc-2ef901b932a7c1880]</span>
+aws_cloudwatch_log_group.fn[<span class="tk-str">"users"</span>]: <span class="tk-com">Refreshing state...</span> <span class="tk-com">[id=subnet-454f46a6910acff00]</span>
+aws_cloudwatch_log_group.fn[<span class="tk-str">"cart"</span>]: <span class="tk-com">Refreshing state...</span> <span class="tk-com">[id=bad8d194a98921396]</span>
+aws_cloudwatch_log_group.fn[<span class="tk-str">"search"</span>]: <span class="tk-com">Refreshing state...</span> <span class="tk-com">[id=subnet-54f59672710e6d8e6]</span></pre>
+          <p class="cut">… 806 more lines · 10,663 tokens in all</p>
+        </div>
+        <p class="agent-label">What the agent reads (1,697 tokens):</p>
+<pre class="out agent" data-lang="tf" data-hl>
+<span class="hl"><span class="tk-fn">  # aws_db_instance.main must be replaced</span></span>
+<span class="tk-err">-/+</span> <span class="tk-kw">resource</span> <span class="tk-str">"aws_db_instance"</span> <span class="tk-str">"main"</span> {
+      <span class="tk-num">~</span> address                               = <span class="tk-str">"shop-main.c9akciq32.eu-west-1.rds.amazonaws.com"</span> <span class="tk-com">-&gt;</span> <span class="tk-com">(known after apply)</span>
+      <span class="tk-num">~</span> arn                                   = <span class="tk-str">"arn:aws:rds:eu-west-1:123456789012:db:shop-main"</span> <span class="tk-com">-&gt;</span> <span class="tk-com">(known after apply)</span>
+      <span class="tk-num">~</span> endpoint                              = <span class="tk-str">"shop-main.c9akciq32.eu-west-1.rds.amazonaws.com:5432"</span> <span class="tk-com">-&gt;</span> <span class="tk-com">(known after apply)</span>
+      <span class="tk-num">~</span> engine_version_actual                 = <span class="tk-str">"15.4"</span> <span class="tk-com">-&gt;</span> <span class="tk-com">(known after apply)</span>
+      <span class="tk-num">~</span> id                                    = <span class="tk-str">"db-0867E84707EC717F158895787F"</span> <span class="tk-com">-&gt;</span> <span class="tk-com">(known after apply)</span>
+      <span class="tk-num">~</span> storage_encrypted                     = false <span class="tk-com">-&gt;</span> true # <span class="tk-err">forces replacement</span>
+        <span class="tk-com">(known after apply: kms_key_id)</span>
+      <span class="tk-num">~</span> latest_restorable_time                = <span class="tk-str">"2026-10-10T07:55:00Z"</span> <span class="tk-com">-&gt;</span> <span class="tk-com">(known after apply)</span>
+        tags                                  = {
+            <span class="tk-str">"env"</span> = <span class="tk-str">"prod"</span>
+        }
+    }
+<span class="tk-fn">
+  # aws_lambda_function.orders will be updated in-place</span>
+  <span class="tk-num">~</span> <span class="tk-kw">resource</span> <span class="tk-str">"aws_lambda_function"</span> <span class="tk-str">"orders"</span> {
+        id                             = <span class="tk-str">"shop-orders"</span>
+      <span class="tk-num">~</span> last_modified                  = <span class="tk-str">"2026-09-30T10:00:00.000+0000"</span> <span class="tk-com">-&gt;</span> <span class="tk-com">(known after apply)</span>
+      <span class="tk-num">~</span> runtime                        = <span class="tk-str">"nodejs16.x"</span> <span class="tk-com">-&gt;</span> <span class="tk-str">"nodejs20.x"</span>
+      <span class="tk-num">~</span> source_code_hash               = <span class="tk-str">"400d3881a5058056ed0980dc6ffbd953dc23cc21779="</span> <span class="tk-com">-&gt;</span> <span class="tk-str">"faa0e42d43c2547f19c6bf84914a6a5bc9974a677c6="</span>
+        tags                           = {}
+
+      <span class="tk-num">~</span> environment {
+          <span class="tk-num">~</span> variables = {
+              <span class="tk-num">~</span> <span class="tk-str">"LOG_LEVEL"</span> = <span class="tk-str">"debug"</span> <span class="tk-com">-&gt;</span> <span class="tk-str">"info"</span>
+            }
+        }
+
+    }
+<span class="tk-fn">
+  # aws_security_group.db will be updated in-place</span>
+  <span class="tk-num">~</span> <span class="tk-kw">resource</span> <span class="tk-str">"aws_security_group"</span> <span class="tk-str">"db"</span> {
+        id                     = <span class="tk-str">"sg-0a36939efea83854a"</span>
+      <span class="tk-num">~</span> ingress                = [
+          <span class="tk-err">-</span> {
+              <span class="tk-err">-</span> cidr_blocks      = [
+                  <span class="tk-err">-</span> <span class="tk-str">"0.0.0.0/0"</span>,
+                ]
+              <span class="tk-err">-</span> from_port        = 5432
+              <span class="tk-err">-</span> protocol         = <span class="tk-str">"tcp"</span>
+              <span class="tk-err">-</span> to_port          = 5432
+            },
+          <span class="tk-ok">+</span> {
+              <span class="tk-ok">+</span> cidr_blocks      = [
+                  <span class="tk-ok">+</span> <span class="tk-str">"10.0.0.0/16"</span>,
+                ]
+              <span class="tk-ok">+</span> from_port        = 5432
+              <span class="tk-ok">+</span> protocol         = <span class="tk-str">"tcp"</span>
+              <span class="tk-ok">+</span> to_port          = 5432
+            },
+        ]
+        name                   = <span class="tk-str">"shop-db"</span>
+    }
+<span class="tk-fn">
+  # module.queues.aws_sqs_queue.this["q00"] will be created</span>
+  <span class="tk-ok">+</span> <span class="tk-kw">resource</span> <span class="tk-str">"aws_sqs_queue"</span> <span class="tk-str">"this"</span> {
+        <span class="tk-com">(known after apply: arn, deduplication_scope, fifo_throughput_limit, id, kms_data_key_reuse_period_seconds, name_prefix, policy, redrive_allow_policy, redrive_policy, sqs_managed_sse_enabled, url)</span>
+      <span class="tk-ok">+</span> content_based_deduplication       = false
+      <span class="tk-ok">+</span> delay_seconds                     = 0
+      <span class="tk-ok">+</span> fifo_queue                        = false
+      <span class="tk-ok">+</span> max_message_size                  = 262144
+      <span class="tk-ok">+</span> message_retention_seconds         = 345600
+      <span class="tk-ok">+</span> name                              = <span class="tk-str">"shop-q00"</span>
+      <span class="tk-ok">+</span> receive_wait_time_seconds         = 0
+      <span class="tk-ok">+</span> tags                              = {
+          <span class="tk-ok">+</span> <span class="tk-str">"env"</span> = <span class="tk-str">"prod"</span>
+        }
+      <span class="tk-ok">+</span> tags_all                          = {
+          <span class="tk-ok">+</span> <span class="tk-str">"env"</span> = <span class="tk-str">"prod"</span>
+        }
+      <span class="tk-ok">+</span> visibility_timeout_seconds        = 30
+    }
+<span class="tk-fn">
+  # module.queues.aws_sqs_queue.this["q01"] will be created (like above)</span>
+<span class="tk-fn">  # module.queues.aws_sqs_queue.this["q02"] will be created (like above)</span>
+<span class="tk-fn">  # module.queues.aws_sqs_queue.this["q03"] will be created (like above)</span>
+<span class="tk-fn">  # module.queues.aws_sqs_queue.this["q04"] will be created (like above)</span>
+<span class="tk-fn">  # module.queues.aws_sqs_queue.this["q05"] will be created (like above)</span>
+<span class="tk-fn">  # module.queues.aws_sqs_queue.this["q06"] will be created (like above)</span>
+<span class="tk-fn">  # module.queues.aws_sqs_queue.this["q07"] will be created (like above)</span>
+<span class="tk-fn">  # module.queues.aws_sqs_queue.this["q08"] will be created (like above)</span>
+<span class="tk-fn">  # module.queues.aws_sqs_queue.this["q09"] will be created (like above)</span>
+<span class="tk-fn">  # module.queues.aws_sqs_queue.this["q10"] will be created (like above)</span>
+<span class="tk-fn">  # module.queues.aws_sqs_queue.this["q11"] will be created (like above)</span>
+<span class="tk-fn">  # module.queues.aws_sqs_queue.this["q12"] will be created (like above)</span>
+<span class="tk-fn">  # module.queues.aws_sqs_queue.this["q13"] will be created (like above)</span>
+<span class="tk-fn">  # module.queues.aws_sqs_queue.this["q14"] will be created (like above)</span>
+<span class="tk-fn">  # module.queues.aws_sqs_queue.this["q15"] will be created (like above)</span>
+<span class="tk-fn">  # module.queues.aws_sqs_queue.this["q16"] will be created (like above)</span>
+<span class="tk-fn">  # module.queues.aws_sqs_queue.this["q17"] will be created (like above)</span>
+<span class="tk-fn">  # module.queues.aws_sqs_queue.this["q18"] will be created (like above)</span>
+<span class="tk-fn">  # module.queues.aws_sqs_queue.this["q19"] will be created (like above)</span>
+<span class="tk-fn">  # module.queues.aws_sqs_queue.this["q20"] will be created (like above)</span>
+<span class="tk-fn">  # module.queues.aws_sqs_queue.this["q21"] will be created (like above)</span>
+<span class="tk-fn">  # module.queues.aws_sqs_queue.this["q22"] will be created (like above)</span>
+<span class="tk-fn">  # module.queues.aws_sqs_queue.this["q23"] will be created (like above)</span>
+<span class="hl"><span class="tk-kw">Plan: 25 to add, 2 to change, 1 to destroy.</span></span>
+
+<span class="tk-kw">Changes to Outputs:</span>
+  <span class="tk-num">~</span> db_endpoint = <span class="tk-str">"shop-main.c9akciq32.eu-west-1.rds.amazonaws.com:5432"</span> <span class="tk-com">-&gt;</span> <span class="tk-com">(known after apply)</span>
+<span class="tk-num">Warning: Argument is deprecated</span>
+
+  with aws_s3_bucket.assets,
+  on s3.tf line 12, in <span class="tk-kw">resource</span> <span class="tk-str">"aws_s3_bucket"</span> <span class="tk-str">"assets"</span>:
+  12:   acl    = <span class="tk-str">"private"</span>
+
+Use the aws_s3_bucket_acl <span class="tk-kw">resource</span> instead
+
+(and 3 more similar warnings elsewhere)
+
+<span class="hint hl">[gascoigne: optimized 10663→1697 tokens · full: gascoigne raw 455c6c52]</span></pre>
+      </div>
     </div>
-    <figcaption>A test hangs and Go prints a 421-line goroutine dump. The agent gets the diagnosis:
-      stuck in <code>Syncer.Run</code>, 40 workers waiting on a channel, 12 clients on network reads.</figcaption>
+    <div class="more" id="more" aria-hidden="true"><span id="more-n">↓ scroll for the rest</span></div>
+    </div>
+    <figcaption class="ex-cap" data-ex="go">A test hangs and Go prints a 421-line goroutine dump. The agent gets the diagnosis: <mark>stuck in <code>Syncer.Run</code></mark>, <mark>40 workers waiting on a channel</mark>, <mark>12 clients on network reads</mark>, and the id to fetch any of the rest.</figcaption>
+    <figcaption class="ex-cap" data-ex="npm">An install with HTTP logging prints 823 lines of cache hits and fetches. The agent gets the outcome: <mark>378 packages added</mark>, <mark>38 vulnerabilities</mark> and the five deprecated packages.</figcaption>
+    <figcaption class="ex-cap" data-ex="nginx">Fourteen minutes of an nginx access log, 900 requests. The agent gets <mark>traffic by route and status</mark>, the busiest clients and <mark>the server errors in full</mark>.</figcaption>
+    <figcaption class="ex-cap" data-ex="tf">A plan spends hundreds of lines refreshing state. The agent gets what changes: <mark>a database that must be replaced</mark>, a runtime upgrade and <mark>25 to add, 2 to change, 1 to destroy</mark>.</figcaption>
   </figure>
 </section>
 </div>
 
 <main>
 
-<section class="band" id="lossless">
-  <h2>The original is one command away</h2>
-  <div class="split">
-    <p>Every original goes to a local ledger before anything is shortened, and each shortened
-      output ends with its id. When the agent needs a detail that was folded away, it asks for just
-      that part instead of re-running the command.</p>
-<pre class="snippet">$ gascoigne raw 17415a92 -grep 'goroutine 7[0-9] ' -C 1
-95-
-96:goroutine 70 [chan receive, 9 minutes]:
-117-example.com/shop/sync.(*worker).loop(0xc00020a000)
-…</pre>
+<section id="benefits" class="benefits-sec" aria-labelledby="benefits-h">
+  <h2 id="benefits-h">What your agent gets</h2>
+  <ul class="benefits">
+    <li><strong>70–99%</strong><b>Fewer tokens</b>
+      <span>off verbose output: installs, test runs, logs, traces. The median eval case shrinks by 69%.</span></li>
+    <li><strong>$31<small>/MTok</small></strong><b>Lower cost</b>
+      <span>a saved token's worth on Opus 5.5: each tool result is re-read by a median 110 later requests.</span></li>
+    <li><strong>4–27%</strong><b>Longer sessions</b>
+      <span>less tool output per real coding session (median 10%), so the context window fills more slowly.</span></li>
+    <li><strong>1 call</strong><b>Nothing lost</b>
+      <span>every original is stored first; <code>gascoigne raw &lt;id&gt;</code> brings it back, whole or just the lines you need.</span></li>
+    <li><strong>Local</strong><b>Stays on your machine</b>
+      <span>the ledger and dashboard are local; nothing is sent anywhere except an optional daily release check you can <a href="releases/0.3.0/#notice">turn off</a>.</span></li>
+    <li><strong>Same output</strong><b>Deterministic</b>
+      <span>for the same input, every time, so prompt caches stay warm, through the LLM proxy too.</span></li>
+  </ul>
+  <p class="fine">Eval numbers are an upper bound for the tools gascoigne knows; the real-use and cost figures
+    come from Claude Code sessions. Details under <a href="#savings">what it saves</a> and in
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/docs/cost.md">cost</a>.</p>
+
+  <div class="oss" id="open-source">
+    <h3>Open source, free to use</h3>
+    <ul>
+      <li><b>Apache License 2.0.</b> The CLI, all six SDKs and this website are free to use, change and ship.</li>
+      <li><b>Nothing to sign up for.</b> No account, API key or cloud service is needed for the optimization itself:
+        one static binary in pure Go, no cgo, and SDKs from GitHub releases.</li>
+      <li><b>Auditable.</b> Every engine is public code, and the same input always gives the same output, so you
+        can check what your agent was shown against the original.</li>
+      <li><b>Built in the open.</b> Issues and pull requests are welcome on
+        <a href="https://github.com/gascoigne-ai/gascoigne-cli">gascoigne-cli</a> and the rest of
+        <a href="https://github.com/gascoigne-ai">github.com/gascoigne-ai</a>. Ideas taken from other projects are
+        credited under <a href="#inspirations">standing on good ideas</a>.</li>
+    </ul>
+    <p class="fine">Privacy: the ledger and dashboard stay on your machine. The one optional request, a daily read of a small release file from this site, can be <a href="releases/0.3.0/#notice">turned off</a>.</p>
   </div>
-  <p class="aside">On a re-run after the fix, failures already seen in the session become one line:
-    <code>[↑ 5 lines as in the previous run, from "--- FAIL: TestParse"]</code>.</p>
 </section>
+
+<section id="how" class="band">
+  <h2>How it works</h2>
+  <p class="intro">gascoigne sits between your agent's tools and the model. Shell commands run through
+    <code>gascoigne exec</code>, other MCP servers through <code>gascoigne mcp-proxy</code>, web pages
+    through <code>fetch</code>, and the LLM API proxy trims what the agent's own tools return.</p>
+
+<figure class="flow anim" role="img" aria-label="Animation: a 12,025-token tool result goes into gascoigne. The noise goes down into the local ledger, which keeps every original; the model reads 142 tokens. A dashed arrow from the ledger back to the model shows gascoigne raw bringing an original back.">
+  <svg class="flow-wide" viewBox="0 0 960 340" aria-hidden="true" focusable="false">
+    <defs>
+      <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="arw"/></marker>
+    </defs>
+    <rect class="box" x="20" y="20" width="280" height="230" rx="12"/>
+    <text class="ttl" x="40" y="52">Tool result</text>
+    <text class="num" x="280" y="52">12,025 tokens</text>
+    <rect class="bar noise" x="40" y="74" width="220" height="9" rx="4"/>
+    <rect class="bar noise" x="40" y="92" width="180" height="9" rx="4"/>
+    <rect class="bar keep" x="40" y="110" width="240" height="9" rx="4"/>
+    <rect class="bar noise" x="40" y="128" width="160" height="9" rx="4"/>
+    <rect class="bar noise" x="40" y="146" width="230" height="9" rx="4"/>
+    <rect class="bar keep err" x="40" y="164" width="200" height="9" rx="4"/>
+    <rect class="bar noise" x="40" y="182" width="150" height="9" rx="4"/>
+    <rect class="bar keep" x="40" y="200" width="210" height="9" rx="4"/>
+    <rect class="bar noise" x="40" y="218" width="190" height="9" rx="4"/>
+
+    <line class="link" x1="304" y1="135" x2="424" y2="135" marker-end="url(#arw)"/>
+    <rect class="pk pk-in" x="306" y="131" width="16" height="8" rx="3" style="--d:0s"/>
+    <rect class="pk pk-in" x="306" y="131" width="16" height="8" rx="3" style="--d:-1s"/>
+    <rect class="pk pk-in" x="306" y="131" width="16" height="8" rx="3" style="--d:-2s"/>
+
+    <text class="ttl c" x="480" y="64">gascoigne</text>
+    <circle class="halo" cx="480" cy="135" r="54"/>
+    <circle class="lit" cx="480" cy="135" r="40"/>
+    <path class="shade" d="M480 95A40 40 0 0 1 480 175A20 40 0 0 0 480 95Z"/>
+
+    <line class="link" x1="536" y1="135" x2="654" y2="135" marker-end="url(#arw)"/>
+    <rect class="pk pk-out keep" x="540" y="131" width="16" height="8" rx="3" style="--d:-0.5s"/>
+    <rect class="pk pk-out err" x="540" y="131" width="16" height="8" rx="3" style="--d:-2s"/>
+
+    <rect class="box" x="660" y="20" width="280" height="230" rx="12"/>
+    <text class="ttl" x="680" y="52">Model reads</text>
+    <text class="num" x="920" y="52">142 tokens</text>
+    <rect class="bar keep got" x="680" y="74" width="240" height="9" rx="4" style="--d:0s"/>
+    <rect class="bar keep err got" x="680" y="92" width="200" height="9" rx="4" style="--d:.25s"/>
+    <rect class="bar keep got" x="680" y="110" width="210" height="9" rx="4" style="--d:.5s"/>
+    <text class="note" x="680" y="150">errors first, what the</text>
+    <text class="note" x="680" y="170">agent acts on</text>
+
+    <line class="link" x1="480" y1="192" x2="480" y2="246" marker-end="url(#arw)"/>
+    <rect class="pk pk-down" x="476" y="194" width="8" height="12" rx="3" style="--d:0s"/>
+    <rect class="pk pk-down" x="476" y="194" width="8" height="12" rx="3" style="--d:-1.5s"/>
+    <g class="ledger">
+      <path d="M436 262v34c0 7 20 12 44 12s44-5 44-12v-34"/>
+      <ellipse cx="480" cy="262" rx="44" ry="12"/>
+    </g>
+    <text class="ttl e" x="422" y="282">Ledger</text>
+    <text class="note e" x="422" y="304">every original kept</text>
+
+    <path class="raw" d="M528 290 C 640 300, 790 300, 800 256" marker-end="url(#arw)"/>
+    <text class="rawlab" x="660" y="328">gascoigne raw &lt;id&gt;</text>
+  </svg>
+
+  <svg class="flow-tall" viewBox="0 0 360 560" aria-hidden="true" focusable="false">
+    <rect class="box" x="10" y="10" width="340" height="140" rx="12"/>
+    <text class="ttl" x="28" y="40">Tool result</text>
+    <text class="num" x="332" y="40">12,025 tokens</text>
+    <rect class="bar noise" x="28" y="56" width="280" height="8" rx="4"/>
+    <rect class="bar keep" x="28" y="72" width="240" height="8" rx="4"/>
+    <rect class="bar noise" x="28" y="88" width="300" height="8" rx="4"/>
+    <rect class="bar keep err" x="28" y="104" width="220" height="8" rx="4"/>
+    <rect class="bar noise" x="28" y="120" width="260" height="8" rx="4"/>
+
+    <line class="link" x1="180" y1="152" x2="180" y2="196" marker-end="url(#arw2)"/>
+    <defs><marker id="arw2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="arw"/></marker></defs>
+    <circle class="halo" cx="180" cy="240" r="44"/>
+    <circle class="lit" cx="180" cy="240" r="32"/>
+    <path class="shade" d="M180 208A32 32 0 0 1 180 272A16 32 0 0 0 180 208Z"/>
+    <text class="ttl" x="236" y="246">gascoigne</text>
+
+    <line class="link" x1="152" y1="276" x2="96" y2="326" marker-end="url(#arw2)"/>
+    <line class="link" x1="208" y1="276" x2="264" y2="326" marker-end="url(#arw2)"/>
+
+    <rect class="box" x="10" y="332" width="168" height="130" rx="12"/>
+    <text class="ttl" x="26" y="360">Model reads</text>
+    <text class="num s" x="26" y="382">142 tokens</text>
+    <rect class="bar keep got" x="26" y="398" width="136" height="8" rx="4" style="--d:0s"/>
+    <rect class="bar keep err got" x="26" y="414" width="110" height="8" rx="4" style="--d:.25s"/>
+    <rect class="bar keep got" x="26" y="430" width="124" height="8" rx="4" style="--d:.5s"/>
+
+    <g class="ledger">
+      <path d="M226 346v40c0 7 18 12 40 12s40-5 40-12v-40"/>
+      <ellipse cx="266" cy="346" rx="40" ry="12"/>
+    </g>
+    <text class="ttl c" x="266" y="428">Ledger</text>
+    <text class="note c" x="266" y="448">every original kept</text>
+
+    <path class="raw" d="M266 466 C 266 520, 120 520, 96 466" marker-end="url(#arw2)"/>
+    <text class="rawlab" x="180" y="546">gascoigne raw &lt;id&gt;</text>
+  </svg>
+  <figcaption>The SDK's noisy-log example: a 12,025-token tool result reaches the model as 142 tokens, the error first.</figcaption>
+</figure>
+
+  <ol class="how-steps">
+    <li><b>Store.</b> The original goes to a local ledger before anything is shortened.</li>
+    <li><b>Fold.</b> It recognizes the output's family and tool, then keeps what the agent acts on
+      (failures, errors, diffs, summaries) and folds the rest. Short outputs pass through untouched.</li>
+    <li><b>Retrieve.</b> The shortened output ends with an id. <code>gascoigne raw &lt;id&gt;</code> or the
+      MCP <code>retrieve</code> tool returns all of it, or only the lines that match.</li>
+  </ol>
+</section>
+
+<section id="features">
+  <h2>What it does</h2>
+  <p class="intro">Each panel loops from what the agent would get without gascoigne to what it gets with it.</p>
+
+  <article class="feat">
+    <figure class="ba anim" role="img" aria-label="Animation. Before: the agent reads a shortened goroutine dump, 388 tokens, ending with a raw id. After: it asks gascoigne raw for goroutines 70 to 79 and gets three lines back from the 7,478-token original.">
+      <div class="ba-head">
+        <span class="sw"><span class="b">Agent reads the short version</span><span class="a">Agent asks for one detail</span></span>
+        <span class="sw cnt"><span class="b">388 tokens</span><span class="a">3 lines</span></span>
+      </div>
+      <div class="ba-body" aria-hidden="true">
+<pre class="b" data-lang="godump" data-hl><span class="tk-kw">goroutine 60 [chan receive, 9 minutes]:</span>
+  <span class="tk-num">+39 more on this stack</span>: 61 62 63 …
+<span class="tk-com">… 13 standard library frames omitted</span>
+<span class="tk-err">FAIL  example.com/shop/sync  600.021s</span>
+<span class="h">[gascoigne: optimized 7478→388 tokens
+ · full: gascoigne raw 17415a92]</span></pre>
+<pre class="a" data-lang="godump" data-hl><span class="p">$ gascoigne raw 17415a92 \
+    -grep 'goroutine 7[0-9] ' -C 1</span>
+95-
+<span class="k">96:goroutine 70 [chan receive, 9 minutes]:</span>
+117-example.com/shop/sync.(*worker).<span class="tk-fn">loop</span>(0xc00020a000)</pre>
+      </div>
+      <figcaption class="legend">Real output from the goroutine dump at the top of the page. The 7,478-token original stays in the local ledger.</figcaption>
+    </figure>
+    <div class="feat-copy">
+      <h3>Lossless by retrieval</h3>
+      <p>Originals go to a local ledger before anything is shortened, and each shortened output ends with its
+        id. When the agent needs a detail that was folded away, it asks for just that part, by grep, query or
+        line range, instead of re-running the command.</p>
+      <p>Sources whose originals keep being fetched reach the agent whole next time, and output that would save less than its own hint costs is left as it is.</p>
+      <p class="fact">7,478 → 388 tokens, original one call away</p>
+    </div>
+  </article>
+
+  <article class="feat" id="mcp">
+    <figure class="ba anim" role="img" aria-label="Animation. Before: an MCP server lists all 30 tool definitions, about 5,200 tokens. After: 5 tools listed plus search_tools and call_tool, about 1,200 tokens; the other 25 load on request.">
+      <div class="ba-head">
+        <span class="sw"><span class="b">Tool list before: 30 definitions</span><span class="a">After: 5 listed + search_tools, call_tool</span></span>
+        <span class="sw cnt"><span class="b">~5,200 tokens</span><span class="a">~1,200 tokens</span></span>
+      </div>
+      <div class="ba-body" aria-hidden="true">
+        <div class="b chips">
+          <span>create_issue</span><span>get_issue</span><span>list_issues</span><span>add_comment</span><span>search_code</span>
+          <span>update_issue</span><span>close_issue</span><span>add_label</span><span>remove_label</span><span>list_labels</span>
+          <span>assign_user</span><span>list_users</span><span>get_user</span><span>list_prs</span><span>get_pr</span>
+          <span>create_pr</span><span>merge_pr</span><span>review_pr</span><span>list_branches</span><span>create_branch</span>
+          <span>delete_branch</span><span>get_file</span><span>put_file</span><span>list_commits</span><span>get_commit</span>
+          <span>list_releases</span><span>create_release</span><span>list_tags</span><span>get_workflow</span><span>run_workflow</span>
+        </div>
+        <div class="a chips">
+          <span>create_issue</span><span>get_issue</span><span>list_issues</span><span>add_comment</span><span>search_code</span>
+          <span class="new">search_tools</span><span class="new">call_tool</span>
+          <p class="chips-note">The other 25 load on request: <code>search_tools</code> names them, <code>call_tool</code> runs one.</p>
+        </div>
+      </div>
+      <figcaption class="legend">Illustrative tool names. Token counts from the docs: a 30-tool server with 25 tools left out.</figcaption>
+    </figure>
+    <div class="feat-copy">
+      <h3>MCP servers, trimmed</h3>
+      <p><code>gascoigne mcp-proxy</code> sits in front of any stdio MCP server. It shortens the server's text
+        results and compacts tool schemas, keeping every constraint.</p>
+      <p>Tools you never call can load on request: the agent still sees their names and asks for one when a
+        task needs it. A session's tool list never changes, so the prompt cache holds.</p>
+      <p class="fact">About 5,200 → 1,200 tokens of tool definitions</p>
+    </div>
+  </article>
+
+  <article class="feat" id="browser">
+    <figure class="ba anim" role="img" aria-label="Animation. Before: a browser accessibility snapshot with a long run of menu links, 6,569 tokens. After: the head and tail of the run, the heading and the read-more link stay with their refs; the middle links fold into one line. 2,601 tokens.">
+      <div class="ba-head">
+        <span class="sw"><span class="b">Accessibility snapshot</span><span class="a">What the agent reads</span></span>
+        <span class="sw cnt"><span class="b">6,569 tokens</span><span class="a">2,601 tokens</span></span>
+      </div>
+      <div class="ba-body" aria-hidden="true">
+<pre class="b" data-lang="aria" data-hl>- <span class="tk-kw">navigation</span> [<span class="tk-num">ref=e8</span>]:
+  - <span class="tk-kw">link</span> <span class="tk-str">"World"</span> [<span class="tk-num">ref=e15</span>]
+  - <span class="tk-kw">link</span> <span class="tk-str">"Business"</span> [<span class="tk-num">ref=e17</span>]
+  - <span class="tk-kw">link</span> <span class="tk-str">"Technology"</span> [<span class="tk-num">ref=e19</span>]
+  - <span class="tk-kw">link</span> <span class="tk-str">"Science"</span> [<span class="tk-num">ref=e21</span>]
+  - <span class="tk-kw">link</span> <span class="tk-str">"Sport"</span> [<span class="tk-num">ref=e23</span>]
+- <span class="tk-kw">heading</span> <span class="tk-str">"Chip makers rally"</span> [<span class="tk-num">ref=e61</span>]
+- <span class="tk-kw">link</span> <span class="tk-str">"Read more"</span> [<span class="tk-num">ref=e64</span>]</pre>
+<pre class="a" data-lang="aria" data-hl>- <span class="tk-kw">navigation</span> [<span class="tk-num">ref=e8</span>]:
+  - <span class="tk-kw">link</span> <span class="tk-str">"World"</span> [<span class="k">ref=e15</span>]
+  <span class="h">… 3 more links</span>
+  - <span class="tk-kw">link</span> <span class="tk-str">"Sport"</span> [<span class="k">ref=e23</span>]
+- <span class="tk-kw">heading</span> <span class="tk-str">"Chip makers rally"</span> [<span class="k">ref=e61</span>]
+- <span class="tk-kw">link</span> <span class="tk-str">"Read more"</span> [<span class="k">ref=e64</span>]</pre>
+      </div>
+      <figcaption class="legend">Illustrative snapshot. Token counts from the Playwright snapshot in the eval.</figcaption>
+    </figure>
+    <div class="feat-copy">
+      <h3>Browser pages, still clickable</h3>
+      <p>Browser tools return the page as an accessibility tree, mostly menus. gascoigne keeps the head, the
+        tail and whatever matches your <code>query</code>, and every kept <code>ref</code> stays, so the agent
+        can still click what it sees.</p>
+      <p>Fetched HTML becomes markdown with the article kept and the chrome dropped: the Go release history
+        page, 37k tokens of HTML, comes back at about 4k with a query.</p>
+      <p class="fact">6,569 → 2,601 tokens, every kept ref valid</p>
+    </div>
+  </article>
+
+  <article class="feat">
+    <figure class="ba anim" role="img" aria-label="Animation. Before: the first test run shows a failure in full, seven lines. After: on a re-run in the same session the five lines already seen become one line pointing at the previous run, and only the new failure is shown.">
+      <div class="ba-head">
+        <span class="sw"><span class="b">First run</span><span class="a">Re-run after an edit</span></span>
+        <span class="sw cnt"><span class="b">7 lines</span><span class="a">5 lines</span></span>
+      </div>
+      <div class="ba-body" aria-hidden="true">
+<pre class="b" data-lang="gotest" data-hl><span class="p">$ go test ./parser/</span>
+<span class="tk-err">--- FAIL: TestParse (0.00s)</span>
+    <span class="tk-path">parse_test.go:41</span>: unexpected <span class="tk-str">"}"</span>
+    <span class="tk-path">parse_test.go:58</span>: got 2 nodes, want 3
+    <span class="tk-path">parse_test.go:73</span>: missing quote
+    <span class="tk-path">parse_test.go:90</span>: bad indent
+<span class="tk-err">FAIL</span></pre>
+<pre class="a" data-lang="gotest" data-hl><span class="p">$ go test ./parser/</span>
+<span class="h">[↑ 5 lines as in the previous run, from "--- FAIL: TestParse"]</span>
+<span class="k">--- FAIL: TestLexer (0.00s)</span>
+    <span class="tk-path">lexer_test.go:22</span>: got EOF, want IDENT
+<span class="tk-err">FAIL</span></pre>
+      </div>
+      <figcaption class="legend">Illustrative output. The one-line marker is gascoigne's real format.</figcaption>
+    </figure>
+    <div class="feat-copy">
+      <h3>Re-runs show only what changed</h3>
+      <p>Agents re-run tests and builds after every edit. When the same command runs again in the session
+        (within 20 minutes), runs of 4+ lines that one of the last 3 outputs already showed become one line,
+        so only what changed is read again.</p>
+      <p class="fact">For test, build, task, pkg, log, search and vcs output</p>
+    </div>
+  </article>
+
+  <article class="feat">
+    <figure class="ba anim" role="img" aria-label="Animation. Before: an excerpt of Python's json/decoder.py, 3,220 tokens for the file. After: its outline, 579 tokens; a docstring and a function body become markers naming their line ranges, signatures stay byte-exact.">
+      <div class="ba-head">
+        <span class="sw"><span class="b">cat json/decoder.py (excerpt)</span><span class="a">Outline</span></span>
+        <span class="sw cnt"><span class="b">3,220 tokens</span><span class="a">579 tokens</span></span>
+      </div>
+      <div class="ba-body" aria-hidden="true">
+<pre class="b" data-lang="py" data-hl><span class="tk-kw">class</span> <span class="tk-fn">JSONDecodeError</span>(ValueError):
+    <span class="tk-str">"""Subclass of ValueError with the following</span>
+    additional properties:
+
+    msg: The unformatted error message
+    doc: The JSON document being parsed
+    …
+    <span class="tk-kw">def</span> <span class="tk-fn">__init__</span>(self, msg, doc, pos):
+        lineno = doc.<span class="tk-fn">count</span>(<span class="tk-str">'\n'</span>, <span class="tk-num">0</span>, pos) + <span class="tk-num">1</span>
+        colno = pos - doc.<span class="tk-fn">rfind</span>(<span class="tk-str">'\n'</span>, <span class="tk-num">0</span>, pos)
+        …</pre>
+<pre class="a" data-lang="py" data-hl><span class="h"># outline: 8 bodies elided (cat_mode=full for complete source)</span>
+<span class="tk-kw">class</span> <span class="tk-fn">JSONDecodeError</span>(ValueError):
+    <span class="tk-str">"""Subclass of ValueError with the following</span>
+    additional properties:
+    <span class="h"># … docstring L22-29</span>
+    <span class="tk-com"># Note that this exception is used from _json</span>
+    <span class="tk-kw">def</span> <span class="tk-fn">__init__</span>(self, msg, doc, pos):
+        <span class="h"># … L32-40</span>
+
+    <span class="tk-kw">def</span> <span class="tk-fn">__reduce__</span>(self):</pre>
+      </div>
+      <figcaption class="legend">Based on the outline example in the docs; token counts for the whole file. Long lines are wrapped here.</figcaption>
+    </figure>
+    <div class="feat-copy">
+      <h3>Big source files, safe to edit from</h3>
+      <p>Source files only lose whole lines: comments and, in big files, long function bodies. Kept lines are
+        byte-exact and every gap names the lines it stands for, so the agent can edit from what it read.</p>
+      <p><code>gascoigne show file.go:Func</code> reads one function with its doc comment.</p>
+      <p class="fact">35,098 → 9,363 tokens on Go's <code>net/http/server.go</code></p>
+    </div>
+  </article>
+
+  <article class="feat" id="dashboard">
+    <figure class="shot-fig">
+      <picture>
+        <source srcset="assets/dashboard-dark.png" media="(prefers-color-scheme: dark)">
+        <img class="shot" src="assets/dashboard-light.png" width="1600" height="1319" loading="lazy"
+          alt="The gascoigne dashboard: savings over time, top commands and optimizers, and a list of recent runs.">
+      </picture>
+    </figure>
+    <div class="feat-copy">
+      <h3>Watch it work</h3>
+      <p><code>gascoigne dashboard</code> opens a live view in your browser: savings per day, command and
+        optimizer, every run as it happens, and any run's original side by side with what the agent read.
+        Tables are grouped into tabs, and experimental features that are on get their own panel.</p>
+      <p><code>gascoigne gain</code> prints the same in the terminal, with cost.</p>
+      <p class="fact">Its moon shows your savings rate</p>
+    </div>
+  </article>
+</section>
+
+<section id="sdk" class="band">
+  <h2>Not an agent CLI? Use the SDK</h2>
+  <p class="intro">The same shortening, inside your own agent app. The SDKs find the local
+    <code>gascoigne</code> CLI, start its server and shorten tool results before your model reads them.
+    No CLI on the machine means one warning and every result passes through unchanged; it never throws
+    into your app. Apache-2.0, same as the CLI.</p>
+
+  <ul class="stats tight">
+    <li><strong>99%</strong><span>off a noisy log: 12,025 → 142 tokens</span></li>
+    <li><strong>6</strong><span>languages</span></li>
+    <li><strong>3</strong><span>ways to hook in</span></li>
+    <li><strong>15</strong><span>framework demos</span></li>
+  </ul>
+
+  <div class="sdk" data-sdk>
+    <div class="sdk-bar">
+      <div class="seg-tabs" role="tablist" aria-label="Mode">
+        <button role="tab" type="button" id="sdk-m-wrap" data-mode="wrap" aria-controls="sdk-panel" aria-selected="true">Wrap</button>
+        <button role="tab" type="button" id="sdk-m-proxy" data-mode="proxy" aria-controls="sdk-panel" aria-selected="false">Proxy</button>
+        <button role="tab" type="button" id="sdk-m-auto" data-mode="auto" aria-controls="sdk-panel" aria-selected="false">Auto</button>
+      </div>
+      <div class="lang-tabs" role="tablist" aria-label="Language">
+        <button role="tab" type="button" id="sdk-l-python" data-lang="python" aria-controls="sdk-panel" aria-selected="true">Python</button>
+        <button role="tab" type="button" id="sdk-l-typescript" data-lang="typescript" aria-controls="sdk-panel" aria-selected="false">TypeScript</button>
+        <button role="tab" type="button" id="sdk-l-go" data-lang="go" aria-controls="sdk-panel" aria-selected="false">Go</button>
+        <button role="tab" type="button" id="sdk-l-java" data-lang="java" aria-controls="sdk-panel" aria-selected="false">Java</button>
+        <button role="tab" type="button" id="sdk-l-dotnet" data-lang="dotnet" aria-controls="sdk-panel" aria-selected="false">.NET</button>
+        <button role="tab" type="button" id="sdk-l-rust" data-lang="rust" aria-controls="sdk-panel" aria-selected="false">Rust</button>
+      </div>
+    </div>
+    <div class="sdk-panel" id="sdk-panel" role="tabpanel" aria-label="SDK example" tabindex="0">
+      <div class="sdk-main">
+      <p class="sdk-desc" data-mode="wrap"><b>Wrap.</b> Pick tools one by one. Works with any provider and any framework.</p>
+      <p class="sdk-desc" data-mode="proxy"><b>Proxy.</b> Point the LLM client at the gascoigne proxy: every tool result in every request is shortened, whatever produced it, with no tool code changes.</p>
+      <p class="sdk-desc" data-mode="auto"><b>Auto.</b> One explicit call decorates the place every tool call goes through, MCP tools included. Nothing is decorated unless your code asks.</p>
+      <div class="sdk-codebox">
+        <div class="sdk-codebar"><span class="sdk-file" aria-live="polite"></span><button class="copy small" type="button" data-copy-code>Copy</button></div>
+        <div class="sdk-code" data-lang="python" data-mode="wrap" data-src="docs/install.md">
+          <h3 class="sdk-code-h">Python · Wrap <span>docs/install.md</span></h3>
+<pre data-lang="py" data-hl><span class="tk-kw">import</span> gascoigne
+
+gascoigne.<span class="tk-fn">init</span>(agent=<span class="tk-str">"my-app"</span>)
+search = gascoigne.<span class="tk-fn">wrap_tool</span>(search)      <span class="tk-com"># any tool function returning str</span></pre>
+        </div>
+        <div class="sdk-code" data-lang="python" data-mode="proxy" data-src="demos/python/langgraph/proxy.py">
+          <h3 class="sdk-code-h">Python · Proxy <span>demos/python/langgraph/proxy.py</span></h3>
+<pre data-lang="py" data-hl><span class="tk-com"># 1. Start gascoigne.</span>
+gascoigne.<span class="tk-fn">init</span>(agent=<span class="tk-str">"langgraph"</span>)
+
+<span class="tk-com"># 2. Send LLM traffic through the gascoigne proxy.</span>
+base_url = gascoigne.<span class="tk-fn">proxy_base_url</span>(<span class="tk-str">"openai"</span>) <span class="tk-kw">or</span> openrouter.base_url
+
+agent = <span class="tk-fn">create_agent</span>(
+    <span class="tk-fn">ChatOpenAI</span>(model=openrouter.model, api_key=openrouter.api_key, base_url=base_url),
+    [<span class="tk-fn">tool</span>(search_logs)],
+)</pre>
+        </div>
+        <div class="sdk-code" data-lang="python" data-mode="auto" data-src="demos/python/langgraph/auto.py">
+          <h3 class="sdk-code-h">Python · Auto <span>demos/python/langgraph/auto.py</span></h3>
+<pre data-lang="py" data-hl><span class="tk-com"># 1. Start gascoigne.</span>
+gascoigne.<span class="tk-fn">init</span>(agent=<span class="tk-str">"langgraph-mcp"</span>)
+
+<span class="tk-com"># 2. Opt in, explicitly: results of MCP calls and LangChain tools are now shortened. The tool that</span>
+<span class="tk-com"># fetches originals is skipped, so asking for the full text does not shorten it again.</span>
+gascoigne.<span class="tk-fn">auto</span>(skip=[<span class="tk-str">"retrieve_original"</span>])</pre>
+        </div>
+        <div class="sdk-code" data-lang="typescript" data-mode="wrap" data-src="demos/typescript/ai-sdk/wrap.ts">
+          <h3 class="sdk-code-h">TypeScript · Wrap <span>demos/typescript/ai-sdk/wrap.ts</span></h3>
+<pre data-lang="ts" data-hl><span class="tk-kw">import</span> { wrapTools } <span class="tk-kw">from</span> <span class="tk-str">"@gascoigne-ai/ai-sdk"</span>;
+<span class="tk-kw">import</span> { init } <span class="tk-kw">from</span> <span class="tk-str">"@gascoigne-ai/sdk"</span>;
+
+<span class="tk-com">// 1. Start gascoigne.</span>
+<span class="tk-fn">init</span>({ agent: <span class="tk-str">"vercel-ai-sdk"</span> });
+
+<span class="tk-kw">const</span> tools = <span class="tk-fn">wrapTools</span>({
+  <span class="tk-com">// 2. Wrap the tools.</span>
+  search_logs: <span class="tk-fn">tool</span>({
+    description: <span class="tk-str">"Return the recent service logs."</span>,
+    inputSchema: z.<span class="tk-fn">object</span>({}),
+    execute: <span class="tk-kw">async</span> () =&gt; <span class="tk-fn">searchLogs</span>(),
+  }),
+});</pre>
+        </div>
+        <div class="sdk-code" data-lang="typescript" data-mode="proxy" data-src="demos/typescript/ai-sdk/proxy.ts">
+          <h3 class="sdk-code-h">TypeScript · Proxy <span>demos/typescript/ai-sdk/proxy.ts</span></h3>
+<pre data-lang="ts" data-hl><span class="tk-kw">import</span> { init, proxyBaseUrl } <span class="tk-kw">from</span> <span class="tk-str">"@gascoigne-ai/sdk"</span>;
+
+<span class="tk-com">// 1. Start gascoigne.</span>
+<span class="tk-fn">init</span>({ agent: <span class="tk-str">"vercel-ai-sdk"</span> });
+
+<span class="tk-com">// 2. Send LLM traffic through the gascoigne proxy.</span>
+<span class="tk-kw">const</span> baseURL = (<span class="tk-kw">await</span> <span class="tk-fn">proxyBaseUrl</span>(<span class="tk-str">"openai"</span>)) ?? openrouter.baseURL;
+
+<span class="tk-kw">const</span> openRouter = <span class="tk-fn">createOpenRouter</span>({ apiKey: openrouter.apiKey, baseURL });</pre>
+        </div>
+        <div class="sdk-code" data-lang="go" data-mode="wrap" data-src="docs/install.md">
+          <h3 class="sdk-code-h">Go · Wrap <span>docs/install.md</span></h3>
+<pre data-lang="go" data-hl><span class="tk-kw">import</span> <span class="tk-str">"github.com/gascoigne-ai/gascoigne-sdk/go/gascoigne"</span>
+
+rt := gascoigne.<span class="tk-fn">New</span>(gascoigne.Options{Agent: <span class="tk-str">"my-app"</span>})
+logs := rt.<span class="tk-fn">WrapTool</span>(searchTool)       <span class="tk-com">// any value with Name, Description and Call</span></pre>
+        </div>
+        <div class="sdk-code" data-lang="go" data-mode="proxy" data-src="demos/go/langchaingo/proxy/main.go">
+          <h3 class="sdk-code-h">Go · Proxy <span>demos/go/langchaingo/proxy/main.go</span></h3>
+<pre data-lang="go" data-hl><span class="tk-com">// 1. Start gascoigne.</span>
+rt := gascoigne.<span class="tk-fn">New</span>(gascoigne.Options{Agent: <span class="tk-str">"langchaingo"</span>})
+
+<span class="tk-com">// 2. Send LLM traffic through the gascoigne proxy.</span>
+baseURL := cmp.<span class="tk-fn">Or</span>(rt.<span class="tk-fn">ProxyBaseURL</span>(ctx, <span class="tk-str">"openai"</span>), cfg.BaseURL)
+
+llm, <span class="tk-kw">err</span> := openai.<span class="tk-fn">New</span>(
+	openai.<span class="tk-fn">WithBaseURL</span>(baseURL),
+	openai.<span class="tk-fn">WithToken</span>(cfg.APIKey),
+	openai.<span class="tk-fn">WithModel</span>(cfg.Model),
+)</pre>
+        </div>
+        <div class="sdk-code" data-lang="java" data-mode="wrap" data-src="demos/java/spring-ai/wrap/…/LogTools.java">
+          <h3 class="sdk-code-h">Java · Wrap <span>demos/java/spring-ai/wrap/…/LogTools.java</span></h3>
+<pre data-lang="java" data-hl><span class="tk-kw">@Tool</span>(name = <span class="tk-str">"search_logs"</span>, description = <span class="tk-str">"Return the recent service logs."</span>)
+<span class="tk-kw">String</span> <span class="tk-fn">searchLogs</span>() {
+    <span class="tk-com">// 2. Optimize what the tool returns.</span>
+    <span class="tk-kw">return</span> gascoigne.<span class="tk-fn">optimize</span>(Demo.<span class="tk-fn">noisyLogs</span>(), Attrs.<span class="tk-fn">tool</span>(<span class="tk-str">"search_logs"</span>));
+}</pre>
+        </div>
+        <div class="sdk-code" data-lang="java" data-mode="proxy" data-src="demos/java/spring-ai/proxy/…/Application.java">
+          <h3 class="sdk-code-h">Java · Proxy <span>demos/java/spring-ai/proxy/…/Application.java</span></h3>
+<pre data-lang="java" data-hl><span class="tk-com">// 1. Start gascoigne.</span>
+Gascoigne gascoigne = Gascoigne.<span class="tk-fn">builder</span>().<span class="tk-fn">agent</span>(<span class="tk-str">"spring-ai"</span>).<span class="tk-fn">build</span>();
+
+<span class="tk-com">// 2. Send LLM traffic through the gascoigne proxy.</span>
+<span class="tk-kw">String</span> baseUrl = gascoigne.<span class="tk-fn">proxyBaseUrl</span>(<span class="tk-str">"openai"</span>).<span class="tk-fn">orElse</span>(openRouter.<span class="tk-fn">baseUrl</span>());</pre>
+        </div>
+        <div class="sdk-code" data-lang="java" data-mode="auto" data-src="demos/java/spring-ai/auto/…/Application.java">
+          <h3 class="sdk-code-h">Java · Auto <span>demos/java/spring-ai/auto/…/Application.java</span></h3>
+<pre data-lang="java" data-hl><span class="tk-com">// 1. Opt in, explicitly: without this annotation nothing is decorated.</span>
+<span class="tk-kw">@EnableGascoigne</span>(skip = {<span class="tk-str">"write_file"</span>, <span class="tk-str">"retrieve_original"</span>})
+<span class="tk-kw">@SpringBootApplication</span>
+<span class="tk-kw">public</span> <span class="tk-kw">class</span> Application {</pre>
+        </div>
+        <div class="sdk-code" data-lang="dotnet" data-mode="wrap" data-src="demos/dotnet/microsoft-extensions-ai/wrap/Program.cs">
+          <h3 class="sdk-code-h">.NET · Wrap <span>demos/dotnet/microsoft-extensions-ai/wrap/Program.cs</span></h3>
+<pre data-lang="cs" data-hl><span class="tk-com">// 1. Start gascoigne.</span>
+<span class="tk-kw">using</span> <span class="tk-kw">var</span> gascoigne = <span class="tk-kw">new</span> <span class="tk-fn">GascoigneClient</span>(<span class="tk-kw">new</span> GascoigneOptions
+{
+    Agent = <span class="tk-str">"microsoft-extensions-ai"</span>,
+    OnResult = Kit.Observe,
+});
+
+<span class="tk-kw">var</span> searchLogs = AIFunctionFactory.<span class="tk-fn">Create</span>(
+    <span class="tk-com">// 2. Optimize what the tool returns.</span>
+    () =&gt; gascoigne.<span class="tk-fn">OptimizeAsync</span>(Kit.<span class="tk-fn">NoisyLogs</span>(), <span class="tk-kw">new</span> Attrs { Tool = <span class="tk-str">"search_logs"</span> }),
+    <span class="tk-str">"search_logs"</span>,
+    <span class="tk-str">"Return the recent service logs."</span>);</pre>
+        </div>
+        <div class="sdk-code" data-lang="dotnet" data-mode="auto" data-src="demos/dotnet/microsoft-extensions-ai/auto/Program.cs">
+          <h3 class="sdk-code-h">.NET · Auto <span>demos/dotnet/microsoft-extensions-ai/auto/Program.cs</span></h3>
+<pre data-lang="cs" data-hl>    <span class="tk-com">// 2. Opt in, explicitly: without this call nothing is decorated.</span>
+    .<span class="tk-fn">UseFunctionInvocation</span>(configure: c =&gt; c.<span class="tk-fn">UseGascoigne</span>(
+        gascoigne, <span class="tk-kw">new</span> GascoigneToolOptions { Skip = [<span class="tk-str">"retrieve_original"</span>] }))
+    .<span class="tk-fn">Build</span>();</pre>
+        </div>
+        <div class="sdk-code" data-lang="rust" data-mode="wrap" data-src="demos/rust/plain/wrap.rs">
+          <h3 class="sdk-code-h">Rust · Wrap <span>demos/rust/plain/wrap.rs</span></h3>
+<pre data-lang="rust" data-hl><span class="tk-com">// 1. Start gascoigne.</span>
+<span class="tk-kw">let</span> rt = Runtime::<span class="tk-fn">new</span>(<span class="tk-str">"rust-demo"</span>);
+
+<span class="tk-com">// 2. Optimize the tool result.</span>
+<span class="tk-kw">let</span> res = rt.<span class="tk-fn">optimize_result</span>(&amp;<span class="tk-fn">noisy_log</span>(), &amp;Attrs::<span class="tk-fn">tool</span>(<span class="tk-str">"search_logs"</span>));</pre>
+        </div>
+        <p class="sdk-note" hidden></p>
+      </div>
+      </div>
+      <div class="sdk-side">
+      <figure class="sdk-strip anim" role="img" aria-label="Animation: the tool result of 12,025 tokens shrinks to the 142 tokens the model reads.">
+        <div class="row"><span class="lab">Tool result</span><span class="track"><i class="full"></i></span><span class="val">12,025 tokens</span></div>
+        <div class="row"><span class="lab">Model reads</span><span class="track"><i class="shrink"></i></span><span class="val sw"><span class="b">12,025 tokens</span><span class="a">142 tokens</span></span></div>
+        <figcaption>The SDK README's noisy log: saved 99%, original one <code>raw</code> call away.</figcaption>
+      </figure>
+      <div class="sdk-meta" data-lang="python">
+        <div class="sdk-install">
+          <span class="k">Install <span class="tag">py-v0.1.1</span></span>
+          <code data-lang="sh" data-hl><span class="tk-cmd">uv</span> add <span class="tk-path">https://github.com/gascoigne-ai/gascoigne-sdk/releases/download/py-v0.1.1/gascoigne-0.1.1-py3-none-any.whl</span></code>
+          <span class="how">release wheel; pip works with the same URL. <a href="https://github.com/gascoigne-ai/gascoigne-sdk/blob/master/docs/install.md#python">Install guide</a></span>
+        </div>
+        <ul class="fw" aria-label="Python framework demos"><li>LangChain</li><li>LangGraph</li><li>Agno</li><li>Google ADK</li><li>OpenAI Agents</li><li>Pydantic AI</li><li>smolagents</li></ul>
+      </div>
+      <div class="sdk-meta" data-lang="typescript">
+        <div class="sdk-install">
+          <span class="k">Install <span class="tag">ts-v0.1.2</span></span>
+          <code data-lang="sh" data-hl><span class="tk-cmd">npm</span> install @gascoigne-ai/sdk @gascoigne-ai/ai-sdk</code>
+          <span class="how">GitHub Packages (needs a token), or the release tarballs. <a href="https://github.com/gascoigne-ai/gascoigne-sdk/blob/master/docs/install.md#typescript">Install guide</a></span>
+        </div>
+        <ul class="fw" aria-label="TypeScript framework demos"><li>Vercel AI SDK</li><li>LangChain.js</li><li>OpenAI Agents JS</li><li>Mastra</li></ul>
+      </div>
+      <div class="sdk-meta" data-lang="go">
+        <div class="sdk-install">
+          <span class="k">Install <span class="tag">go/v0.1.1</span></span>
+          <code data-lang="sh" data-hl><span class="tk-cmd">go</span> get github.com/gascoigne-ai/gascoigne-sdk/go@v0.1.1</code>
+          <span class="how">Go modules, from the git repo. <a href="https://github.com/gascoigne-ai/gascoigne-sdk/blob/master/docs/install.md#go">Install guide</a></span>
+        </div>
+        <ul class="fw" aria-label="Go framework demos"><li>langchaingo</li></ul>
+      </div>
+      <div class="sdk-meta" data-lang="java">
+        <div class="sdk-install">
+          <span class="k">Install <span class="tag">java-v0.1.2</span></span>
+          <code data-lang="sh" data-hl><span class="tk-cmd">ai.gascoigne</span>:gascoigne:0.1.2</code>
+          <span class="how">Maven, from GitHub Packages; gascoigne-spring-ai for the annotation. <a href="https://github.com/gascoigne-ai/gascoigne-sdk/blob/master/docs/install.md#java">Install guide</a></span>
+        </div>
+        <ul class="fw" aria-label="Java framework demos"><li>Spring AI</li><li>LangChain4j</li></ul>
+      </div>
+      <div class="sdk-meta" data-lang="dotnet">
+        <div class="sdk-install">
+          <span class="k">Install <span class="tag">dotnet-v0.1.2</span></span>
+          <code data-lang="sh" data-hl><span class="tk-cmd">dotnet</span> add package Gascoigne.Extensions.AI <span class="tk-flag">--version</span> 0.1.2</code>
+          <span class="how">release .nupkg as a local source, or GitHub Packages. <a href="https://github.com/gascoigne-ai/gascoigne-sdk/blob/master/docs/install.md#net">Install guide</a></span>
+        </div>
+        <ul class="fw" aria-label=".NET framework demos"><li>Microsoft.Extensions.AI</li></ul>
+      </div>
+      <div class="sdk-meta" data-lang="rust">
+        <div class="sdk-install">
+          <span class="k">Install <span class="tag">rust-v0.1.1</span></span>
+          <code data-lang="sh" data-hl><span class="tk-cmd">cargo</span> add gascoigne <span class="tk-flag">--git</span> <span class="tk-path">https://github.com/gascoigne-ai/gascoigne-sdk</span> <span class="tk-flag">--tag</span> rust-v0.1.1</code>
+          <span class="how">from the git repo. <a href="https://github.com/gascoigne-ai/gascoigne-sdk/blob/master/docs/install.md#rust">Install guide</a></span>
+        </div>
+        <ul class="fw" aria-label="Rust framework demos"><li class="none">no framework demo, it optimizes a log</li></ul>
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <ul class="callouts">
+    <li><b>MCP servers:</b> auto mode follows them through Python's <code>mcp</code> client, Spring AI and
+      Microsoft.Extensions.AI; on the command line <code>gascoigne mcp-proxy</code> covers any stdio server.</li>
+    <li><b>Browser snapshots:</b> the same engines run behind the SDK, so a shortened accessibility tree keeps
+      every <code>ref</code> the agent may click.</li>
+  </ul>
+  <p class="fine">Every SDK has the same surface: <code>optimize</code>, <code>raw</code>,
+    <code>proxy_base_url</code>, <code>stats</code>, <code>wrap_tool</code> and an <code>on_result</code>
+    observer. Install the CLI first. The SDKs are not on PyPI, npmjs, crates.io or Maven Central yet.
+    <a href="https://github.com/gascoigne-ai/gascoigne-sdk">SDK repository</a>.</p>
+</section>
+
 
 <section id="savings">
   <h2>What it saves</h2>
@@ -546,6 +958,7 @@ FAIL	example.com/shop/sync	600.021s
     the more it removes. Progress bars, passing tests and <code>managedFields</code> go almost
     entirely; a source diff or a short search result has little to cut. The darker the moon, the
     more your agent skipped.</p>
+  <div class="savings-grid">
   <div class="table-wrap">
   <table class="savings">
     <thead><tr><th scope="col"><span class="sr">Phase</span></th><th scope="col">Output</th><th scope="col" class="n">Before</th><th scope="col" class="n">After</th><th scope="col" class="n">Saved</th></tr></thead>
@@ -572,6 +985,7 @@ FAIL	example.com/shop/sync	600.021s
     </tbody>
   </table>
   </div>
+  <div class="savings-side">
   <p class="aside">Across all 268 eval cases the median output shrinks by 69%, and 82% of all tokens
     go, because the largest outputs are also the noisiest; 9 cases are not shortened at all. Outputs under
     200 tokens pass through untouched. The fixtures are real-shaped samples of the tools gascoigne
@@ -586,41 +1000,30 @@ FAIL	example.com/shop/sync	600.021s
     your bill drops by less than that. <code>gascoigne gain</code> shows your own numbers.</p>
   <p class="fine">Tokens are a BPE-style estimate, within ~10% of a real tokenizer. Fixtures in
     <code>testdata/eval</code>, measured with <code>make eval</code>.</p>
+  </div>
+  </div>
 </section>
 
-<section id="agents">
+<section id="agents" class="band">
   <h2>Hook up your agent</h2>
-  <p class="intro">Try it for one run with <code>wrap</code>. When you like it, <code>install</code>
-    keeps it on for the project, or for every project with <code>-g</code>.</p>
+  <p class="intro">Try it for one run with <code data-lang="sh" data-hl><span class="tk-cmd">wrap</span></code>. When you like it, <code data-lang="sh" data-hl><span class="tk-cmd">install</span></code>
+    keeps it on for the project, or for every project with <code data-lang="sh" data-hl>-g</code>.</p>
   <div class="table-wrap">
   <table class="agents">
     <thead><tr><th scope="col">Agent</th><th scope="col">One run</th><th scope="col">Keep it on</th></tr></thead>
     <tbody>
-      <tr><td>Claude Code</td><td><code>gascoigne wrap claude</code></td><td><code>gascoigne install claude</code></td></tr>
-      <tr><td>Codex</td><td><code>gascoigne wrap codex</code></td><td><code>gascoigne install codex</code></td></tr>
-      <tr><td>Gemini CLI</td><td><code>gascoigne wrap gemini</code></td><td><code>gascoigne install gemini</code></td></tr>
-      <tr><td>opencode</td><td><code>gascoigne wrap opencode</code></td><td><code>gascoigne install opencode</code></td></tr>
-      <tr><td>pi</td><td><code>gascoigne wrap pi</code></td><td><code>gascoigne install pi</code></td></tr>
-      <tr><td>Cursor</td><td class="none">—</td><td><code>gascoigne install cursor</code></td></tr>
+      <tr><td>Claude Code</td><td><code data-lang="sh" data-hl><span class="tk-cmd">gascoigne</span> wrap claude</code></td><td><code data-lang="sh" data-hl><span class="tk-cmd">gascoigne</span> install claude</code></td></tr>
+      <tr><td>Codex</td><td><code data-lang="sh" data-hl><span class="tk-cmd">gascoigne</span> wrap codex</code></td><td><code data-lang="sh" data-hl><span class="tk-cmd">gascoigne</span> install codex</code></td></tr>
+      <tr><td>Gemini CLI</td><td><code data-lang="sh" data-hl><span class="tk-cmd">gascoigne</span> wrap gemini</code></td><td><code data-lang="sh" data-hl><span class="tk-cmd">gascoigne</span> install gemini</code></td></tr>
+      <tr><td>opencode</td><td><code data-lang="sh" data-hl><span class="tk-cmd">gascoigne</span> wrap opencode</code></td><td><code data-lang="sh" data-hl><span class="tk-cmd">gascoigne</span> install opencode</code></td></tr>
+      <tr><td>pi</td><td><code data-lang="sh" data-hl><span class="tk-cmd">gascoigne</span> wrap pi</code></td><td><code data-lang="sh" data-hl><span class="tk-cmd">gascoigne</span> install pi</code></td></tr>
+      <tr><td>Cursor</td><td class="none">—</td><td><code data-lang="sh" data-hl><span class="tk-cmd">gascoigne</span> install cursor</code></td></tr>
     </tbody>
   </table>
   </div>
-  <p class="fine">Shell commands run through <code>gascoigne exec</code>, results from other MCP servers
-    are shortened through <code>gascoigne mcp-proxy</code>, and agents get <code>fetch</code>,
-    <code>compress</code>, <code>show</code> and <code>retrieve</code> as MCP tools.</p>
-</section>
-
-<section id="dashboard" class="band">
-  <h2>Watch it work</h2>
-  <p class="intro"><code>gascoigne dashboard</code> opens a live view in your browser: savings per day,
-    command and optimizer, every run as it happens, and any run's original side by side with what the
-    agent read. Tables are grouped into tabs, and experimental features that are on get their own panel.
-    Its moon shows your savings rate.</p>
-  <picture>
-    <source srcset="assets/dashboard-dark.png" media="(prefers-color-scheme: dark)">
-    <img class="shot" src="assets/dashboard-light.png" width="1600" height="1319" loading="lazy"
-      alt="The gascoigne dashboard: savings over time, top commands and optimizers, and a list of recent runs.">
-  </picture>
+  <p class="fine">Shell commands run through <code data-lang="sh" data-hl><span class="tk-cmd">gascoigne</span> exec</code>, results from other MCP servers
+    are shortened through <code data-lang="sh" data-hl><span class="tk-cmd">gascoigne</span> mcp-proxy</code>, and agents get <code data-lang="sh" data-hl><span class="tk-cmd">fetch</span></code>,
+    <code data-lang="sh" data-hl><span class="tk-cmd">compress</span></code>, <code data-lang="sh" data-hl><span class="tk-cmd">show</span></code> and <code data-lang="sh" data-hl><span class="tk-cmd">retrieve</span></code> as MCP tools.</p>
 </section>
 
 <section id="families">
@@ -648,32 +1051,20 @@ FAIL	example.com/shop/sync	600.021s
   </dl>
 </section>
 
-<section id="prose">
-  <h2>Long prose, shortened by a local model</h2>
-  <p class="intro">New in 0.5, and an experiment: a small language model on your own GPU or CPU drops the
-    words in long paragraphs that carry least, keeps every number, path, flag and line of code, and leaves
-    tables, lists and command output untouched. About 8–10% fewer tokens on prose-heavy text. It is off until
-    you say yes in <code>gascoigne setup</code>, which downloads it with checksums shown, and the original
-    is one <code>gascoigne raw</code> away. <a href="releases/0.5.0/">See it work</a>.</p>
-</section>
-
-<section id="promises">
-  <h2>What you can rely on</h2>
-  <dl class="promises">
-    <dt>Lossless by retrieval</dt>
-    <dd>Originals are stored first and every shortened output carries its <code>raw</code> id.
-      Output that would save less than its own hint costs is left as it is.</dd>
-    <dt>Deterministic</dt>
-    <dd>Same input, same output, so prompt caches stay warm.</dd>
-    <dt>Safe to edit from</dt>
-    <dd>Source files only lose whole lines: comments and outlined bodies. Kept lines are byte-exact and
-      every gap names the lines it stands for, like <code>// … comments L12-30</code>.</dd>
-    <dt>Self-correcting</dt>
-    <dd>When agents keep fetching a source's originals, that source reaches the agent whole next time.</dd>
-    <dt>Local</dt>
-    <dd>The ledger and dashboard stay on your machine. Nothing is sent anywhere, except one optional
-      request a day for a small release file from this site, which you can
-      <a href="releases/0.3.0/#notice">turn off</a>.</dd>
+<section id="experimental" class="band">
+  <h2>Experimental, off by default</h2>
+  <p class="intro">Four features that are not stable yet. Each stays off until you turn it on with
+    <code>gascoigne setup -experimental</code>, which asks about each one with an example and its impact.</p>
+  <dl class="cards">
+    <div><dt>prose</dt><dd>A small local language model, on CUDA, CoreML or the CPU with no Python, drops
+      low-value words from long paragraphs. Numbers, paths, flags and code stay; tables, lists and command
+      output are left alone. Lossy, about 8–10% fewer tokens on prose-heavy text, and the original is one
+      <code>gascoigne raw</code> away. <a href="releases/0.5.0/">See it work</a>.</dd></div>
+    <div><dt>prompts</dt><dd>Lists the instruction text your agents send with every request and prices it.</dd></div>
+    <div><dt>learn</dt><dd>Proposes instruction lines from habits that cost context, such as commands run
+      again for output that was already shortened.</dd></div>
+    <div><dt>continuity</dt><dd>After a compaction or resume, Claude gets a short snapshot: its last request,
+      open tasks, edited files and failed commands.</dd></div>
   </dl>
 </section>
 
@@ -699,7 +1090,7 @@ FAIL	example.com/shop/sync	600.021s
     <div>
       <h3>With Go 1.27+</h3>
       <div class="oneliner">
-        <code id="i-go">go install github.com/gascoigne-ai/gascoigne-cli/cmd/gascoigne@latest</code>
+        <code id="i-go" data-lang="sh" data-hl><span class="tk-cmd">go</span> install github.com/gascoigne-ai/gascoigne-cli/cmd/gascoigne@latest</code>
         <button class="copy" data-copy="i-go" type="button">Copy</button>
       </div>
       <p class="fine">The binary lands in <code>$(go env GOPATH)/bin</code>.</p>
@@ -707,7 +1098,7 @@ FAIL	example.com/shop/sync	600.021s
     <div>
       <h3>Prebuilt binary: Linux, macOS</h3>
       <div class="oneliner">
-        <code id="i-bin">v=$(curl -fsSLI -o /dev/null -w '%{url_effective}' https://github.com/gascoigne-ai/gascoigne-cli/releases/latest); v=${v##*/v}; os=$(uname -s | tr A-Z a-z); arch=$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/'); f=gascoigne_${v}_${os}_${arch}.tar.gz; b=https://github.com/gascoigne-ai/gascoigne-cli/releases/download/v$v; curl -fsSLO $b/$f -O $b/checksums.txt &amp;&amp; grep " $f\$" checksums.txt | { sha256sum -c - || shasum -a 256 -c -; } &amp;&amp; tar xzf $f &amp;&amp; mkdir -p ~/.local/bin &amp;&amp; cp ${f%.tar.gz}/gascoigne ~/.local/bin/</code>
+        <code id="i-bin" data-lang="sh" data-hl><span class="tk-cmd">v</span>=<span class="tk-path">$(curl</span> <span class="tk-flag">-fsSLI</span> <span class="tk-flag">-o</span> /dev/null <span class="tk-flag">-w</span> <span class="tk-str">'%{url_effective}'</span> <span class="tk-path">https://github.com/gascoigne-ai/gascoigne-cli/releases/latest</span>); <span class="tk-cmd">v</span>=<span class="tk-num">${v</span>##*/v}; <span class="tk-cmd">os</span>=<span class="tk-path">$(uname</span> <span class="tk-flag">-s</span> | <span class="tk-cmd">tr</span> A-Z a-z); <span class="tk-cmd">arch</span>=<span class="tk-path">$(uname</span> <span class="tk-flag">-m</span> | <span class="tk-cmd">sed</span> <span class="tk-str">'s/x86_64/amd64/;s/aarch64/arm64/'</span>); <span class="tk-cmd">f</span>=gascoigne_<span class="tk-num">${v}</span>_<span class="tk-num">${os}</span>_<span class="tk-num">${arch}</span>.tar.gz; <span class="tk-cmd">b</span>=<span class="tk-path">https://github.com/gascoigne-ai/gascoigne-cli/releases/download/v$v</span>; <span class="tk-cmd">curl</span> <span class="tk-flag">-fsSLO</span> <span class="tk-num">$b</span>/<span class="tk-num">$f</span> <span class="tk-flag">-O</span> <span class="tk-num">$b</span>/<span class="tk-path">checksums.txt</span> &amp;&amp; <span class="tk-cmd">grep</span> <span class="tk-str">" $f\$"</span> <span class="tk-path">checksums.txt</span> | { <span class="tk-cmd">sha256sum</span> <span class="tk-flag">-c</span> - || <span class="tk-cmd">shasum</span> <span class="tk-flag">-a</span> 256 <span class="tk-flag">-c</span> -; } &amp;&amp; <span class="tk-cmd">tar</span> xzf <span class="tk-num">$f</span> &amp;&amp; <span class="tk-cmd">mkdir</span> <span class="tk-flag">-p</span> <span class="tk-path">~/.local/bin</span> &amp;&amp; <span class="tk-cmd">cp</span> <span class="tk-num">${f</span><span class="tk-path">%.tar.gz}/gascoigne</span> <span class="tk-path">~/.local/bin/</span></code>
         <button class="copy" data-copy="i-bin" type="button">Copy</button>
       </div>
       <p class="fine">Takes the latest release for your system, checks it against <code>checksums.txt</code> and copies it to
@@ -717,7 +1108,7 @@ FAIL	example.com/shop/sync	600.021s
     <div>
       <h3>Prebuilt binary: Windows</h3>
       <div class="oneliner">
-        <code id="i-win">$v=(irm https://api.github.com/repos/gascoigne-ai/gascoigne-cli/releases/latest).tag_name.TrimStart('v'); $a=if($env:PROCESSOR_ARCHITECTURE -eq 'ARM64'){'arm64'}else{'amd64'}; $f="gascoigne_${v}_windows_$a.zip"; $b="https://github.com/gascoigne-ai/gascoigne-cli/releases/download/v$v"; iwr "$b/$f" -OutFile $f; if(-not ((irm "$b/checksums.txt") -match ((Get-FileHash $f).Hash.ToLower()+'  '+$f))){throw 'checksum mismatch'}; Expand-Archive $f . -Force; ni -Force -ItemType Directory $env:LOCALAPPDATA\gascoigne | Out-Null; cp "$($f -replace '\.zip$')\gascoigne.exe" $env:LOCALAPPDATA\gascoigne\</code>
+        <code id="i-win" data-lang="sh" data-hl><span class="tk-num">$v</span>=(irm <span class="tk-path">https://api.github.com/repos/gascoigne-ai/gascoigne-cli/releases/latest</span>).tag_name.TrimStart(<span class="tk-str">'v'</span>); <span class="tk-num">$a</span>=if(<span class="tk-num">$env:PROCESSOR_ARCHITECTURE</span> <span class="tk-flag">-eq</span> <span class="tk-str">'ARM64'</span>){<span class="tk-str">'arm64'</span>}else{<span class="tk-str">'amd64'</span>}; <span class="tk-num">$f</span>=<span class="tk-str">"gascoigne_${v}_windows_$a.zip"</span>; <span class="tk-num">$b</span>=<span class="tk-str">"https://github.com/gascoigne-ai/gascoigne-cli/releases/download/v$v"</span>; <span class="tk-cmd">iwr</span> <span class="tk-str">"$b/$f"</span> <span class="tk-flag">-OutFile</span> <span class="tk-num">$f</span>; <span class="tk-cmd">if</span>(-not ((irm <span class="tk-str">"$b/checksums.txt"</span>) <span class="tk-flag">-match</span> ((Get-FileHash <span class="tk-num">$f</span>).Hash.ToLower()+<span class="tk-str">'  '</span>+<span class="tk-num">$f</span>))){throw <span class="tk-str">'checksum mismatch'</span>}; <span class="tk-cmd">Expand-Archive</span> <span class="tk-num">$f</span> . <span class="tk-flag">-Force</span>; <span class="tk-cmd">ni</span> <span class="tk-flag">-Force</span> <span class="tk-flag">-ItemType</span> Directory <span class="tk-num">$env:LOCALAPPDATA</span>\gascoigne | <span class="tk-cmd">Out-Null</span>; <span class="tk-cmd">cp</span> <span class="tk-str">"$($f -replace '\.zip$')\gascoigne.exe"</span> <span class="tk-num">$env:LOCALAPPDATA</span>\gascoigne\</code>
         <button class="copy" data-copy="i-win" type="button">Copy</button>
       </div>
       <p class="fine">PowerShell. Verifies the checksum and copies <code>gascoigne.exe</code> to
@@ -727,7 +1118,7 @@ FAIL	example.com/shop/sync	600.021s
     <div>
       <h3>From a checkout</h3>
       <div class="oneliner">
-        <code id="i-src">git clone https://github.com/gascoigne-ai/gascoigne-cli &amp;&amp; cd gascoigne-cli &amp;&amp; make install</code>
+        <code id="i-src" data-lang="sh" data-hl><span class="tk-cmd">git</span> clone <span class="tk-path">https://github.com/gascoigne-ai/gascoigne-cli</span> &amp;&amp; <span class="tk-cmd">cd</span> gascoigne-cli &amp;&amp; <span class="tk-cmd">make</span> install</code>
         <button class="copy" data-copy="i-src" type="button">Copy</button>
       </div>
       <p class="fine">Installs to <code>~/.local/bin</code>; set <code>PREFIX</code> for elsewhere.</p>
@@ -735,7 +1126,7 @@ FAIL	example.com/shop/sync	600.021s
     <div>
       <h3>Remove it</h3>
       <div class="oneliner">
-        <code id="i-rm">gascoigne uninstall</code>
+        <code id="i-rm" data-lang="sh" data-hl><span class="tk-cmd">gascoigne</span> uninstall</code>
         <button class="copy" data-copy="i-rm" type="button">Copy</button>
       </div>
       <p class="fine">Takes gascoigne out of your agents' configs, stops the server and deletes the ledger,
@@ -755,9 +1146,9 @@ FAIL	example.com/shop/sync	600.021s
     </summary>
     <ul>
       <li>Experimental prose compression: a local model drops low-value words from long paragraphs of text and markdown, on CUDA, CoreML or the CPU, with no Python and no cgo. Numbers, paths, flags, code and links stay; the original stays in the ledger.</li>
-      <li><code>gascoigne prose install</code> and <code>status</code>; setup downloads the model (274 MB) with pinned checksums shown.</li>
-      <li>Dashboard: a <code>prose −N</code> tag on shortened runs, an Experiments panel, and tables grouped into two tabbed panels.</li>
-      <li><code>eval -record</code> and <code>make eval-experimental</code> put eval runs in the dashboard.</li>
+      <li><code data-lang="sh" data-hl><span class="tk-cmd">gascoigne</span> prose install</code> and <code data-lang="sh" data-hl><span class="tk-cmd">status</span></code>; setup downloads the model (274 MB) with pinned checksums shown.</li>
+      <li>Dashboard: a <code data-lang="sh" data-hl><span class="tk-cmd">prose</span> −N</code> tag on shortened runs, an Experiments panel, and tables grouped into two tabbed panels.</li>
+      <li><code data-lang="sh" data-hl><span class="tk-cmd">eval</span> <span class="tk-flag">-record</span></code> and <code data-lang="sh" data-hl><span class="tk-cmd">make</span> eval-experimental</code> put eval runs in the dashboard.</li>
     </ul>
     <p class="fine"><a href="releases/0.5.0/">What's new in 0.5.0</a>,
       <a href="https://github.com/gascoigne-ai/gascoigne-cli/releases/tag/v0.5.0">release notes and downloads</a></p>
@@ -779,8 +1170,8 @@ FAIL	example.com/shop/sync	600.021s
       <p class="fine"><time datetime="2026-10-13">13 October 2026</time>, binaries for every system</p>
     </summary>
     <ul>
-      <li>Prebuilt archives for Linux, macOS and Windows (amd64, arm64) with <code>checksums.txt</code> on every GitHub release.</li>
-      <li><code>gascoigne context</code> and a dashboard page: where conversation size and cache rewrites cost money.</li>
+      <li>Prebuilt archives for Linux, macOS and Windows (amd64, arm64) with <code data-lang="sh" data-hl><span class="tk-path">checksums.txt</span></code> on every GitHub release.</li>
+      <li><code data-lang="sh" data-hl><span class="tk-cmd">gascoigne</span> context</code> and a dashboard page: where conversation size and cache rewrites cost money.</li>
       <li>A weekly MCP review page with per-server use and how to switch a server off.</li>
     </ul>
     <p class="fine"><a href="releases/0.4.0/">What's new in 0.4.0</a>,
@@ -792,10 +1183,10 @@ FAIL	example.com/shop/sync	600.021s
       <p class="fine"><time datetime="2026-10-12">12 October 2026</time>, setting up and keeping up to date</p>
     </summary>
     <ul>
-      <li>A setup page in your browser (and <code>gascoigne setup</code> in the terminal): nothing that changes how your agents are set up happens before you answer.</li>
-      <li><code>gascoigne upgrade</code> after a new version: stale or lost hooks, rules and commands written again, <code>config.yaml</code> moved onto the new template, open choices asked.</li>
-      <li><code>gascoigne doctor</code> in plain words; <code>install -permissions</code>, <code>-guide</code> and <code>-autosync</code>; agents found on your machine are offered, not installed.</li>
-      <li>Experimental <code>continuity</code>, <code>learn</code> and <code>prompts</code>, turned on from setup with an example and the impact of each.</li>
+      <li>A setup page in your browser (and <code data-lang="sh" data-hl><span class="tk-cmd">gascoigne</span> setup</code> in the terminal): nothing that changes how your agents are set up happens before you answer.</li>
+      <li><code data-lang="sh" data-hl><span class="tk-cmd">gascoigne</span> upgrade</code> after a new version: stale or lost hooks, rules and commands written again, <code data-lang="sh" data-hl><span class="tk-path">config.yaml</span></code> moved onto the new template, open choices asked.</li>
+      <li><code data-lang="sh" data-hl><span class="tk-cmd">gascoigne</span> doctor</code> in plain words; <code data-lang="sh" data-hl><span class="tk-cmd">install</span> <span class="tk-flag">-permissions</span></code>, <code data-lang="sh" data-hl>-guide</code> and <code data-lang="sh" data-hl>-autosync</code>; agents found on your machine are offered, not installed.</li>
+      <li>Experimental <code data-lang="sh" data-hl><span class="tk-cmd">continuity</span></code>, <code data-lang="sh" data-hl><span class="tk-cmd">learn</span></code> and <code data-lang="sh" data-hl><span class="tk-cmd">prompts</span></code>, turned on from setup with an example and the impact of each.</li>
       <li>Dashboard: savings by model family, every table sorts and filters. A once-a-day release notice, off with one switch.</li>
     </ul>
     <p class="fine"><a href="releases/0.3.0/">What's new in 0.3.0</a>,
@@ -809,11 +1200,11 @@ FAIL	example.com/shop/sync	600.021s
     </summary>
     <ul>
       <li>16 family engines across 110+ tools and formats: verbose output shrinks 70–99%, a typical coding session's tool output 4–27%.</li>
-      <li><code>wrap</code> and <code>install</code> for Claude Code, Codex, Gemini CLI, opencode, pi and Cursor;
-        <code>uninstall</code> removes it all.</li>
+      <li><code data-lang="sh" data-hl><span class="tk-cmd">wrap</span></code> and <code data-lang="sh" data-hl><span class="tk-cmd">install</span></code> for Claude Code, Codex, Gemini CLI, opencode, pi and Cursor;
+        <code data-lang="sh" data-hl><span class="tk-cmd">uninstall</span></code> removes it all.</li>
       <li>MCP server and MCP proxy, plus an LLM API proxy that shortens tool results inside requests.</li>
-      <li>Every original kept in a local ledger and read back with <code>gascoigne raw</code>.</li>
-      <li>Live dashboard, <code>gain</code> with cost, and exact token counts with <code>tokens</code>.</li>
+      <li>Every original kept in a local ledger and read back with <code data-lang="sh" data-hl><span class="tk-cmd">gascoigne</span> raw</code>.</li>
+      <li>Live dashboard, <code data-lang="sh" data-hl><span class="tk-cmd">gain</span></code> with cost, and exact token counts with <code data-lang="sh" data-hl><span class="tk-cmd">tokens</span></code>.</li>
       <li>Static binaries for Linux, macOS and Windows under the Apache License 2.0.</li>
     </ul>
     <p class="fine"><a href="https://github.com/gascoigne-ai/gascoigne-cli/releases/tag/v0.2.1">Release notes and downloads</a>
@@ -825,13 +1216,14 @@ FAIL	example.com/shop/sync	600.021s
 
 <footer>
   <svg class="moon" data-saved="0.95" width="22" height="22" aria-hidden="true"></svg>
-  <p>gascoigne is open source under the <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/LICENSE">Apache License 2.0</a>.
+  <p>gascoigne is free and open source under the <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/LICENSE">Apache License 2.0</a>:
+    the CLI, the SDKs and this site, all on <a href="https://github.com/gascoigne-ai">GitHub</a>.
     <a href="https://github.com/gascoigne-ai/gascoigne-cli">Source</a>,
     <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/docs/getting-started.md">getting started</a>,
     <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/docs/cli.md">CLI reference</a> and
     <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/docs/configuration.md">configuration</a>.</p>
 </footer>
 
-<script src="assets/site.js"></script>
+<script src="assets/site.js?v=20261014c"></script>
 </body>
 </html>
