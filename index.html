@@ -374,22 +374,22 @@ Use the aws_s3_bucket_acl <span class="tk-kw">resource</span> instead
   <p class="slogan"><b>Telemetry first.</b> Every saving is measured before it is claimed: the ledger records each
     original and each optimized result, and the local dashboard and <code>gascoigne tokens</code> show the numbers.</p>
   <ul class="benefits">
-    <li><strong>70–99%</strong><b>Fewer tokens</b>
-      <span>off verbose output: installs, test runs, logs, traces. The median eval case shrinks by 69%.</span></li>
-    <li><strong>$31<small>/MTok</small></strong><b>Lower cost</b>
-      <span>a saved token's worth on Opus 5.5: each tool result is re-read by a median 110 later requests.</span></li>
-    <li><strong>4–27%</strong><b>Longer sessions</b>
-      <span>less tool output per real coding session (median 10%), so the context window fills more slowly.</span></li>
+    <li><strong>62%</strong><b>Median saving</b>
+      <span>of the 244 eval cases. Outputs under 200 tokens pass through untouched.</span></li>
+    <li><strong>81%</strong><b>Of all eval tokens</b>
+      <span>1.43M tokens in, 0.28M out. The biggest outputs are also the noisiest, so the total is higher than the median.</span></li>
+    <li><strong>39–82%</strong><b>Middle half of cases</b>
+      <span>a quarter of cases save less than 39%, 16 are not shortened. It depends on the tool.</span></li>
     <li><strong>1 call</strong><b>Nothing lost</b>
       <span>every original is stored first; <code>gascoigne raw &lt;id&gt;</code> brings it back, whole or just the lines you need.</span></li>
     <li><strong>Local</strong><b>Stays on your machine</b>
-      <span>the ledger and dashboard are local; nothing is sent anywhere except an optional daily release check you can <a href="releases/0.3.0/#notice">turn off</a>.</span></li>
+      <span>the ledger and dashboard are local; nothing is sent anywhere except an optional hourly release check you can <a href="releases/0.3.0/#notice">turn off</a>.</span></li>
     <li><strong>Same output</strong><b>Deterministic</b>
       <span>for the same input, every time, so prompt caches stay warm, through the LLM proxy too.</span></li>
   </ul>
-  <p class="fine">Eval numbers are an upper bound for the tools gascoigne knows; the real-use and cost figures
-    come from Claude Code sessions. Details under <a href="#savings">what it saves</a> and in
-    <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/docs/cost.md">cost</a>.</p>
+  <p class="fine">All numbers on this page come from the eval fixtures (<code>make eval</code>): real-shaped output of
+    the tools gascoigne knows. Read them as an upper bound for those tools, not a forecast for your sessions.
+    Details under <a href="#savings">what it saves</a>; <code>gascoigne gain</code> shows your own.</p>
 
   <div class="oss" id="open-source">
     <h3>Open source, free to use</h3>
@@ -404,7 +404,7 @@ Use the aws_s3_bucket_acl <span class="tk-kw">resource</span> instead
         <a href="https://github.com/gascoigne-ai">github.com/gascoigne-ai</a>. Ideas taken from other projects are
         credited under <a href="#inspirations">standing on good ideas</a>.</li>
     </ul>
-    <p class="fine">Privacy: the ledger and dashboard stay on your machine. The one optional request, a daily read of a small release file from this site, can be <a href="releases/0.3.0/#notice">turned off</a>.</p>
+    <p class="fine">Privacy: the ledger and dashboard stay on your machine. The one optional request, an hourly read of a small release file from this site, can be <a href="releases/0.3.0/#notice">turned off</a>.</p>
   </div>
 </section>
 
@@ -695,8 +695,8 @@ Use the aws_s3_bucket_acl <span class="tk-kw">resource</span> instead
   <article class="feat" id="dashboard">
     <figure class="shot-fig">
       <picture>
-        <source srcset="assets/dashboard-dark.png" media="(prefers-color-scheme: dark)">
-        <img class="shot" src="assets/dashboard-light.png" width="1600" height="1319" loading="lazy"
+        <source srcset="assets/dashboard-dark.png?v=20261016" media="(prefers-color-scheme: dark)">
+        <img class="shot" src="assets/dashboard-light.png?v=20261016" width="1600" height="1319" loading="lazy"
           alt="The gascoigne dashboard: savings over time, top commands and optimizers, and a list of recent runs.">
       </picture>
     </figure>
@@ -707,6 +707,7 @@ Use the aws_s3_bucket_acl <span class="tk-kw">resource</span> instead
         Tables are grouped into tabs, and experimental features that are on get their own panel.</p>
       <p><code>gascoigne gain</code> prints the same in the terminal, with cost.</p>
       <p class="fact">Its moon shows your savings rate</p>
+      <p class="fine">Screenshot: the dashboard after <code>gascoigne eval -record</code> on the eval fixtures. Every case runs twice there, so run counts are doubled.</p>
     </div>
   </article>
 </section>
@@ -719,7 +720,7 @@ Use the aws_s3_bucket_acl <span class="tk-kw">resource</span> instead
     into your app. Apache-2.0, same as the CLI.</p>
 
   <ul class="stats tight">
-    <li><strong>99%</strong><span>off a noisy log: 12,025 → 142 tokens</span></li>
+    <li><strong>12,025 → 142</strong><span>tokens in the SDK's noisy-log example; other outputs save less</span></li>
     <li><strong>6</strong><span>languages</span></li>
     <li><strong>3</strong><span>ways to hook in</span></li>
     <li><strong>15</strong><span>framework demos</span></li>
@@ -887,7 +888,7 @@ Gascoigne gascoigne = Gascoigne.<span class="tk-fn">builder</span>().<span class
       <figure class="sdk-strip anim" role="img" aria-label="Animation: the tool result of 12,025 tokens shrinks to the 142 tokens the model reads.">
         <div class="row"><span class="lab">Tool result</span><span class="track"><i class="full"></i></span><span class="val">12,025 tokens</span></div>
         <div class="row"><span class="lab">Model reads</span><span class="track"><i class="shrink"></i></span><span class="val sw"><span class="b">12,025 tokens</span><span class="a">142 tokens</span></span></div>
-        <figcaption>The SDK README's noisy log: saved 99%, original one <code>raw</code> call away.</figcaption>
+        <figcaption>The SDK README's noisy log, one example: 12,025 → 142 tokens, original one <code>raw</code> call away.</figcaption>
       </figure>
       <div class="sdk-meta" data-lang="python">
         <div class="sdk-install">
@@ -973,13 +974,13 @@ Gascoigne gascoigne = Gascoigne.<span class="tk-fn">builder</span>().<span class
       <tr><td><svg class="moon" data-saved="0.956" width="26" height="26" aria-hidden="true"></svg></td><td><code>cat churn.ipynb</code> (notebook)</td><td class="n">20,144</td><td class="n">896</td><td class="n">95.6%</td></tr>
       <tr><td><svg class="moon" data-saved="0.948" width="26" height="26" aria-hidden="true"></svg></td><td><code>go test</code> timeout (goroutine dump)</td><td class="n">7,478</td><td class="n">388</td><td class="n">94.8%</td></tr>
       <tr><td><svg class="moon" data-saved="0.932" width="26" height="26" aria-hidden="true"></svg></td><td>CodeQL SARIF report</td><td class="n">15,590</td><td class="n">1,065</td><td class="n">93.2%</td></tr>
-      <tr><td><svg class="moon" data-saved="0.907" width="26" height="26" aria-hidden="true"></svg></td><td><code>kubectl logs</code> (JSON)</td><td class="n">23,171</td><td class="n">2,156</td><td class="n">90.7%</td></tr>
-      <tr><td><svg class="moon" data-saved="0.873" width="26" height="26" aria-hidden="true"></svg></td><td><code>aws ec2 describe-instances</code></td><td class="n">33,835</td><td class="n">4,301</td><td class="n">87.3%</td></tr>
+      <tr><td><svg class="moon" data-saved="0.907" width="26" height="26" aria-hidden="true"></svg></td><td><code>kubectl logs</code> (JSON)</td><td class="n">23,171</td><td class="n">2,159</td><td class="n">90.7%</td></tr>
+      <tr><td><svg class="moon" data-saved="0.874" width="26" height="26" aria-hidden="true"></svg></td><td><code>aws ec2 describe-instances</code></td><td class="n">33,835</td><td class="n">4,275</td><td class="n">87.4%</td></tr>
       <tr><td><svg class="moon" data-saved="0.841" width="26" height="26" aria-hidden="true"></svg></td><td><code>terraform plan</code></td><td class="n">10,663</td><td class="n">1,697</td><td class="n">84.1%</td></tr>
       <tr><td><svg class="moon" data-saved="0.743" width="26" height="26" aria-hidden="true"></svg></td><td><code>kubectl get pods -o yaml</code></td><td class="n">37,330</td><td class="n">9,609</td><td class="n">74.3%</td></tr>
       <tr><td><svg class="moon" data-saved="0.724" width="26" height="26" aria-hidden="true"></svg></td><td><code>git log</code></td><td class="n">4,173</td><td class="n">1,151</td><td class="n">72.4%</td></tr>
       <tr><td><svg class="moon" data-saved="0.604" width="26" height="26" aria-hidden="true"></svg></td><td>browser snapshot (accessibility tree)</td><td class="n">6,569</td><td class="n">2,601</td><td class="n">60.4%</td></tr>
-      <tr><td><svg class="moon" data-saved="0.562" width="26" height="26" aria-hidden="true"></svg></td><td><code>cat lib/benchmark.rb</code> (comments)</td><td class="n">6,390</td><td class="n">2,800</td><td class="n">56.2%</td></tr>
+      <tr><td><svg class="moon" data-saved="0.727" width="26" height="26" aria-hidden="true"></svg></td><td><code>cat lib/benchmark.rb</code> (comments)</td><td class="n">6,390</td><td class="n">1,746</td><td class="n">72.7%</td></tr>
           <tr><td><svg class="moon" data-saved="0.304" width="26" height="26" aria-hidden="true"></svg></td><td><code>git diff</code> of source edits</td><td class="n">3,430</td><td class="n">2,386</td><td class="n">30.4%</td></tr>
       <tr><td><svg class="moon" data-saved="0.275" width="26" height="26" aria-hidden="true"></svg></td><td><code>pytest</code> with one failure</td><td class="n">899</td><td class="n">652</td><td class="n">27.5%</td></tr>
       <tr><td><svg class="moon" data-saved="0.16" width="26" height="26" aria-hidden="true"></svg></td><td><code>rg</code> search</td><td class="n">3,161</td><td class="n">2,655</td><td class="n">16.0%</td></tr>
@@ -989,18 +990,17 @@ Gascoigne gascoigne = Gascoigne.<span class="tk-fn">builder</span>().<span class
   </table>
   </div>
   <div class="savings-side">
-  <p class="aside">Across all 268 eval cases the median output shrinks by 69%, and 82% of all tokens
-    go, because the largest outputs are also the noisiest; 9 cases are not shortened at all. Outputs under
-    200 tokens pass through untouched. The fixtures are real-shaped samples of the tools gascoigne
-    knows, so read them as an upper bound for those tools, not a forecast for your sessions.</p>
-  <h3 class="realuse">In real use</h3>
-  <p class="intro">Over three days of developing gascoigne itself with Claude Code (over 8,000 tool results),
-    web pages and API responses read with <code>fetch</code> came out 93–99% smaller than the raw
-    response, <code>git show</code> 80%, <code>go test</code> 69% and <code>cat</code> of source
-    files 38%, while targeted reads such as <code>sed -n</code> ranges and <code>rg</code> saved
-    1–3%. Per coding session, tool output was 4–27% smaller (median 10%): most of the work was
-    reading and editing code. Tool output is only part of what the model reads on every turn, so
-    your bill drops by less than that. <code>gascoigne gain</code> shows your own numbers.</p>
+  <p class="aside">Across the 244 eval cases the median output shrinks by 62%, and 81% of all tokens go, because
+    the largest outputs are also the noisiest. The middle half of cases sits between 39% and 82%; 16 cases are
+    not shortened at all, and outputs under 200 tokens pass through untouched. The fixtures are real-shaped
+    samples of the tools gascoigne knows, so read them as an upper bound for those tools, not a forecast for
+    your sessions.</p>
+  <h3 class="realuse">By area</h3>
+  <p class="intro">Median saving per group of fixtures: logs 94% (13 cases), Go tooling 89% (8), cloud CLIs 87%
+    (7), test runners 71% (28), package managers 66% (20), databases 63% (9), git 50% (13), build tools 50% (37),
+    tables such as <code>ps</code> and <code>ss</code> 42% (9), docs 39% (9), and <code>cat</code> of source
+    files 35% (16). Targeted reads such as <code>rg</code> and short outputs have little to cut.
+    <code>gascoigne gain</code> shows what your own sessions save.</p>
   <p class="fine">Tokens are a BPE-style estimate, within ~10% of a real tokenizer. Fixtures in
     <code>testdata/eval</code>, measured with <code>make eval</code>.</p>
   </div>
@@ -1032,7 +1032,7 @@ Gascoigne gascoigne = Gascoigne.<span class="tk-fn">builder</span>().<span class
 <section id="families">
   <h2>One knife, sixteen blades</h2>
   <p class="intro">gascoigne carries a blade for each job and folds out the right one on its own. It
-    recognizes output by family and tool (more than 110 tools), then hands it to the engine that knows
+    recognizes output by family and tool (over 150 tools and formats), then hands it to the engine that knows
     what that output is for. Stack traces fold the same way in every family.</p>
   <dl class="families">
     <div><dt>test</dt><dd><span class="does">keeps failures and the summary, counts the passes.</span> <span class="tools">go, jest, vitest, bun, mocha, deno, pytest, cargo, rspec, maven, dotnet, JUnit XML, coverage</span></dd></div>
