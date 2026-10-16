@@ -35,7 +35,7 @@
     <a href="#savings">Savings</a>
     <a href="#install">Install</a>
     <a href="#changelog">Changelog</a>
-    <a href="releases/0.6.1/">0.6.1</a>
+    <a href="releases/0.7.0/">0.7.0</a>
     <a href="https://github.com/gascoigne-ai/gascoigne-cli/tree/master/docs">Docs</a>
     <a href="https://github.com/gascoigne-ai">GitHub</a>
   </nav>
@@ -1143,6 +1143,19 @@ Gascoigne gascoigne = Gascoigne.<span class="tk-fn">builder</span>().<span class
 <section id="changelog">
   <h2>Changelog</h2>
   <details class="release" open>
+    <summary>
+      <h3>0.7.0</h3>
+      <p class="fine"><time datetime="2026-10-16">16 October 2026</time>, more tools, less noise</p>
+    </summary>
+    <ul>
+      <li><code data-lang="sh" data-hl><span class="tk-cmd">gascoigne</span> gain</code> prints the essentials by default (<code>-full</code> for everything), with <code>-show</code>, <code>-hide</code>, <code>-top</code>, <code>-sort</code>, <code>-min-tokens</code> and <code>-csv</code>.</li>
+      <li>Runs older than <code>events_ttl</code> are rolled into daily totals that are kept forever (<code>ledger.rollup_ttl</code>), so <code>gain</code> history outlives a year.</li>
+      <li>Build, test and package-manager output of dozens more tools is recognised and shortened, stack traces fold runtime frames, and source outlines cover many more languages.</li>
+    </ul>
+    <p class="fine"><a href="releases/0.7.0/">What's new in 0.7.0</a>,
+      <a href="https://github.com/gascoigne-ai/gascoigne-cli/releases/tag/v0.7.0">release notes and downloads</a></p>
+  </details>
+  <details class="release">
     <summary>
       <h3>0.6.1</h3>
       <p class="fine"><time datetime="2026-10-14">14 October 2026</time>, savings net of rerequests</p>

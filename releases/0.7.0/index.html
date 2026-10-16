@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>gascoigne 0.7.0 — more tools understood, a shorter gain, history kept</title>
+<meta name="description" content="gascoigne 0.7.0 recognises many more build, test and package tools, prints a short gain report by default and keeps savings history past a year.">
+<meta property="og:title" content="gascoigne 0.7.0">
+<meta property="og:description" content="More build, test and package tools, a short gain report, and savings history that is kept.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23ECE4E2'/%3E%3Cpath d='M16 2A14 14 0 0 0 16 30A7 14 0 0 0 16 2Z' fill='%234A1A2C'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css?v=20261014d">
+</head>
+<body>
+
+<svg width="0" height="0" class="defs" aria-hidden="true">
+  <defs>
+    <radialGradient id="moon-lit" cx="38%" cy="32%" r="72%"><stop offset="0" stop-color="#fffdfb"/><stop offset=".6" stop-color="#ece4e2"/><stop offset="1" stop-color="#c9bcbf"/></radialGradient>
+    <radialGradient id="moon-dark" cx="60%" cy="60%" r="70%"><stop offset="0" stop-color="#4a1a2c"/><stop offset="1" stop-color="#2a0c17"/></radialGradient>
+  </defs>
+</svg>
+
+<div class="night">
+<header class="top">
+  <a class="brand" href="../../">
+    <svg class="moon" data-saved="0.8" width="28" height="28" aria-hidden="true"></svg>
+    gascoigne
+  </a>
+  <nav>
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/CHANGELOG.md">Changelog</a>
+    <a href="https://github.com/gascoigne-ai">GitHub</a>
+  </nav>
+</header>
+
+
+<section class="hero release-hero">
+  <div class="hero-text">
+    <p class="fine"><time datetime="2026-10-16">16 October 2026</time></p>
+    <h1><span>gascoigne 0.7.0</span> <span>More tools, less noise.</span></h1>
+    <p class="lede">Compiler, test runner and package manager output from dozens more tools is now recognised and
+      shortened, <code>gain</code> prints a short report you can shape, and the ledger keeps daily totals
+      of runs older than a year instead of losing them.</p>
+    <div class="oneliner">
+      <code id="up1">go install github.com/gascoigne-ai/gascoigne-cli/cmd/gascoigne@latest</code>
+      <button class="copy" data-copy="up1" type="button">Copy</button>
+    </div>
+    <p class="fine">Starting fresh? <a href="../../#install">Install it</a> first. Coming from 0.6:
+      <a href="../0.6.1/">savings net of rerequests</a>.</p>
+  </div>
+</section>
+</div>
+
+<main>
+
+<section id="new">
+  <h2>What's new</h2>
+
+  <h3>A gain report you can shape</h3>
+  <p class="intro">Plain <code>gain</code> now prints the essentials: totals, the last 7 days, agents, commands and a
+    warning when sources went bad, with tables cut at 10 rows. <code>gain -full</code> prints every section as before.</p>
+  <ul>
+    <li><code>-show</code> and <code>-hide</code> pick sections by name; <code>-top</code>, <code>-sort</code> and <code>-min-tokens</code> shape the tables.</li>
+    <li><code>-csv</code> exports a <code>-by</code> grouping or the failing sources as plain numbers.</li>
+    <li>Failing sources show when they last failed ("2d ago"), and the header prices the savings when a cost estimate exists.</li>
+  </ul>
+
+  <h3>History that outlives a year</h3>
+  <p class="intro">Runs older than <code>ledger.events_ttl</code> (still a year) used to be deleted. They are now added to
+    daily totals first, per day, agent, model, command, route, outcome and optimizer, so <code>gain -by month</code>
+    keeps counting them. <code>ledger.rollup_ttl</code> defaults to <code>0s</code>, which keeps the totals forever.
+    Session and reason groupings only cover runs still stored.</p>
+
+  <h3>Many more tools</h3>
+  <ul>
+    <li><strong>Build</strong>: CMake, Ninja, Meson, Bazel, clang-tidy, cppcheck, MSVC, dmd, sbt, Swift, Zig, Kotlin, GHC, Dart, rubocop, pylint and formatters. C++ template and include chains keep their ends; a linker's undefined references become one list.</li>
+    <li><strong>Test</strong>: ctest, GoogleTest, Catch2, sbt, dub, PHPUnit, swift test, mix, minitest, unittest, TAP, Playwright, Cypress, Karma, flutter, cabal and stack. Passes are counted, failures stay.</li>
+    <li><strong>Packages</strong>: Composer, Bundler, mix, pub, SwiftPM, NuGet, conda, deno, Nix, Flatpak, snap and <code>mvn dependency:*</code>; text lockfiles shrink to <code>name@version</code> lists.</li>
+    <li><strong>Stack traces</strong> fold runtime and framework frames of the JVM, Python, Rust, Ruby, .NET, PHP, gdb/lldb and sanitizers into one count.</li>
+    <li><strong>Source outlines</strong> for Ruby, Elixir, Lua, Haskell, OCaml, Clojure, Perl, R, PowerShell and more, and a rewritten outline for Rust, C++, Scala and D.</li>
+  </ul>
+
+  <h3>Fixes</h3>
+  <ul>
+    <li>Rust lifetimes, nested block comments and raw strings no longer break the source outline.</li>
+    <li>The release notice checks hourly, so a new release is seen the same day.</li>
+    <li>No more panics on a bare git commit line or <code>dense</code> with a tail of 0; debug log levels match exactly; output after a cached nx task is kept.</li>
+  </ul>
+</section>
+
+<section id="upgrade" class="band">
+  <h2>Upgrade</h2>
+  <div class="steps">
+    <div>
+      <h3>1. Install the new version</h3>
+      <div class="oneliner">
+        <code id="u-go">go install github.com/gascoigne-ai/gascoigne-cli/cmd/gascoigne@latest</code>
+        <button class="copy" data-copy="u-go" type="button">Copy</button>
+      </div>
+      <p class="fine">Or download an archive from the <a href="https://github.com/gascoigne-ai/gascoigne-cli/releases/tag/v0.7.0">release</a>.
+        The background server notices the new binary and restarts itself.</p>
+    </div>
+    <div>
+      <h3>2. Look at your savings</h3>
+      <div class="oneliner">
+        <code id="u-db">gascoigne gain</code>
+        <button class="copy" data-copy="u-db" type="button">Copy</button>
+      </div>
+      <p class="fine">The report is shorter now; <code>gain -full</code> shows everything. Two tables for the daily totals are created on the first start. Nothing is migrated or removed.</p>
+    </div>
+  </div>
+</section>
+
+<section id="more">
+  <h2>More</h2>
+  <p class="intro">The full list is in the
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/CHANGELOG.md">changelog</a>, and
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/releases/tag/v0.7.0">release notes and downloads</a>
+    are on GitHub. Back to the <a href="../../">gascoigne home page</a>.</p>
+</section>
+
+</main>
+
+<footer>
+  <svg class="moon" data-saved="0.95" width="22" height="22" aria-hidden="true"></svg>
+  <p>gascoigne is open source under the <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/LICENSE">Apache License 2.0</a>.
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli">Source</a>,
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/docs/agents.md">agents guide</a> and
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/docs/cli.md">CLI reference</a>.</p>
+</footer>
+
+<script src="../../assets/site.js?v=20261014d"></script>
+</body>
+</html>
