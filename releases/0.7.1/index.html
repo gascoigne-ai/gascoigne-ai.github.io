@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>gascoigne 0.7.1 — a costs page, faster release notices, a readable eval</title>
+<meta name="description" content="gascoigne 0.7.1 adds a dashboard costs page, checks for new releases every 15 minutes and prints a readable eval summary.">
+<meta property="og:title" content="gascoigne 0.7.1">
+<meta property="og:description" content="A costs page, 15-minute release checks and a readable eval summary.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23ECE4E2'/%3E%3Cpath d='M16 2A14 14 0 0 0 16 30A7 14 0 0 0 16 2Z' fill='%234A1A2C'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css?v=20261014d">
+</head>
+<body>
+
+<svg width="0" height="0" class="defs" aria-hidden="true">
+  <defs>
+    <radialGradient id="moon-lit" cx="38%" cy="32%" r="72%"><stop offset="0" stop-color="#fffdfb"/><stop offset=".6" stop-color="#ece4e2"/><stop offset="1" stop-color="#c9bcbf"/></radialGradient>
+    <radialGradient id="moon-dark" cx="60%" cy="60%" r="70%"><stop offset="0" stop-color="#4a1a2c"/><stop offset="1" stop-color="#2a0c17"/></radialGradient>
+  </defs>
+</svg>
+
+<div class="night">
+<header class="top">
+  <a class="brand" href="../../">
+    <svg class="moon" data-saved="0.8" width="28" height="28" aria-hidden="true"></svg>
+    gascoigne
+  </a>
+  <nav>
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/CHANGELOG.md">Changelog</a>
+    <a href="https://github.com/gascoigne-ai">GitHub</a>
+  </nav>
+</header>
+
+
+<section class="hero release-hero">
+  <div class="hero-text">
+    <p class="fine"><time datetime="2026-10-19">19 October 2026</time></p>
+    <h1><span>gascoigne 0.7.1</span> <span>See what it costs, hear about updates sooner.</span></h1>
+    <p class="lede">The dashboard gets a costs page, new releases are noticed within 15 minutes, and
+      <code>make eval</code> ends with a summary you can read.</p>
+    <div class="oneliner">
+      <code id="up1">go install github.com/gascoigne-ai/gascoigne-cli/cmd/gascoigne@latest</code>
+      <button class="copy" data-copy="up1" type="button">Copy</button>
+    </div>
+    <p class="fine">Starting fresh? <a href="../../#install">Install it</a> first. Coming from 0.7.0: <a href="../0.7.0/">more tools, less noise</a>.</p>
+  </div>
+</section>
+</div>
+
+<main>
+
+<section id="new">
+  <h2>What's new</h2>
+
+  <h3>A costs page and easier periods</h3>
+  <p class="intro">The dashboard has a costs page, long periods are easier to read, and sessions can be filtered.</p>
+
+  <h3>Update notices within 15 minutes</h3>
+  <p class="intro">The release notice reads <code>latest.json</code> every 15 minutes, from agent hooks and
+    <code>dashboard</code> instead of the background server. A prompt, not only a session start, opens the page
+    of a newer release, and the page is retried until it opens.</p>
+
+  <h3>A readable eval</h3>
+  <p class="intro"><code>make eval</code> prints a banner per suite, savings bars and a final summary. The script
+    also runs on the bash 3.2 that ships with macOS.</p>
+
+  <h3>Fixes</h3>
+  <ul>
+    <li>The fake MCP authorize endpoint used in tests redirects only to loopback, to the fixed callback path.</li>
+  </ul>
+</section>
+
+<section id="upgrade" class="band">
+  <h2>Upgrade</h2>
+  <div class="steps">
+    <div>
+      <h3>1. Install the new version</h3>
+      <div class="oneliner">
+        <code id="u-go">go install github.com/gascoigne-ai/gascoigne-cli/cmd/gascoigne@latest</code>
+        <button class="copy" data-copy="u-go" type="button">Copy</button>
+      </div>
+      <p class="fine">Or download an archive from the <a href="https://github.com/gascoigne-ai/gascoigne-cli/releases/tag/v0.7.1">release</a>.
+        The background server notices the new binary and restarts itself.</p>
+    </div>
+    <div>
+      <h3>2. Look at your costs</h3>
+      <div class="oneliner">
+        <code id="u-db">gascoigne dashboard</code>
+        <button class="copy" data-copy="u-db" type="button">Copy</button>
+      </div>
+      <p class="fine">Nothing is migrated or removed. The costs page is in the dashboard (<code>gascoigne dashboard</code>).</p>
+    </div>
+  </div>
+</section>
+
+<section id="more">
+  <h2>More</h2>
+  <p class="intro">The full list is in the
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/CHANGELOG.md">changelog</a>, and
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/releases/tag/v0.7.1">release notes and downloads</a>
+    are on GitHub. Back to the <a href="../../">gascoigne home page</a>.</p>
+</section>
+
+</main>
+
+<footer>
+  <svg class="moon" data-saved="0.95" width="22" height="22" aria-hidden="true"></svg>
+  <p>gascoigne is open source under the <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/LICENSE">Apache License 2.0</a>.
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli">Source</a>,
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/docs/agents.md">agents guide</a> and
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/docs/cli.md">CLI reference</a>.</p>
+</footer>
+
+<script src="../../assets/site.js?v=20261014d"></script>
+</body>
+</html>
