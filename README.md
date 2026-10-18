@@ -19,7 +19,7 @@ come from the gascoigne README (`make eval`).
 
 ## Releases and the release notice
 
-gascoigne reads `latest.json` from this site once a day (the background server, never a hook) and,
+gascoigne reads `latest.json` from this site hourly (the background server, never a hook) and,
 when it names a release newer than the one installed, opens that release's page once at the next
 agent session. The file is `{"id": "X.Y.Z", "released": "YYYY-MM-DD", "page": "releases/X.Y.Z/"}`; `page`
 must stay on this site.
