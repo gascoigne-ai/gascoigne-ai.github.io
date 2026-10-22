@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>gascoigne 0.7.2 — quoted env assignments run through the hook</title>
-<meta name="description" content="gascoigne 0.7.2 fixes commands with quoted env assignments, like PG="a b" cmd, that failed with "executable not found".">
+<meta name="description" content="gascoigne 0.7.2 fixes commands with quoted env assignments, such as NODE_OPTIONS=&quot;...&quot; npm run build, that failed with &quot;executable not found&quot;.">
 <meta property="og:title" content="gascoigne 0.7.2">
 <meta property="og:description" content="Quoted env assignments run through the hook again.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23ECE4E2'/%3E%3Cpath d='M16 2A14 14 0 0 0 16 30A7 14 0 0 0 16 2Z' fill='%234A1A2C'/%3E%3C/svg%3E">
@@ -38,7 +38,7 @@
 <section class="hero release-hero">
   <div class="hero-text">
     <p class="fine"><time datetime="2026-10-22">22 October 2026</time></p>
-    <h1><span>gascoigne 0.7.2</span> <span>PG="a b" cmd works again.</span></h1>
+    <h1><span>gascoigne 0.7.2</span> <span>Quoted env values work again.</span></h1>
     <p class="lede">Commands that start with a quoted env assignment run through the hook again, and
       builtins like <code>command</code> are left alone.</p>
     <div class="oneliner">
@@ -56,10 +56,11 @@
   <h2>What's new</h2>
 
   <h3>Quoted env assignments run again</h3>
-  <p class="intro">A command like <code>PG="aaaa" pbbb "hjj"</code> was rewritten to
-    <code>gascoigne exec -- PG="aaaa" pbbb "hjj"</code>, so exec tried to start a program called
-    <code>PG=aaaa</code> and failed with "executable not found". Quoted values, including ones with spaces,
-    now stay in front of <code>gascoigne exec</code>, as unquoted ones always did.</p>
+  <p class="intro">A command like <code>NODE_OPTIONS="--max-old-space-size=4096" npm run build</code> was rewritten to
+    <code>gascoigne exec -- NODE_OPTIONS="--max-old-space-size=4096" npm run build</code>, so exec tried to start a
+    program called <code>NODE_OPTIONS=--max-old-space-size=4096</code> and failed with "executable not found".
+    Quoted values, including ones with spaces, now stay in front of <code>gascoigne exec</code>, as unquoted ones
+    always did. The same goes for <code>DATABASE_URL="postgres://app@localhost/app?sslmode=disable" go test ./...</code>.</p>
 
   <h3>Fixes</h3>
   <ul>

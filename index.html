@@ -1148,7 +1148,7 @@ Gascoigne gascoigne = Gascoigne.<span class="tk-fn">builder</span>().<span class
       <p class="fine"><time datetime="2026-10-22">22 October 2026</time>, quoted env assignments in the hook</p>
     </summary>
     <ul>
-      <li>Commands like <code>PG="a b" cmd</code> keep the env assignment outside <code data-lang="sh" data-hl><span class="tk-cmd">gascoigne</span> exec</code> and run again, instead of failing with "executable not found".</li>
+      <li>Commands like <code>DATABASE_URL="postgres://app@localhost/app?sslmode=disable" go test ./...</code> or <code>NODE_OPTIONS="--max-old-space-size=4096" npm run build</code> keep the env assignment outside <code data-lang="sh" data-hl><span class="tk-cmd">gascoigne</span> exec</code> and run again, instead of failing with "executable not found".</li>
       <li>A line the hook already rewrote is not wrapped a second time.</li>
       <li><code>command</code>, <code>exec</code> and <code>time</code> lines stay unwrapped: they are shell builtins, not programs.</li>
     </ul>
