@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>gascoigne 0.8.0 — fewer tokens from the session itself</title>
+<meta name="description" content="gascoigne 0.8.0 downscales screenshots in the Claude hook, optimizes piped commands, tightens output budgets at large context, and adds 30 dialects and a project config file.">
+<meta property="og:title" content="gascoigne 0.8.0">
+<meta property="og:description" content="Screenshots, pipes and large contexts cost fewer tokens, and 30 new dialects.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23ECE4E2'/%3E%3Cpath d='M16 2A14 14 0 0 0 16 30A7 14 0 0 0 16 2Z' fill='%234A1A2C'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css?v=20261014d">
+</head>
+<body>
+
+<svg width="0" height="0" class="defs" aria-hidden="true">
+  <defs>
+    <radialGradient id="moon-lit" cx="38%" cy="32%" r="72%"><stop offset="0" stop-color="#fffdfb"/><stop offset=".6" stop-color="#ece4e2"/><stop offset="1" stop-color="#c9bcbf"/></radialGradient>
+    <radialGradient id="moon-dark" cx="60%" cy="60%" r="70%"><stop offset="0" stop-color="#4a1a2c"/><stop offset="1" stop-color="#2a0c17"/></radialGradient>
+  </defs>
+</svg>
+
+<div class="night">
+<header class="top">
+  <a class="brand" href="../../">
+    <svg class="moon" data-saved="0.8" width="28" height="28" aria-hidden="true"></svg>
+    gascoigne
+  </a>
+  <nav>
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/CHANGELOG.md">Changelog</a>
+    <a href="https://github.com/gascoigne-ai">GitHub</a>
+  </nav>
+</header>
+
+
+<section class="hero release-hero">
+  <div class="hero-text">
+    <p class="fine"><time datetime="2026-11-01">1 November 2026</time></p>
+    <h1><span>gascoigne 0.8.0</span> <span>Fewer tokens from the session itself.</span></h1>
+    <p class="lede">Screenshots are downscaled in the Claude hook, piped commands are optimized, budgets tighten when
+      the context grows large, and 30 new dialects cover more tools.</p>
+    <div class="oneliner">
+      <code id="up1">go install github.com/gascoigne-ai/gascoigne-cli/cmd/gascoigne@latest</code>
+      <button class="copy" data-copy="up1" type="button">Copy</button>
+    </div>
+    <p class="fine">Starting fresh? <a href="../../#install">Install it</a> first. Coming from 0.7.2: <a href="../0.7.2/">quoted env assignments in the hook</a>.</p>
+  </div>
+</section>
+</div>
+
+<main>
+
+<section id="new">
+  <h2>What's new</h2>
+
+  <h3>Session-level savings</h3>
+  <ul>
+    <li>Image Reads above <code>max_image_pixels</code> are downscaled in the Claude hook. The result keeps its shape and the original stays in the ledger. The default is now 600000 pixels (it was off); set it to 0 to keep images whole.</li>
+    <li>Pipelines that end in <code>grep</code>, <code>jq</code>, <code>sort</code>, <code>wc</code> and similar are optimized, and the exit status of the whole pipeline is kept.</li>
+    <li>A context-size note on prompt submit above a threshold (<code>$GASCOIGNE_CONTEXT_NUDGE</code>, <code>off</code> to disable; nothing is forced), and tighter truncate, log and grep budgets once the context is large.</li>
+    <li>MCP results from the hook carry the call's <code>url</code> and <code>query</code>, as in the LLM proxy, so fetch-like results are typed and sampled for the query. <code>fetch</code> answers a repeated URL with a pointer or a diff, and <code>mcp-proxy</code> can trim tool descriptions.</li>
+    <li>opencode gets a <code>tool.execute.after</code> hook for what the rewrite missed.</li>
+  </ul>
+
+  <h3>A source that failed once is not skipped for good</h3>
+  <p class="intro">The <code>history</code> filter used to bypass a source after one failure, permanently. It now
+    needs 2 failures (3 for fetch URLs) within <code>failure_ttl</code>, 24 hours by default.</p>
+
+  <h3>Project config</h3>
+  <p class="intro">A <code>.gascoigne.yaml</code>, searched from the working directory up to the git root, lays over
+    your user config for <code>exec</code> and the hooks. Each repo gets its own warm pipeline.</p>
+
+  <h3>New dialects</h3>
+  <ul>
+    <li>Node, Deno and Bun stack frames; JSON diagnostics from cargo, eslint, ruff, golangci-lint, mypy and pylint.</li>
+    <li><code>kubectl apply|delete|rollout status</code>, <code>dmesg</code>, <code>docker pull|push</code>, terraform <code>init</code>, <code>state list</code> and <code>validate</code>.</li>
+    <li>Text lockfiles (pnpm, pubspec, mix, Podfile, Package.resolved, bun) and dependency trees (<code>npm ls</code>, <code>pnpm why</code>, <code>cargo tree</code>, <code>pipdeptree</code>, <code>uv tree</code>, gradle and more).</li>
+    <li>Coverage tables, git <code>reflog</code>, <code>stash list</code>, <code>tag</code>, <code>remote -v</code> and a bare <code>diff --stat</code>, web search results, <code>free</code>, <code>vmstat</code>, <code>findmnt</code>, <code>pip list</code>, <code>pacman -Q</code>, the <code>make eval</code> table.</li>
+    <li><code>truncate</code> keeps lines after each error, and <code>find</code>/<code>tree</code> folds keep directory names.</li>
+  </ul>
+
+  <h3>Reports</h3>
+  <ul>
+    <li><code>gain</code> shows rerequested and wasted tokens per dialect, optimizer and command; <code>raw</code> prints a size header for large originals.</li>
+    <li>The dashboard has costs and context pages with charts, one model table and a detail row per session; <code>install -window</code> sets Claude's auto-compact window.</li>
+  </ul>
+</section>
+
+<section id="upgrade" class="band">
+  <h2>Upgrade</h2>
+  <div class="steps">
+    <div>
+      <h3>1. Install the new version</h3>
+      <div class="oneliner">
+        <code id="u-go">go install github.com/gascoigne-ai/gascoigne-cli/cmd/gascoigne@latest</code>
+        <button class="copy" data-copy="u-go" type="button">Copy</button>
+      </div>
+      <p class="fine">Or download an archive from the <a href="https://github.com/gascoigne-ai/gascoigne-cli/releases/tag/v0.8.0">release</a>.
+        The background server notices the new binary and restarts itself.</p>
+    </div>
+    <div>
+      <h3>2. Nothing else to do</h3>
+      <p class="fine">Nothing is migrated or removed. Screenshots above 600000 pixels are downscaled from now on; set <code>max_image_pixels: 0</code> under <code>receivers.httpproxy</code> to turn that off.</p>
+    </div>
+  </div>
+</section>
+
+<section id="more">
+  <h2>More</h2>
+  <p class="intro">The full list is in the
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/CHANGELOG.md">changelog</a>, and
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/releases/tag/v0.8.0">release notes and downloads</a>
+    are on GitHub. Back to the <a href="../../">gascoigne home page</a>.</p>
+</section>
+
+</main>
+
+<footer>
+  <svg class="moon" data-saved="0.95" width="22" height="22" aria-hidden="true"></svg>
+  <p>gascoigne is open source under the <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/LICENSE">Apache License 2.0</a>.
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli">Source</a>,
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/docs/agents.md">agents guide</a> and
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/docs/cli.md">CLI reference</a>.</p>
+</footer>
+
+<script src="../../assets/site.js?v=20261014d"></script>
+</body>
+</html>

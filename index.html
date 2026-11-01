@@ -35,7 +35,7 @@
     <a href="#savings">Savings</a>
     <a href="#install">Install</a>
     <a href="#changelog">Changelog</a>
-    <a href="releases/0.7.2/">0.7.2</a>
+    <a href="releases/0.8.0/">0.8.0</a>
     <a href="https://github.com/gascoigne-ai/gascoigne-cli/tree/master/docs">Docs</a>
     <a href="https://github.com/gascoigne-ai">GitHub</a>
   </nav>
@@ -1143,6 +1143,21 @@ Gascoigne gascoigne = Gascoigne.<span class="tk-fn">builder</span>().<span class
 <section id="changelog">
   <h2>Changelog</h2>
   <details class="release" open>
+    <summary>
+      <h3>0.8.0</h3>
+      <p class="fine"><time datetime="2026-11-01">1 November 2026</time>, fewer tokens from the session itself</p>
+    </summary>
+    <ul>
+      <li>Image Reads above <code>max_image_pixels</code> (now 600000, was off) are downscaled in the Claude hook; piped commands are optimized; a context-size note and tighter budgets appear when the context is large.</li>
+      <li>A source that failed is skipped only after 2 failures within 24 hours, not forever.</li>
+      <li><code>.gascoigne.yaml</code> lays a project config over the user config.</li>
+      <li>30 new dialects and fixes: Node stack frames, JSON diagnostics, kubectl apply, dmesg, text lockfiles, dependency trees, coverage tables, docker pull, git refs, terraform init, web search and more.</li>
+      <li>Costs and context pages in the dashboard; rerequest columns in <code>gain</code>.</li>
+    </ul>
+    <p class="fine"><a href="releases/0.8.0/">What's new in 0.8.0</a>,
+      <a href="https://github.com/gascoigne-ai/gascoigne-cli/releases/tag/v0.8.0">release notes and downloads</a></p>
+  </details>
+  <details class="release">
     <summary>
       <h3>0.7.2</h3>
       <p class="fine"><time datetime="2026-10-22">22 October 2026</time>, quoted env assignments in the hook</p>
