@@ -55,36 +55,36 @@
 <section id="new">
   <h2>What's new</h2>
 
-  <h3>Session-level savings</h3>
+  <h3>Fewer tokens from the session itself</h3>
   <ul>
-    <li>Image Reads above <code>max_image_pixels</code> are downscaled in the Claude hook. The result keeps its shape and the original stays in the ledger. The default is now 600000 pixels (it was off); set it to 0 to keep images whole.</li>
-    <li>Pipelines that end in <code>grep</code>, <code>jq</code>, <code>sort</code>, <code>wc</code> and similar are optimized, and the exit status of the whole pipeline is kept.</li>
-    <li>A context-size note on prompt submit above a threshold (<code>$GASCOIGNE_CONTEXT_NUDGE</code>, <code>off</code> to disable; nothing is forced), and tighter truncate, log and grep budgets once the context is large.</li>
-    <li>MCP results from the hook carry the call's <code>url</code> and <code>query</code>, as in the LLM proxy, so fetch-like results are typed and sampled for the query. <code>fetch</code> answers a repeated URL with a pointer or a diff, and <code>mcp-proxy</code> can trim tool descriptions.</li>
-    <li>opencode gets a <code>tool.execute.after</code> hook for what the rewrite missed.</li>
+    <li><strong>Screenshots cost less.</strong> Large images the agent reads are scaled down before the model sees them (above 600000 pixels; set <code>max_image_pixels: 0</code> to keep them whole). The original stays in the ledger.</li>
+    <li><strong>Piped commands are shortened too.</strong> <code>cmd | grep</code>, <code>jq</code>, <code>sort</code>, <code>wc</code> and similar no longer escape optimization, and the exit status of the whole pipeline is kept.</li>
+    <li><strong>Big contexts get tighter output.</strong> When the conversation grows large, results shrink more, and you get a short note about the context size (<code>$GASCOIGNE_CONTEXT_NUDGE=off</code> turns it off). Nothing is forced.</li>
+    <li><strong>MCP results are smarter.</strong> Fetch-like results are shortened for the question that was asked, a repeated URL gets a pointer or a diff, and <code>mcp-proxy</code> can trim long tool descriptions.</li>
+    <li><strong>opencode</strong> gets a hook for what the rewrite missed.</li>
   </ul>
 
-  <h3>A source that failed once is not skipped for good</h3>
-  <p class="intro">The <code>history</code> filter used to bypass a source after one failure, permanently. It now
-    needs 2 failures (3 for fetch URLs) within <code>failure_ttl</code>, 24 hours by default.</p>
+  <h3>One bad run no longer blocks a source for good</h3>
+  <p class="intro"><strong>What you get:</strong> fewer sources silently left unoptimized. A source is skipped only after 2 failures
+    (3 for fetch URLs) within 24 hours, instead of after one failure, forever.</p>
 
-  <h3>Project config</h3>
-  <p class="intro">A <code>.gascoigne.yaml</code>, searched from the working directory up to the git root, lays over
-    your user config for <code>exec</code> and the hooks. Each repo gets its own warm pipeline.</p>
+  <h3>Per-project settings</h3>
+  <p class="intro"><strong>What you get:</strong> different rules per repo. A <code>.gascoigne.yaml</code>, found from the working
+    directory up to the git root, lays over your user config for <code>exec</code> and the hooks.</p>
 
-  <h3>New dialects</h3>
+  <h3>30 more kinds of output understood</h3>
+  <p class="intro"><strong>What you get:</strong> shorter results from more of the tools you run.</p>
   <ul>
-    <li>Node, Deno and Bun stack frames; JSON diagnostics from cargo, eslint, ruff, golangci-lint, mypy and pylint.</li>
+    <li>Stack traces from Node, Deno and Bun; JSON diagnostics from cargo, eslint, ruff, golangci-lint, mypy and pylint.</li>
     <li><code>kubectl apply|delete|rollout status</code>, <code>dmesg</code>, <code>docker pull|push</code>, terraform <code>init</code>, <code>state list</code> and <code>validate</code>.</li>
-    <li>Text lockfiles (pnpm, pubspec, mix, Podfile, Package.resolved, bun) and dependency trees (<code>npm ls</code>, <code>pnpm why</code>, <code>cargo tree</code>, <code>pipdeptree</code>, <code>uv tree</code>, gradle and more).</li>
-    <li>Coverage tables, git <code>reflog</code>, <code>stash list</code>, <code>tag</code>, <code>remote -v</code> and a bare <code>diff --stat</code>, web search results, <code>free</code>, <code>vmstat</code>, <code>findmnt</code>, <code>pip list</code>, <code>pacman -Q</code>, the <code>make eval</code> table.</li>
-    <li><code>truncate</code> keeps lines after each error, and <code>find</code>/<code>tree</code> folds keep directory names.</li>
+    <li>Lockfiles and dependency trees (<code>npm ls</code>, <code>cargo tree</code>, <code>uv tree</code>, gradle and more), coverage tables, git <code>reflog</code>, <code>stash list</code> and <code>tag</code>, web search results, <code>free</code>, <code>vmstat</code>, <code>pip list</code>, <code>pacman -Q</code>.</li>
+    <li><code>truncate</code> keeps the lines after each error, and <code>find</code> and <code>tree</code> keep directory names.</li>
   </ul>
 
-  <h3>Reports</h3>
+  <h3>See where the money goes</h3>
   <ul>
-    <li><code>gain</code> shows rerequested and wasted tokens per dialect, optimizer and command; <code>raw</code> prints a size header for large originals.</li>
-    <li>The dashboard has costs and context pages with charts, one model table and a detail row per session; <code>install -window</code> sets Claude's auto-compact window.</li>
+    <li><strong>Dashboard:</strong> new costs and context pages with charts, one model table and a detail row per session. <code>install -window</code> sets Claude's auto-compact window.</li>
+    <li><strong><code>gain</code></strong> shows how many tokens were re-requested and wasted, per tool, optimizer and command; <code>raw</code> prints a size header for large originals.</li>
   </ul>
 </section>
 
