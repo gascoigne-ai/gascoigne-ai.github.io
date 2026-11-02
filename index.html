@@ -1216,8 +1216,8 @@ Gascoigne gascoigne = Gascoigne.<span class="tk-fn">builder</span>().<span class
       <p class="fine"><time datetime="2026-11-02">2 November 2026</time>, a crash fixed in the hook</p>
     </summary>
     <ul>
-      <li>The hook no longer panics on <code>gh pr checks</code> and other tab separated tables whose rows differ in length.</li>
-      <li>The SDKs are released at 0.9.1, with native demos for every Python and TypeScript framework and Spring AI.</li>
+      <li><strong>No more crash on <code>gh pr checks</code>.</strong> The hook failed on tables whose rows have different lengths. Your agent now gets the shortened table instead of an error.</li>
+      <li><strong>SDKs 0.9.1.</strong> Python, TypeScript, Go, Java, .NET and Rust, with native demos for every Python and TypeScript framework and Spring AI.</li>
     </ul>
     <p class="fine"><a href="releases/0.9.1/">What's new in 0.9.1</a>,
       <a href="https://github.com/gascoigne-ai/gascoigne-cli/releases/tag/v0.9.1">release notes and downloads</a></p>
@@ -1225,14 +1225,15 @@ Gascoigne gascoigne = Gascoigne.<span class="tk-fn">builder</span>().<span class
   <details class="release">
     <summary>
       <h3>0.9.0</h3>
-      <p class="fine"><time datetime="2026-11-02">2 November 2026</time>, smarter folding and an SDK that runs in your process</p>
+      <p class="fine"><time datetime="2026-11-02">2 November 2026</time>, shorter logs, and the SDKs can run without a server</p>
     </summary>
     <ul>
-      <li><strong>SDK native mode:</strong> every SDK can run the engine in the application process (<code>libgascoigne</code>), with no server or CLI; the SDKs now share the CLI version.</li>
-      <li>Log folding: Drain template miner, MAD outliers, bursts, rarity cap; codes such as <code>status=503</code> no longer fold into <code>status=200</code>.</li>
-      <li>Sources fetched raw after an optimized result take a gentler route before being bypassed; <code>history.max_failures</code> is now 2; <code>gain -refetch</code> shows the rate.</li>
-      <li><code>mcp-review</code> sorts by usage, suggests savings and applies them (<code>-optimize</code>, or the dashboard button).</li>
-      <li><code>replay -set</code>, 1-hour cache advice, per-pipeline <code>optimizers:</code>; the <code>passthrough</code> optimizer is gone (<code>optimizers: []</code>).</li>
+      <li><strong>SDKs run inside your app (native mode).</strong> No server and no CLI to install: the library does the work in your process. Easier to ship and faster per call.</li>
+      <li><strong>Logs shrink further.</strong> Lines that differ only in a host or user now fold together, spikes and bursts are called out, and an error code such as <code>status=503</code> is no longer lost among <code>status=200</code> lines.</li>
+      <li><strong>Sources your agent keeps re-reading get gentler treatment.</strong> If the agent fetches the whole original after a short result, that source is shortened less next time instead of being skipped. <code>gain -refetch</code> shows how often it happens.</li>
+      <li><strong>MCP review fixes things for you.</strong> It lists tools nobody called this week and can set them to load on request (<code>mcp-review -optimize</code> or one button). Fewer tool definitions in every request, nothing removed.</li>
+      <li><strong>Try settings on real sessions.</strong> <code>replay -set</code> compares two settings on the same transcripts, and <code>context</code> advises when a 1-hour cache would save money.</li>
+      <li><strong>One thing to check:</strong> a source is bypassed after 2 failures now (it was 1), and <code>optimizers: []</code> replaces the removed <code>passthrough</code>.</li>
     </ul>
     <p class="fine"><a href="releases/0.9.0/">What's new in 0.9.0</a>,
       <a href="https://github.com/gascoigne-ai/gascoigne-cli/releases/tag/v0.9.0">release notes and downloads</a></p>
@@ -1243,11 +1244,13 @@ Gascoigne gascoigne = Gascoigne.<span class="tk-fn">builder</span>().<span class
       <p class="fine"><time datetime="2026-11-01">1 November 2026</time>, fewer tokens from the session itself</p>
     </summary>
     <ul>
-      <li>Image Reads above <code>max_image_pixels</code> (now 600000, was off) are downscaled in the Claude hook; piped commands are optimized; a context-size note and tighter budgets appear when the context is large.</li>
-      <li>A source that failed is skipped only after 2 failures within 24 hours, not forever.</li>
-      <li><code>.gascoigne.yaml</code> lays a project config over the user config.</li>
-      <li>30 new dialects and fixes: Node stack frames, JSON diagnostics, kubectl apply, dmesg, text lockfiles, dependency trees, coverage tables, docker pull, git refs, terraform init, web search and more.</li>
-      <li>Costs and context pages in the dashboard; rerequest columns in <code>gain</code>.</li>
+      <li><strong>Screenshots cost less.</strong> Large images the agent reads are scaled down before the model sees them. The original is kept.</li>
+      <li><strong>Piped commands are shortened too.</strong> <code>cmd | grep</code>, <code>jq</code>, <code>sort</code> and similar no longer escape optimization, and the exit status stays right.</li>
+      <li><strong>Big contexts get tighter output.</strong> When the conversation grows, results shrink more, and you get a note about the context size.</li>
+      <li><strong>One bad run no longer blocks a source for good.</strong> A source is skipped only after 2 failures within 24 hours.</li>
+      <li><strong>Per-project settings.</strong> Put a <code>.gascoigne.yaml</code> in a repo and it applies there only.</li>
+      <li><strong>30 more kinds of output understood:</strong> Node and Deno stack traces, eslint, cargo and ruff diagnostics, <code>kubectl apply</code>, <code>dmesg</code>, lockfiles, dependency trees, coverage tables, <code>docker pull</code>, git history commands, terraform, web search results.</li>
+      <li><strong>See where the money goes.</strong> New costs and context pages in the dashboard, and rerequest columns in <code>gain</code>.</li>
     </ul>
     <p class="fine"><a href="releases/0.8.0/">What's new in 0.8.0</a>,
       <a href="https://github.com/gascoigne-ai/gascoigne-cli/releases/tag/v0.8.0">release notes and downloads</a></p>
@@ -1258,9 +1261,8 @@ Gascoigne gascoigne = Gascoigne.<span class="tk-fn">builder</span>().<span class
       <p class="fine"><time datetime="2026-10-22">22 October 2026</time>, quoted env assignments in the hook</p>
     </summary>
     <ul>
-      <li>Commands like <code>DATABASE_URL="postgres://app@localhost/app?sslmode=disable" go test ./...</code> or <code>NODE_OPTIONS="--max-old-space-size=4096" npm run build</code> keep the env assignment outside <code data-lang="sh" data-hl><span class="tk-cmd">gascoigne</span> exec</code> and run again, instead of failing with "executable not found".</li>
-      <li>A line the hook already rewrote is not wrapped a second time.</li>
-      <li><code>command</code>, <code>exec</code> and <code>time</code> lines stay unwrapped: they are shell builtins, not programs.</li>
+      <li><strong>Commands with quoted env values work again.</strong> Lines like <code>DATABASE_URL="postgres://app@localhost/app?sslmode=disable" go test ./...</code> failed with &ldquo;executable not found&rdquo;; they now run and are shortened.</li>
+      <li><strong>No double wrapping.</strong> A line the hook already rewrote is left alone, and shell builtins such as <code>command</code>, <code>exec</code> and <code>time</code> are not wrapped.</li>
     </ul>
     <p class="fine"><a href="releases/0.7.2/">What's new in 0.7.2</a>,
       <a href="https://github.com/gascoigne-ai/gascoigne-cli/releases/tag/v0.7.2">release notes and downloads</a></p>
@@ -1271,9 +1273,9 @@ Gascoigne gascoigne = Gascoigne.<span class="tk-fn">builder</span>().<span class
       <p class="fine"><time datetime="2026-10-19">19 October 2026</time>, costs page, faster release notices</p>
     </summary>
     <ul>
-      <li>The dashboard has a costs page, readable long periods and session filters.</li>
-      <li>New releases are noticed within 15 minutes, from agent hooks and <code data-lang="sh" data-hl><span class="tk-cmd">gascoigne</span> dashboard</code>.</li>
-      <li><code>make eval</code> prints a banner per suite, savings bars and a summary.</li>
+      <li><strong>Costs page.</strong> See what your agents spend and what gascoigne saved, over long periods and per session.</li>
+      <li><strong>Hear about updates sooner.</strong> New releases are noticed within 15 minutes.</li>
+      <li><strong>Readable <code>make eval</code>.</strong> A banner per suite, savings bars and a final summary.</li>
     </ul>
     <p class="fine"><a href="releases/0.7.1/">What's new in 0.7.1</a>,
       <a href="https://github.com/gascoigne-ai/gascoigne-cli/releases/tag/v0.7.1">release notes and downloads</a></p>
@@ -1284,9 +1286,9 @@ Gascoigne gascoigne = Gascoigne.<span class="tk-fn">builder</span>().<span class
       <p class="fine"><time datetime="2026-10-16">16 October 2026</time>, more tools, less noise</p>
     </summary>
     <ul>
-      <li><code data-lang="sh" data-hl><span class="tk-cmd">gascoigne</span> gain</code> prints the essentials by default (<code>-full</code> for everything), with <code>-show</code>, <code>-hide</code>, <code>-top</code>, <code>-sort</code>, <code>-min-tokens</code> and <code>-csv</code>.</li>
-      <li>Runs older than <code>events_ttl</code> are rolled into daily totals that are kept forever (<code>ledger.rollup_ttl</code>), so <code>gain</code> history outlives a year.</li>
-      <li>Build, test and package-manager output of dozens more tools is recognised and shortened, stack traces fold runtime frames, and source outlines cover many more languages.</li>
+      <li><strong>Simpler <code>gain</code>.</strong> It prints the essentials by default; <code>-full</code> shows everything, and flags let you filter and export CSV.</li>
+      <li><strong>History that lasts.</strong> Old runs are rolled into daily totals that are kept forever, so your savings history is not lost after a year.</li>
+      <li><strong>Many more tools recognised.</strong> Build, test and package-manager output of dozens of tools is shortened, stack traces fold runtime frames, and source outlines cover more languages.</li>
     </ul>
     <p class="fine"><a href="releases/0.7.0/">What's new in 0.7.0</a>,
       <a href="https://github.com/gascoigne-ai/gascoigne-cli/releases/tag/v0.7.0">release notes and downloads</a></p>
@@ -1297,9 +1299,9 @@ Gascoigne gascoigne = Gascoigne.<span class="tk-fn">builder</span>().<span class
       <p class="fine"><time datetime="2026-10-14">14 October 2026</time>, savings net of rerequests</p>
     </summary>
     <ul>
-      <li>A run the agent re-asked about (fetched the original, or reran it raw) is stored as <code>rerequested</code>, not optimized, and costs the result plus the original in your savings. Old history is converted on first start.</li>
-      <li>The dashboard charts optimizing against rerequesting per day and filters the feed by Optimized, Bypassed, Unchanged, Rerequested, Raw and Failed.</li>
-      <li>Originals stay 30 days, runs and MCP stats a year (<code>ledger.raw_ttl</code>, <code>events_ttl</code>, <code>stats_ttl</code>). Fixes for <code data-lang="sh" data-hl><span class="tk-cmd">gascoigne</span> tokens</code> hanging and a git branch crash.</li>
+      <li><strong>Honest savings.</strong> When the agent asks again for the original, that run counts as a cost, not a saving, so the numbers you see are net. Old history is converted on first start.</li>
+      <li><strong>Better dashboard.</strong> A per-day chart of optimized versus rerequested runs, and a feed you can filter by outcome.</li>
+      <li><strong>Retention you can set.</strong> Originals stay 30 days, run statistics a year. Also fixed: <code>gascoigne tokens</code> hanging and a git branch crash.</li>
     </ul>
     <p class="fine"><a href="releases/0.6.1/">What's new in 0.6.1</a>,
       <a href="https://github.com/gascoigne-ai/gascoigne-cli/releases/tag/v0.6.1">release notes and downloads</a></p>
@@ -1310,9 +1312,9 @@ Gascoigne gascoigne = Gascoigne.<span class="tk-fn">builder</span>().<span class
       <p class="fine"><time datetime="2026-10-14">14 October 2026</time>, pick your prose model</p>
     </summary>
     <ul>
-      <li>Two prose models: <code>kompress-v2-base</code> (274 MB, general prose) and <code>ctxprune-small</code> (563 MB, tool output, logs and code). Setup asks which one, downloads it and checks its files.</li>
-      <li>A progress bar while models and the runtime download in a terminal. Models install into directories of their own, so run <code data-lang="sh" data-hl><span class="tk-cmd">gascoigne</span> prose install</code> once more if you used 0.5.0.</li>
-      <li>The <code>/sdk/v1</code> API for the agent framework SDKs, a minimal Alpine Docker image, and plainer labels in the dashboard.</li>
+      <li><strong>Choose the prose model.</strong> A general one (274 MB) or one tuned for tool output, logs and code (563 MB). Setup asks, downloads it and checks its files.</li>
+      <li><strong>Progress while downloading.</strong> Models install into their own folders; run <code>gascoigne prose install</code> again if you used 0.5.0.</li>
+      <li><strong>For framework developers.</strong> A <code>/sdk/v1</code> API for the agent SDKs, a tiny Alpine Docker image, and plainer dashboard labels.</li>
     </ul>
     <p class="fine"><a href="releases/0.6.0/">What's new in 0.6.0</a>,
       <a href="https://github.com/gascoigne-ai/gascoigne-cli/releases/tag/v0.6.0">release notes and downloads</a></p>
@@ -1323,10 +1325,9 @@ Gascoigne gascoigne = Gascoigne.<span class="tk-fn">builder</span>().<span class
       <p class="fine"><time datetime="2026-10-13">13 October 2026</time>, prose compression with a local model</p>
     </summary>
     <ul>
-      <li>Experimental prose compression: a local model drops low-value words from long paragraphs of text and markdown, on CUDA, CoreML or the CPU, with no Python and no cgo. Numbers, paths, flags, code and links stay; the original stays in the ledger.</li>
-      <li><code data-lang="sh" data-hl><span class="tk-cmd">gascoigne</span> prose install</code> and <code data-lang="sh" data-hl><span class="tk-cmd">status</span></code>; setup downloads the model (274 MB) with pinned checksums shown.</li>
-      <li>Dashboard: a <code data-lang="sh" data-hl><span class="tk-cmd">prose</span> −N</code> tag on shortened runs, an Experiments panel, and tables grouped into two tabbed panels.</li>
-      <li><code data-lang="sh" data-hl><span class="tk-cmd">eval</span> <span class="tk-flag">-record</span></code> and <code data-lang="sh" data-hl><span class="tk-cmd">make</span> eval-experimental</code> put eval runs in the dashboard.</li>
+      <li><strong>Shorter prose, on your machine.</strong> An experimental local model drops low-value words from long text and markdown. Numbers, paths, flags, code and links stay, and the original is kept. No Python, no cgo.</li>
+      <li><strong>Easy to try.</strong> <code>gascoigne prose install</code> and <code>status</code>; setup downloads the model with its checksums shown.</li>
+      <li><strong>See it in the dashboard.</strong> A &minus;N tag on shortened runs and an Experiments panel; <code>eval -record</code> puts eval runs there too.</li>
     </ul>
     <p class="fine"><a href="releases/0.5.0/">What's new in 0.5.0</a>,
       <a href="https://github.com/gascoigne-ai/gascoigne-cli/releases/tag/v0.5.0">release notes and downloads</a></p>
@@ -1337,7 +1338,7 @@ Gascoigne gascoigne = Gascoigne.<span class="tk-fn">builder</span>().<span class
       <p class="fine"><time datetime="2026-10-13">13 October 2026</time>, the release notice works again</p>
     </summary>
     <ul>
-      <li>The once-a-day release check read the website at its old address and never signalled an update; it reads the new one.</li>
+      <li><strong>Update notices work.</strong> The daily check read the website at its old address and never told you about a new version. It reads the new one now.</li>
     </ul>
     <p class="fine"><a href="releases/0.4.1/">What's new in 0.4.1</a>,
       <a href="https://github.com/gascoigne-ai/gascoigne-cli/releases/tag/v0.4.1">release notes and downloads</a></p>
@@ -1348,9 +1349,9 @@ Gascoigne gascoigne = Gascoigne.<span class="tk-fn">builder</span>().<span class
       <p class="fine"><time datetime="2026-10-13">13 October 2026</time>, binaries for every system</p>
     </summary>
     <ul>
-      <li>Prebuilt archives for Linux, macOS and Windows (amd64, arm64) with <code data-lang="sh" data-hl><span class="tk-path">checksums.txt</span></code> on every GitHub release.</li>
-      <li><code data-lang="sh" data-hl><span class="tk-cmd">gascoigne</span> context</code> and a dashboard page: where conversation size and cache rewrites cost money.</li>
-      <li>A weekly MCP review page with per-server use and how to switch a server off.</li>
+      <li><strong>Download and run.</strong> Prebuilt archives for Linux, macOS and Windows (amd64, arm64) with checksums on every GitHub release.</li>
+      <li><strong><code>gascoigne context</code>.</strong> Shows where conversation size and cache rewrites cost you money.</li>
+      <li><strong>Weekly MCP review.</strong> Which servers you use, and how to switch one off.</li>
     </ul>
     <p class="fine"><a href="releases/0.4.0/">What's new in 0.4.0</a>,
       <a href="https://github.com/gascoigne-ai/gascoigne-cli/releases/tag/v0.4.0">release notes and downloads</a></p>
@@ -1361,11 +1362,11 @@ Gascoigne gascoigne = Gascoigne.<span class="tk-fn">builder</span>().<span class
       <p class="fine"><time datetime="2026-10-12">12 October 2026</time>, setting up and keeping up to date</p>
     </summary>
     <ul>
-      <li>A setup page in your browser (and <code data-lang="sh" data-hl><span class="tk-cmd">gascoigne</span> setup</code> in the terminal): nothing that changes how your agents are set up happens before you answer.</li>
-      <li><code data-lang="sh" data-hl><span class="tk-cmd">gascoigne</span> upgrade</code> after a new version: stale or lost hooks, rules and commands written again, <code data-lang="sh" data-hl><span class="tk-path">config.yaml</span></code> moved onto the new template, open choices asked.</li>
-      <li><code data-lang="sh" data-hl><span class="tk-cmd">gascoigne</span> doctor</code> in plain words; <code data-lang="sh" data-hl><span class="tk-cmd">install</span> <span class="tk-flag">-permissions</span></code>, <code data-lang="sh" data-hl>-guide</code> and <code data-lang="sh" data-hl>-autosync</code>; agents found on your machine are offered, not installed.</li>
-      <li>Experimental <code data-lang="sh" data-hl><span class="tk-cmd">continuity</span></code>, <code data-lang="sh" data-hl><span class="tk-cmd">learn</span></code> and <code data-lang="sh" data-hl><span class="tk-cmd">prompts</span></code>, turned on from setup with an example and the impact of each.</li>
-      <li>Dashboard: savings by model family, every table sorts and filters. A once-a-day release notice, off with one switch.</li>
+      <li><strong>Setup you control.</strong> A page in your browser (or <code>gascoigne setup</code>) asks first; nothing about your agents changes before you answer.</li>
+      <li><strong>Upgrades fix themselves.</strong> <code>gascoigne upgrade</code> rewrites stale or lost hooks, rules and commands and moves your config to the new template.</li>
+      <li><strong>Clearer help.</strong> <code>gascoigne doctor</code> in plain words, and agents found on your machine are offered, not installed.</li>
+      <li><strong>Experiments, opt in.</strong> Continuity, learn and prompts are turned on from setup, each with an example and its impact.</li>
+      <li><strong>Dashboard.</strong> Savings by model family, and every table sorts and filters. A once-a-day release notice you can switch off.</li>
     </ul>
     <p class="fine"><a href="releases/0.3.0/">What's new in 0.3.0</a>,
       <a href="https://github.com/gascoigne-ai/gascoigne-cli/releases/tag/v0.3.0">release notes and downloads</a>
@@ -1377,13 +1378,12 @@ Gascoigne gascoigne = Gascoigne.<span class="tk-fn">builder</span>().<span class
       <p class="fine"><time datetime="2026-10-12">12 October 2026</time>, first release</p>
     </summary>
     <ul>
-      <li>16 family engines across 110+ tools and formats: verbose output shrinks 70–99%, a typical coding session's tool output 4–27%.</li>
-      <li><code data-lang="sh" data-hl><span class="tk-cmd">wrap</span></code> and <code data-lang="sh" data-hl><span class="tk-cmd">install</span></code> for Claude Code, Codex, Gemini CLI, opencode, pi and Cursor;
-        <code data-lang="sh" data-hl><span class="tk-cmd">uninstall</span></code> removes it all.</li>
-      <li>MCP server and MCP proxy, plus an LLM API proxy that shortens tool results inside requests.</li>
-      <li>Every original kept in a local ledger and read back with <code data-lang="sh" data-hl><span class="tk-cmd">gascoigne</span> raw</code>.</li>
-      <li>Live dashboard, <code data-lang="sh" data-hl><span class="tk-cmd">gain</span></code> with cost, and exact token counts with <code data-lang="sh" data-hl><span class="tk-cmd">tokens</span></code>.</li>
-      <li>Static binaries for Linux, macOS and Windows under the Apache License 2.0.</li>
+      <li><strong>Shorter tool output.</strong> 16 engines across 110+ tools and formats: verbose output shrinks 70&ndash;99%, a typical coding session&rsquo;s tool output 4&ndash;27%.</li>
+      <li><strong>Works with your agent.</strong> <code>wrap</code> and <code>install</code> for Claude Code, Codex, Gemini CLI, opencode, pi and Cursor; <code>uninstall</code> removes everything.</li>
+      <li><strong>MCP and API proxies.</strong> Shortens results from MCP servers and tool results inside LLM requests.</li>
+      <li><strong>Nothing is lost.</strong> Every original is kept locally and read back with <code>gascoigne raw</code>.</li>
+      <li><strong>See the effect.</strong> A live dashboard, <code>gain</code> with cost, and exact token counts with <code>tokens</code>.</li>
+      <li><strong>One file.</strong> Static binaries for Linux, macOS and Windows, Apache License 2.0.</li>
     </ul>
     <p class="fine"><a href="https://github.com/gascoigne-ai/gascoigne-cli/releases/tag/v0.2.1">Release notes and downloads</a>
       or the full <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/CHANGELOG.md">changelog</a>.</p>

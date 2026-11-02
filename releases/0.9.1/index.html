@@ -56,15 +56,16 @@
 <section id="new">
   <h2>What's new</h2>
 
-  <h3>Fixed</h3>
-  <ul>
-    <li><code>gh pr checks</code> and other tab separated tables with rows of different lengths no longer panic the hook. Short rows are padded, and extra fields get <code>C&lt;n&gt;</code> columns. In 0.9.0 the hook failed with <code>index out of range</code> on such output.</li>
-  </ul>
+  <h3>No more crash on <code>gh pr checks</code></h3>
+  <p class="intro"><strong>What you get:</strong> the hook works on every table again. In 0.9.0 it failed with
+    <code>index out of range</code> when a table's rows had different lengths, which <code>gh pr checks</code> produces.
+    Short rows are now padded, so your agent receives the shortened table instead of an error.</p>
 
   <h3>SDKs 0.9.1</h3>
-  <p class="intro">Python, TypeScript, Go, Java, .NET, Rust and the native library are released at 0.9.1, the first
-    release of the 0.9 line to ship. There are native demos for every Python and TypeScript framework and for
-    Spring AI, and the README starts with a try-it that needs no API key. See the <a href="../../sdk/">SDK page</a>.</p>
+  <p class="intro"><strong>What you get:</strong> a working release of every SDK (Python, TypeScript, Go, Java, .NET, Rust)
+    and the native library, built against this CLI. New: native demos for every Python and TypeScript framework and
+    Spring AI, and a README that starts with a one-minute try-it that needs no API key.
+    See the <a href="../../sdk/">SDK page</a>.</p>
 </section>
 
 <section id="upgrade" class="band">

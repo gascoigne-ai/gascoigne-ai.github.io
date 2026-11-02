@@ -40,8 +40,8 @@
   <div class="hero-text">
     <p class="fine"><time datetime="2026-11-02">2 November 2026</time></p>
     <h1><span>gascoigne 0.9.0</span> <span>Smarter folding, and an engine you can embed.</span></h1>
-    <p class="lede">Logs fold by Drain templates, sources the agent keeps fetching raw get a gentler route,
-      <code>mcp-review</code> applies the savings it finds, and every SDK can run the engine inside your own process.</p>
+    <p class="lede">Shorter logs, fewer wasted round trips, MCP savings applied for you, and SDKs that run inside
+      your app with no server.</p>
     <div class="oneliner">
       <code id="up1">go install github.com/gascoigne-ai/gascoigne-cli/cmd/gascoigne@latest</code>
       <button class="copy" data-copy="up1" type="button">Copy</button>
@@ -56,37 +56,38 @@
 <section id="new">
   <h2>What's new</h2>
 
-  <h3>SDK 0.9.0: native mode</h3>
-  <p class="intro">The SDKs now share the CLI's version number. Every one of them (Python, TypeScript, Go, Java, .NET,
-    Rust) can load <code>libgascoigne</code> and run the engine in the application process: no server, no
-    <code>gascoigne</code> binary on the <code>PATH</code>. The Go CLI exposes the same pipeline as a public
-    <code>inproc</code> package. See the <a href="../../sdk/">SDK page</a> for examples.</p>
+  <h3>The SDKs can run without a server</h3>
+  <p class="intro"><strong>What you get:</strong> add gascoigne to your own agent app without installing anything next to it.
+    Python, TypeScript, Go, Java, .NET and Rust can load <code>libgascoigne</code> and do the work inside your
+    process. It is simpler to deploy and quicker per call. The old way, through the local server, still works.
+    <a href="../../sdk/">See the SDK page</a> for examples.</p>
 
-  <h3>Log folding</h3>
+  <h3>Logs shrink further</h3>
   <ul>
-    <li><code>miner: drain</code> folds lines that differ in a few words (host, user) by Drain template clusters; warnings and errors never merge.</li>
-    <li><code>outliers: mad</code> keeps spikes the 10x median rule misses, <code>bursts</code> says where a template's repeats cluster (<code>mostly lines 661–687</code>), and <code>rarity</code> keeps the entries standing for the fewest lines.</li>
-    <li>Codes stay apart: one <code>status=503</code> among <code>status=200</code> lines is no longer folded into them. <code>passes</code> picks the stages that run before templating.</li>
-    <li><code>truncate</code> can pick query lines by maximal marginal relevance (<code>query_diverse</code>), so near-identical matches do not fill the budget.</li>
+    <li><strong>Similar lines fold together.</strong> Lines that differ only in a host or a user name become one line with a count, so long logs get much shorter.</li>
+    <li><strong>The important line stays.</strong> One <code>status=503</code> among hundreds of <code>status=200</code> lines is kept, and spikes are no longer averaged away.</li>
+    <li><strong>You see where it happened.</strong> A repeated message that clusters says so, for example <code>mostly lines 661&ndash;687</code>.</li>
+    <li><strong>Search results are more varied.</strong> When the agent asks about something, near-identical matches no longer fill the answer.</li>
   </ul>
 
-  <h3>Sources fetched raw get a gentler route</h3>
-  <p class="intro">When the agent fetches the whole original after an optimized result, that source takes a
-    <code>gentle</code> route (the same chain, less aggressive) before it is bypassed. A whole family goes gentle
-    when too many of its results are fetched raw, and optimized runs forgive failures. <code>gain -refetch</code>
-    shows how often each family was fetched raw afterwards.</p>
+  <h3>Sources the agent keeps re-reading</h3>
+  <p class="intro"><strong>What you get:</strong> fewer wasted round trips. If the agent fetches the whole original after a
+    short result, that source is shortened less next time rather than being skipped for good. A whole kind of
+    output (logs, tests, &hellip;) does the same when this keeps happening, and sources recover as they do well.
+    <code>gain -refetch</code> shows how often it happens.</p>
 
-  <h3>MCP review applies what it finds</h3>
-  <ul>
-    <li>Servers and tools are sorted by usage, with suggestions: tools not called in 7 days to load on request, and advice for the agent's own config (switch an unused server off, <code>max_tools</code>, <code>trim_descriptions</code>).</li>
-    <li>The <em>Auto-optimize</em> button, or <code>gascoigne mcp-review -optimize</code>, adds the suggested lazy tools from the next session. Nothing is removed.</li>
-  </ul>
+  <h3>MCP review fixes things for you</h3>
+  <p class="intro"><strong>What you get:</strong> smaller requests. The review sorts servers and tools by use, lists tools
+    nobody called this week and can set them to load on request, with one button or
+    <code>gascoigne mcp-review -optimize</code>. It also suggests what to change in your agent's own config.
+    Nothing is removed.</p>
 
-  <h3>More</h3>
+  <h3>Smaller things</h3>
   <ul>
-    <li><code>replay -set</code> compares settings on the same transcripts; pipelines list their active optimizers under <code>optimizers:</code>.</li>
-    <li>Advice on 1-hour cache pauses in <code>context</code>; <code>prompts</code> flags skills and subagents no transcript shows.</li>
-    <li>The dashboard opens the setup page once after an upgrade, and its Change button opens it with a token.</li>
+    <li><strong>Try settings safely.</strong> <code>replay -set</code> compares two settings on the same transcripts.</li>
+    <li><strong>Cache advice.</strong> <code>context</code> tells you when a 1-hour cache would save money after long pauses.</li>
+    <li><strong>See what a pipeline does.</strong> Each pipeline lists its active optimizers under <code>optimizers:</code>.</li>
+    <li><strong>Setup after an upgrade.</strong> The dashboard opens the setup page once so you can finish updating.</li>
   </ul>
 </section>
 
