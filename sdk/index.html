@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>gascoigne SDK — Python, TypeScript, Go, Java, .NET and Rust</title>
+<meta name="description" content="Shorten tool results inside your own agent app. Python, TypeScript, Go, Java, .NET and Rust SDKs, in your process (native) or through a local server (proxy).">
+<meta property="og:title" content="gascoigne SDK">
+<meta property="og:description" content="Your agent framework reads less. Nothing gets lost.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23ECE4E2'/%3E%3Cpath d='M16 2A14 14 0 0 0 16 30A7 14 0 0 0 16 2Z' fill='%234A1A2C'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css?v=20261102">
+</head>
+<body>
+
+<svg width="0" height="0" class="defs" aria-hidden="true">
+  <defs>
+    <radialGradient id="moon-lit" cx="38%" cy="32%" r="72%"><stop offset="0" stop-color="#fffdfb"/><stop offset=".6" stop-color="#ece4e2"/><stop offset="1" stop-color="#c9bcbf"/></radialGradient>
+    <radialGradient id="moon-dark" cx="60%" cy="60%" r="70%"><stop offset="0" stop-color="#4a1a2c"/><stop offset="1" stop-color="#2a0c17"/></radialGradient>
+  </defs>
+</svg>
+
+<div class="night">
+<header class="top">
+  <a class="brand" href="../">
+    <svg class="moon" data-saved="0.99" width="28" height="28" aria-hidden="true"></svg>
+    gascoigne
+  </a>
+  <nav>
+    <a href="https://github.com/gascoigne-ai/gascoigne-sdk/blob/master/CHANGELOG.md">Changelog</a>
+    <a href="#modes">Modes</a>
+    <a href="#install">Install</a>
+    <a href="#demos">Demos</a>
+    <a href="https://github.com/gascoigne-ai">GitHub</a>
+  </nav>
+</header>
+
+
+<section class="hero release-hero">
+  <div class="hero-text">
+    <p class="fine">SDK 0.9.0 · Python · TypeScript · Go · Java · .NET · Rust</p>
+    <h1><span>Your agent framework reads less.</span> <span>Nothing gets lost.</span></h1>
+    <p class="lede">The gascoigne engine as a library. Wrap a tool, point your LLM client at the local proxy, or run the
+      engine inside your own process, and the model reads a shortened result. The original stays one
+      <code>raw</code> call away.</p>
+    <div class="oneliner">
+      <code id="up1">uv add https://github.com/gascoigne-ai/gascoigne-sdk/releases/download/py-v0.9.0/gascoigne-0.9.0-py3-none-any.whl</code>
+      <button class="copy" data-copy="up1" type="button">Copy</button>
+    </div>
+    <p class="fine">Other languages: <a href="#install">install table</a>. Looking for the command-line tool? <a href="../">gascoigne for agents</a>.</p>
+  </div>
+</section>
+</div>
+
+<main>
+
+<section id="showcase">
+  <h2>What the model reads</h2>
+  <p class="intro">A tool returns a noisy log of about 400 lines. The SDK folds the repeats, keeps the one error and tells the model
+    where the original is. This is the example from the SDK README.</p>
+  <ul class="stats tight">
+    <li><strong>12,025 → 142</strong><span>tokens, the noisy log below</span></li>
+    <li><strong>6</strong><span>languages, one surface</span></li>
+    <li><strong>4</strong><span>ways to hook in</span></li>
+    <li><strong>15</strong><span>framework demos</span></li>
+  </ul>
+  <div class="ba-grid">
+  <figure class="snippet-fig">
+<pre class="snippet" data-lang="log" tabindex="0" aria-label="Tool result before the SDK, 12,025 tokens">2026-10-13T12:00:00Z INFO ...
+... 393 more lines</pre>
+    <figcaption class="fine">The tool result: 12,025 tokens (abridged).</figcaption>
+  </figure>
+  <figure class="snippet-fig">
+<pre class="snippet" data-lang="log" tabindex="0" aria-label="What the model reads, 142 tokens">2026-10-13T12:00:00Z INFO ...
+... 247 repeats of lines above
+2026-10-13T12:04:10Z ERROR db connection timeout
+Saved 99%: 12,025 -&gt; 142 tokens. Original: gascoigne raw ded3885c</pre>
+    <figcaption class="fine">What the model reads: 142 tokens, with the error intact and a way back to the original.</figcaption>
+  </figure>
+  </div>
+  <ul class="callouts">
+    <li><b>Never throws into your app.</b> Any failure returns the input unchanged, and a failing server trips a circuit breaker.</li>
+    <li><b>No library, no problem.</b> Without <code>libgascoigne</code> (native) or the <code>gascoigne</code> CLI (proxy), proxy mode logs one warning per process and passes every result through.</li>
+    <li><b>Nothing is decorated unless your code asks.</b> <code>auto()</code> is an explicit, reversible call, never an import side effect or an environment variable.</li>
+  </ul>
+</section>
+
+<section id="modes" class="band">
+  <h2>Pick a mode, pick a language</h2>
+  <p class="intro">Four ways to hook in, the same six languages. <b>Native</b> and <b>proxy</b> are how the SDK reaches the
+    engine; <b>wrap</b> and <b>auto</b> are how it meets your tools. Every example below is code from the
+    <a href="https://github.com/gascoigne-ai/gascoigne-sdk/tree/master/demos">demos</a>.</p>
+
+  <div class="sdk" data-sdk data-default-mode="native">
+    <div class="sdk-bar">
+      <div class="seg-tabs" role="tablist" aria-label="Mode">
+        <button role="tab" type="button" id="sdk-m-native" data-mode="native" aria-controls="sdk-panel" aria-selected="false">Native</button>
+        <button role="tab" type="button" id="sdk-m-wrap" data-mode="wrap" aria-controls="sdk-panel" aria-selected="true">Wrap</button>
+        <button role="tab" type="button" id="sdk-m-proxy" data-mode="proxy" aria-controls="sdk-panel" aria-selected="false">Proxy</button>
+        <button role="tab" type="button" id="sdk-m-auto" data-mode="auto" aria-controls="sdk-panel" aria-selected="false">Auto</button>
+      </div>
+      <div class="lang-tabs" role="tablist" aria-label="Language">
+        <button role="tab" type="button" id="sdk-l-python" data-lang="python" aria-controls="sdk-panel" aria-selected="true">Python</button>
+        <button role="tab" type="button" id="sdk-l-typescript" data-lang="typescript" aria-controls="sdk-panel" aria-selected="false">TypeScript</button>
+        <button role="tab" type="button" id="sdk-l-go" data-lang="go" aria-controls="sdk-panel" aria-selected="false">Go</button>
+        <button role="tab" type="button" id="sdk-l-java" data-lang="java" aria-controls="sdk-panel" aria-selected="false">Java</button>
+        <button role="tab" type="button" id="sdk-l-dotnet" data-lang="dotnet" aria-controls="sdk-panel" aria-selected="false">.NET</button>
+        <button role="tab" type="button" id="sdk-l-rust" data-lang="rust" aria-controls="sdk-panel" aria-selected="false">Rust</button>
+      </div>
+    </div>
+    <div class="sdk-panel" id="sdk-panel" role="tabpanel" aria-label="SDK example" tabindex="0">
+      <div class="sdk-main">
+      <p class="sdk-desc" data-mode="native"><b>Native.</b> The engine runs inside your process as <code>libgascoigne</code>: no server, no <code>gascoigne</code> binary, no proxy URL. Same wrap calls as below.</p>
+      <p class="sdk-desc" data-mode="wrap"><b>Wrap.</b> Pick tools one by one. Works with any provider and any framework.</p>
+      <p class="sdk-desc" data-mode="proxy"><b>Proxy.</b> Point the LLM client at the gascoigne proxy: every tool result in every request is shortened, whatever produced it, with no tool code changes.</p>
+      <p class="sdk-desc" data-mode="auto"><b>Auto.</b> One explicit call decorates the place every tool call goes through, MCP tools included. Nothing is decorated unless your code asks.</p>
+      <div class="sdk-codebox">
+        <div class="sdk-codebar"><span class="sdk-file" aria-live="polite"></span><button class="copy small" type="button" data-copy-code>Copy</button></div>
+        <div class="sdk-code" data-lang="python" data-mode="native" data-src="demos/python/langgraph/native.py">
+          <h3 class="sdk-code-h">Python · Native <span>demos/python/langgraph/native.py</span></h3>
+<pre data-lang="py"># 1. Start gascoigne in native mode. It raises if libgascoigne cannot be found.
+gascoigne.init(agent="langgraph", mode="native")
+
+# 2. Wrap the tool. The engine runs inside this process: no server, no CLI.
+search_logs = gascoigne.wrap_tool(search_logs)</pre>
+        </div>
+        <div class="sdk-code" data-lang="typescript" data-mode="native" data-src="demos/typescript/ai-sdk/native.ts">
+          <h3 class="sdk-code-h">TypeScript · Native <span>demos/typescript/ai-sdk/native.ts</span></h3>
+<pre data-lang="ts">// 1. Start gascoigne in native mode. It throws if libgascoigne cannot be found.
+init({ agent: "vercel-ai-sdk", mode: "native" });
+
+const tools = wrapTools({
+  // 2. Wrap the tools.
+  search_logs: tool({
+    description: "Return the recent service logs.",
+    inputSchema: z.object({}),
+    execute: async () =&gt; searchLogs(),
+  }),
+});</pre>
+        </div>
+        <div class="sdk-code" data-lang="go" data-mode="native" data-src="native/examples/plain/main.go">
+          <h3 class="sdk-code-h">Go · Native <span>native/examples/plain/main.go</span></h3>
+<pre data-lang="go">// 1. Start gascoigne in native mode. New fails when the engine cannot start.
+backend, err := embedded.New(ctx, embedded.Options{})
+rt := gascoigne.New(gascoigne.Options{Agent: "go-demo", Backend: backend})
+defer rt.Close()
+
+// 2. Optimize the tool result.
+res := rt.OptimizeResult(ctx, noisyLog(), gascoigne.Attrs{Tool: "search_logs"})</pre>
+        </div>
+        <div class="sdk-code" data-lang="java" data-mode="native" data-src="demos/java/langchain4j/native/…/nativemode/Main.java">
+          <h3 class="sdk-code-h">Java · Native <span>demos/java/langchain4j/native/…/nativemode/Main.java</span></h3>
+<pre data-lang="java">// 1. Start gascoigne in native mode (JNA loads libgascoigne).
+Gascoigne gascoigne = Gascoigne.builder()
+        .agent("langchain4j")
+        .embedded(Settings.defaults())
+        .build();
+
+// 2. Optimize what a tool returns.
+String shortened = gascoigne.optimize(logs, Attrs.tool("search_logs"));</pre>
+        </div>
+        <div class="sdk-code" data-lang="dotnet" data-mode="native" data-src="demos/dotnet/microsoft-extensions-ai/native/Program.cs">
+          <h3 class="sdk-code-h">.NET · Native <span>demos/dotnet/microsoft-extensions-ai/native/Program.cs</span></h3>
+<pre data-lang="cs">// 1. Start gascoigne in native mode. The constructor throws if libgascoigne cannot be found.
+using var gascoigne = new GascoigneClient(new GascoigneOptions
+{
+    Agent = "microsoft-extensions-ai",
+    Embedded = new EmbeddedSettings(),
+});
+
+var searchLogs = AIFunctionFactory.Create(
+    // 2. Optimize what the tool returns.
+    () =&gt; gascoigne.OptimizeAsync(Kit.NoisyLogs(), new Attrs { Tool = "search_logs" }),
+    "search_logs",
+    "Return the recent service logs.");</pre>
+        </div>
+        <div class="sdk-code" data-lang="rust" data-mode="native" data-src="demos/rust/plain/native.rs">
+          <h3 class="sdk-code-h">Rust · Native <span>demos/rust/plain/native.rs</span></h3>
+<pre data-lang="rust">// 1. Start gascoigne in native mode. It fails if libgascoigne cannot be found.
+let rt = Runtime::native("rust-demo", Settings::default())?;
+
+// 2. Optimize the tool result.
+let res = rt.optimize_result(&amp;noisy_log(), &amp;Attrs::tool("search_logs"));</pre>
+        </div>
+        <div class="sdk-code" data-lang="python" data-mode="wrap" data-src="docs/install.md">
+          <h3 class="sdk-code-h">Python · Wrap <span>docs/install.md</span></h3>
+<pre data-lang="py" data-hl><span class="tk-kw">import</span> gascoigne
+
+gascoigne.<span class="tk-fn">init</span>(agent=<span class="tk-str">"my-app"</span>)
+search = gascoigne.<span class="tk-fn">wrap_tool</span>(search)      <span class="tk-com"># any tool function returning str</span></pre>
+        </div>
+        <div class="sdk-code" data-lang="python" data-mode="proxy" data-src="demos/python/langgraph/proxy.py">
+          <h3 class="sdk-code-h">Python · Proxy <span>demos/python/langgraph/proxy.py</span></h3>
+<pre data-lang="py" data-hl><span class="tk-com"># 1. Start gascoigne.</span>
+gascoigne.<span class="tk-fn">init</span>(agent=<span class="tk-str">"langgraph"</span>)
+
+<span class="tk-com"># 2. Send LLM traffic through the gascoigne proxy.</span>
+base_url = gascoigne.<span class="tk-fn">proxy_base_url</span>(<span class="tk-str">"openai"</span>) <span class="tk-kw">or</span> openrouter.base_url
+
+agent = <span class="tk-fn">create_agent</span>(
+    <span class="tk-fn">ChatOpenAI</span>(model=openrouter.model, api_key=openrouter.api_key, base_url=base_url),
+    [<span class="tk-fn">tool</span>(search_logs)],
+)</pre>
+        </div>
+        <div class="sdk-code" data-lang="python" data-mode="auto" data-src="demos/python/langgraph/auto.py">
+          <h3 class="sdk-code-h">Python · Auto <span>demos/python/langgraph/auto.py</span></h3>
+<pre data-lang="py" data-hl><span class="tk-com"># 1. Start gascoigne.</span>
+gascoigne.<span class="tk-fn">init</span>(agent=<span class="tk-str">"langgraph-mcp"</span>)
+
+<span class="tk-com"># 2. Opt in, explicitly: results of MCP calls and LangChain tools are now shortened. The tool that</span>
+<span class="tk-com"># fetches originals is skipped, so asking for the full text does not shorten it again.</span>
+gascoigne.<span class="tk-fn">auto</span>(skip=[<span class="tk-str">"retrieve_original"</span>])</pre>
+        </div>
+        <div class="sdk-code" data-lang="typescript" data-mode="wrap" data-src="demos/typescript/ai-sdk/wrap.ts">
+          <h3 class="sdk-code-h">TypeScript · Wrap <span>demos/typescript/ai-sdk/wrap.ts</span></h3>
+<pre data-lang="ts" data-hl><span class="tk-kw">import</span> { wrapTools } <span class="tk-kw">from</span> <span class="tk-str">"@gascoigne-ai/ai-sdk"</span>;
+<span class="tk-kw">import</span> { init } <span class="tk-kw">from</span> <span class="tk-str">"@gascoigne-ai/sdk"</span>;
+
+<span class="tk-com">// 1. Start gascoigne.</span>
+<span class="tk-fn">init</span>({ agent: <span class="tk-str">"vercel-ai-sdk"</span> });
+
+<span class="tk-kw">const</span> tools = <span class="tk-fn">wrapTools</span>({
+  <span class="tk-com">// 2. Wrap the tools.</span>
+  search_logs: <span class="tk-fn">tool</span>({
+    description: <span class="tk-str">"Return the recent service logs."</span>,
+    inputSchema: z.<span class="tk-fn">object</span>({}),
+    execute: <span class="tk-kw">async</span> () =&gt; <span class="tk-fn">searchLogs</span>(),
+  }),
+});</pre>
+        </div>
+        <div class="sdk-code" data-lang="typescript" data-mode="proxy" data-src="demos/typescript/ai-sdk/proxy.ts">
+          <h3 class="sdk-code-h">TypeScript · Proxy <span>demos/typescript/ai-sdk/proxy.ts</span></h3>
+<pre data-lang="ts" data-hl><span class="tk-kw">import</span> { init, proxyBaseUrl } <span class="tk-kw">from</span> <span class="tk-str">"@gascoigne-ai/sdk"</span>;
+
+<span class="tk-com">// 1. Start gascoigne.</span>
+<span class="tk-fn">init</span>({ agent: <span class="tk-str">"vercel-ai-sdk"</span> });
+
+<span class="tk-com">// 2. Send LLM traffic through the gascoigne proxy.</span>
+<span class="tk-kw">const</span> baseURL = (<span class="tk-kw">await</span> <span class="tk-fn">proxyBaseUrl</span>(<span class="tk-str">"openai"</span>)) ?? openrouter.baseURL;
+
+<span class="tk-kw">const</span> openRouter = <span class="tk-fn">createOpenRouter</span>({ apiKey: openrouter.apiKey, baseURL });</pre>
+        </div>
+        <div class="sdk-code" data-lang="go" data-mode="wrap" data-src="docs/install.md">
+          <h3 class="sdk-code-h">Go · Wrap <span>docs/install.md</span></h3>
+<pre data-lang="go" data-hl><span class="tk-kw">import</span> <span class="tk-str">"github.com/gascoigne-ai/gascoigne-sdk/go/gascoigne"</span>
+
+rt := gascoigne.<span class="tk-fn">New</span>(gascoigne.Options{Agent: <span class="tk-str">"my-app"</span>})
+logs := rt.<span class="tk-fn">WrapTool</span>(searchTool)       <span class="tk-com">// any value with Name, Description and Call</span></pre>
+        </div>
+        <div class="sdk-code" data-lang="go" data-mode="proxy" data-src="demos/go/langchaingo/proxy/main.go">
+          <h3 class="sdk-code-h">Go · Proxy <span>demos/go/langchaingo/proxy/main.go</span></h3>
+<pre data-lang="go" data-hl><span class="tk-com">// 1. Start gascoigne.</span>
+rt := gascoigne.<span class="tk-fn">New</span>(gascoigne.Options{Agent: <span class="tk-str">"langchaingo"</span>})
+
+<span class="tk-com">// 2. Send LLM traffic through the gascoigne proxy.</span>
+baseURL := cmp.<span class="tk-fn">Or</span>(rt.<span class="tk-fn">ProxyBaseURL</span>(ctx, <span class="tk-str">"openai"</span>), cfg.BaseURL)
+
+llm, <span class="tk-kw">err</span> := openai.<span class="tk-fn">New</span>(
+	openai.<span class="tk-fn">WithBaseURL</span>(baseURL),
+	openai.<span class="tk-fn">WithToken</span>(cfg.APIKey),
+	openai.<span class="tk-fn">WithModel</span>(cfg.Model),
+)</pre>
+        </div>
+        <div class="sdk-code" data-lang="java" data-mode="wrap" data-src="demos/java/spring-ai/wrap/…/LogTools.java">
+          <h3 class="sdk-code-h">Java · Wrap <span>demos/java/spring-ai/wrap/…/LogTools.java</span></h3>
+<pre data-lang="java" data-hl><span class="tk-kw">@Tool</span>(name = <span class="tk-str">"search_logs"</span>, description = <span class="tk-str">"Return the recent service logs."</span>)
+<span class="tk-kw">String</span> <span class="tk-fn">searchLogs</span>() {
+    <span class="tk-com">// 2. Optimize what the tool returns.</span>
+    <span class="tk-kw">return</span> gascoigne.<span class="tk-fn">optimize</span>(Demo.<span class="tk-fn">noisyLogs</span>(), Attrs.<span class="tk-fn">tool</span>(<span class="tk-str">"search_logs"</span>));
+}</pre>
+        </div>
+        <div class="sdk-code" data-lang="java" data-mode="proxy" data-src="demos/java/spring-ai/proxy/…/Application.java">
+          <h3 class="sdk-code-h">Java · Proxy <span>demos/java/spring-ai/proxy/…/Application.java</span></h3>
+<pre data-lang="java" data-hl><span class="tk-com">// 1. Start gascoigne.</span>
+Gascoigne gascoigne = Gascoigne.<span class="tk-fn">builder</span>().<span class="tk-fn">agent</span>(<span class="tk-str">"spring-ai"</span>).<span class="tk-fn">build</span>();
+
+<span class="tk-com">// 2. Send LLM traffic through the gascoigne proxy.</span>
+<span class="tk-kw">String</span> baseUrl = gascoigne.<span class="tk-fn">proxyBaseUrl</span>(<span class="tk-str">"openai"</span>).<span class="tk-fn">orElse</span>(openRouter.<span class="tk-fn">baseUrl</span>());</pre>
+        </div>
+        <div class="sdk-code" data-lang="java" data-mode="auto" data-src="demos/java/spring-ai/auto/…/Application.java">
+          <h3 class="sdk-code-h">Java · Auto <span>demos/java/spring-ai/auto/…/Application.java</span></h3>
+<pre data-lang="java" data-hl><span class="tk-com">// 1. Opt in, explicitly: without this annotation nothing is decorated.</span>
+<span class="tk-kw">@EnableGascoigne</span>(skip = {<span class="tk-str">"write_file"</span>, <span class="tk-str">"retrieve_original"</span>})
+<span class="tk-kw">@SpringBootApplication</span>
+<span class="tk-kw">public</span> <span class="tk-kw">class</span> Application {</pre>
+        </div>
+        <div class="sdk-code" data-lang="dotnet" data-mode="wrap" data-src="demos/dotnet/microsoft-extensions-ai/wrap/Program.cs">
+          <h3 class="sdk-code-h">.NET · Wrap <span>demos/dotnet/microsoft-extensions-ai/wrap/Program.cs</span></h3>
+<pre data-lang="cs" data-hl><span class="tk-com">// 1. Start gascoigne.</span>
+<span class="tk-kw">using</span> <span class="tk-kw">var</span> gascoigne = <span class="tk-kw">new</span> <span class="tk-fn">GascoigneClient</span>(<span class="tk-kw">new</span> GascoigneOptions
+{
+    Agent = <span class="tk-str">"microsoft-extensions-ai"</span>,
+    OnResult = Kit.Observe,
+});
+
+<span class="tk-kw">var</span> searchLogs = AIFunctionFactory.<span class="tk-fn">Create</span>(
+    <span class="tk-com">// 2. Optimize what the tool returns.</span>
+    () =&gt; gascoigne.<span class="tk-fn">OptimizeAsync</span>(Kit.<span class="tk-fn">NoisyLogs</span>(), <span class="tk-kw">new</span> Attrs { Tool = <span class="tk-str">"search_logs"</span> }),
+    <span class="tk-str">"search_logs"</span>,
+    <span class="tk-str">"Return the recent service logs."</span>);</pre>
+        </div>
+        <div class="sdk-code" data-lang="dotnet" data-mode="auto" data-src="demos/dotnet/microsoft-extensions-ai/auto/Program.cs">
+          <h3 class="sdk-code-h">.NET · Auto <span>demos/dotnet/microsoft-extensions-ai/auto/Program.cs</span></h3>
+<pre data-lang="cs" data-hl>    <span class="tk-com">// 2. Opt in, explicitly: without this call nothing is decorated.</span>
+    .<span class="tk-fn">UseFunctionInvocation</span>(configure: c =&gt; c.<span class="tk-fn">UseGascoigne</span>(
+        gascoigne, <span class="tk-kw">new</span> GascoigneToolOptions { Skip = [<span class="tk-str">"retrieve_original"</span>] }))
+    .<span class="tk-fn">Build</span>();</pre>
+        </div>
+        <div class="sdk-code" data-lang="rust" data-mode="wrap" data-src="demos/rust/plain/wrap.rs">
+          <h3 class="sdk-code-h">Rust · Wrap <span>demos/rust/plain/wrap.rs</span></h3>
+<pre data-lang="rust" data-hl><span class="tk-com">// 1. Start gascoigne.</span>
+<span class="tk-kw">let</span> rt = Runtime::<span class="tk-fn">new</span>(<span class="tk-str">"rust-demo"</span>);
+
+<span class="tk-com">// 2. Optimize the tool result.</span>
+<span class="tk-kw">let</span> res = rt.<span class="tk-fn">optimize_result</span>(&amp;<span class="tk-fn">noisy_log</span>(), &amp;Attrs::<span class="tk-fn">tool</span>(<span class="tk-str">"search_logs"</span>));</pre>
+        </div>
+        <p class="sdk-note" hidden></p>
+      </div>
+      </div>
+      <div class="sdk-side">
+      <figure class="sdk-strip anim" role="img" aria-label="Animation: the tool result of 12,025 tokens shrinks to the 142 tokens the model reads.">
+        <div class="row"><span class="lab">Tool result</span><span class="track"><i class="full"></i></span><span class="val">12,025 tokens</span></div>
+        <div class="row"><span class="lab">Model reads</span><span class="track"><i class="shrink"></i></span><span class="val sw"><span class="b">12,025 tokens</span><span class="a">142 tokens</span></span></div>
+        <figcaption>The SDK README's noisy log, one example: 12,025 → 142 tokens, original one <code>raw</code> call away.</figcaption>
+      </figure>
+      <div class="sdk-meta" data-lang="python">
+        <div class="sdk-install">
+          <span class="k">Install <span class="tag">py-v0.9.0</span></span>
+          <code data-lang="sh" data-hl><span class="tk-cmd">uv</span> add <span class="tk-path">https://github.com/gascoigne-ai/gascoigne-sdk/releases/download/py-v0.9.0/gascoigne-0.9.0-py3-none-any.whl</span></code>
+          <span class="how">release wheel; pip works with the same URL. <a href="https://github.com/gascoigne-ai/gascoigne-sdk/blob/master/docs/install.md#python">Install guide</a></span>
+        </div>
+        <ul class="fw" aria-label="Python framework demos"><li>LangChain</li><li>LangGraph</li><li>Agno</li><li>Google ADK</li><li>OpenAI Agents</li><li>Pydantic AI</li><li>smolagents</li></ul>
+      </div>
+      <div class="sdk-meta" data-lang="typescript">
+        <div class="sdk-install">
+          <span class="k">Install <span class="tag">ts-v0.9.0</span></span>
+          <code data-lang="sh" data-hl><span class="tk-cmd">npm</span> install @gascoigne-ai/sdk @gascoigne-ai/ai-sdk</code>
+          <span class="how">GitHub Packages (needs a token), or the release tarballs. <a href="https://github.com/gascoigne-ai/gascoigne-sdk/blob/master/docs/install.md#typescript">Install guide</a></span>
+        </div>
+        <ul class="fw" aria-label="TypeScript framework demos"><li>Vercel AI SDK</li><li>LangChain.js</li><li>OpenAI Agents JS</li><li>Mastra</li></ul>
+      </div>
+      <div class="sdk-meta" data-lang="go">
+        <div class="sdk-install">
+          <span class="k">Install <span class="tag">go/v0.9.0</span></span>
+          <code data-lang="sh" data-hl><span class="tk-cmd">go</span> get github.com/gascoigne-ai/gascoigne-sdk/go@v0.9.0</code>
+          <span class="how">Go modules, from the git repo. <a href="https://github.com/gascoigne-ai/gascoigne-sdk/blob/master/docs/install.md#go">Install guide</a></span>
+        </div>
+        <ul class="fw" aria-label="Go framework demos"><li>langchaingo</li></ul>
+      </div>
+      <div class="sdk-meta" data-lang="java">
+        <div class="sdk-install">
+          <span class="k">Install <span class="tag">java-v0.9.0</span></span>
+          <code data-lang="sh" data-hl><span class="tk-cmd">ai.gascoigne</span>:gascoigne:0.9.0</code>
+          <span class="how">Maven, from GitHub Packages; gascoigne-spring-ai for the annotation. <a href="https://github.com/gascoigne-ai/gascoigne-sdk/blob/master/docs/install.md#java">Install guide</a></span>
+        </div>
+        <ul class="fw" aria-label="Java framework demos"><li>Spring AI</li><li>LangChain4j</li></ul>
+      </div>
+      <div class="sdk-meta" data-lang="dotnet">
+        <div class="sdk-install">
+          <span class="k">Install <span class="tag">dotnet-v0.9.0</span></span>
+          <code data-lang="sh" data-hl><span class="tk-cmd">dotnet</span> add package Gascoigne.Extensions.AI <span class="tk-flag">--version</span> 0.9.0</code>
+          <span class="how">release .nupkg as a local source, or GitHub Packages. <a href="https://github.com/gascoigne-ai/gascoigne-sdk/blob/master/docs/install.md#net">Install guide</a></span>
+        </div>
+        <ul class="fw" aria-label=".NET framework demos"><li>Microsoft.Extensions.AI</li></ul>
+      </div>
+      <div class="sdk-meta" data-lang="rust">
+        <div class="sdk-install">
+          <span class="k">Install <span class="tag">rust-v0.9.0</span></span>
+          <code data-lang="sh" data-hl><span class="tk-cmd">cargo</span> add gascoigne <span class="tk-flag">--git</span> <span class="tk-path">https://github.com/gascoigne-ai/gascoigne-sdk</span> <span class="tk-flag">--tag</span> rust-v0.9.0</code>
+          <span class="how">from the git repo. <a href="https://github.com/gascoigne-ai/gascoigne-sdk/blob/master/docs/install.md#rust">Install guide</a></span>
+        </div>
+        <ul class="fw" aria-label="Rust framework demos"><li class="none">no framework demo, it optimizes a log</li></ul>
+      </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="table-wrap" style="margin-top:1.5rem">
+  <table>
+    <thead><tr><th scope="col"></th><th scope="col">Native</th><th scope="col">Proxy (default)</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">Transport</th><td>FFI into <code>libgascoigne</code>, in your process</td><td>HTTP to the local <code>gascoigne server</code></td></tr>
+      <tr><th scope="row">Needs</th><td>the library, found through <code>$GASCOIGNE_LIB</code> or the system directories</td><td>the <code>gascoigne</code> CLI</td></tr>
+      <tr><th scope="row">LLM proxy URL</th><td>none</td><td><code>proxy_base_url("openai")</code></td></tr>
+      <tr><th scope="row">Choose it when</th><td>one process, no daemon, lowest latency</td><td>the server is shared with agents, or the library cannot be loaded</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="fine">Select with <code>GASCOIGNE_MODE=native|proxy</code> or in code: <code>init(mode="native")</code>. The library
+    merges its defaults, your user config and the settings you pass. The SDK itself stays thin and never carries the
+    library; add the optional per-platform package, or point <code>GASCOIGNE_LIB</code> at a file.</p>
+</section>
+
+<section id="install">
+  <h2>Install</h2>
+  <p class="intro">Every SDK carries the CLI's version number (0.9.0). They are installed from GitHub releases and
+    GitHub Packages; they are not on PyPI, npmjs, crates.io or Maven Central yet.
+    The <a href="https://github.com/gascoigne-ai/gascoigne-sdk/blob/master/docs/install.md">install guide</a> has the details per language.</p>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th scope="col">Language</th><th scope="col">Tag</th><th scope="col">Install</th><th scope="col">Native package</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">Python</th><td><code>py-v0.9.0</code></td><td>release wheel or git</td><td><code>gascoigne-native</code></td></tr>
+      <tr><th scope="row">TypeScript</th><td><code>ts-v0.9.0</code></td><td><code>npm install @gascoigne-ai/sdk</code></td><td><code>@gascoigne-ai/sdk-native</code> and <code>koffi</code></td></tr>
+      <tr><th scope="row">Go</th><td><code>go/v0.9.0</code></td><td><code>go get github.com/gascoigne-ai/gascoigne-sdk/go@v0.9.0</code></td><td><code>native/embedded</code>, engine linked in</td></tr>
+      <tr><th scope="row">Java</th><td><code>java-v0.9.0</code></td><td><code>ai.gascoigne:gascoigne:0.9.0</code></td><td><code>ai.gascoigne:gascoigne-native</code> and <code>jna</code></td></tr>
+      <tr><th scope="row">.NET</th><td><code>dotnet-v0.9.0</code></td><td><code>Gascoigne.Extensions.AI</code> 0.9.0</td><td><code>Gascoigne.Native.&lt;rid&gt;</code></td></tr>
+      <tr><th scope="row">Rust</th><td><code>rust-v0.9.0</code></td><td><code>cargo add gascoigne --git … --tag rust-v0.9.0</code></td><td><code>gascoigne-native</code>, feature <code>native</code></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="fine">Proxy mode also needs the CLI: <a href="../#install">install gascoigne</a> first. Releases are signed
+    (<a href="https://github.com/gascoigne-ai/gascoigne-sdk/blob/master/docs/verifying.md">how to verify</a>).</p>
+</section>
+
+<section id="demos" class="band">
+  <h2>Demos</h2>
+  <p class="intro">Fifteen working agents under <code>demos/&lt;language&gt;/&lt;framework&gt;/&lt;mode&gt;</code>, each a main file plus
+    the two lines that add gascoigne. They use OpenRouter; set <code>GASCOIGNE_DEMO_DRY=1</code> to run a tool without a key.</p>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th scope="col">Language</th><th scope="col">Frameworks</th><th scope="col">Run</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">Python</th><td>LangChain, LangGraph, Agno, Google ADK, OpenAI Agents, Pydantic AI, smolagents</td><td><code>cd demos/python &amp;&amp; uv run --extra langgraph python langgraph/wrap.py</code></td></tr>
+      <tr><th scope="row">TypeScript</th><td>Vercel AI SDK, LangChain.js, OpenAI Agents JS, Mastra</td><td><code>cd demos/typescript &amp;&amp; pnpm install &amp;&amp; pnpm ai-sdk:wrap</code></td></tr>
+      <tr><th scope="row">Java</th><td>Spring AI, LangChain4j</td><td>see <code>demos/README.md</code></td></tr>
+      <tr><th scope="row">.NET</th><td>Microsoft.Extensions.AI</td><td><code>cd demos/dotnet &amp;&amp; dotnet run --project microsoft-extensions-ai/wrap</code></td></tr>
+      <tr><th scope="row">Go</th><td>langchaingo</td><td><code>cd demos/go &amp;&amp; go run ./langchaingo/wrap</code></td></tr>
+      <tr><th scope="row">Rust</th><td>none, it optimizes a log</td><td><code>cd demos/rust/plain &amp;&amp; cargo run</code></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <ul class="callouts">
+    <li><b>MCP servers:</b> auto mode follows them through Python's <code>mcp</code> client, Spring AI and Microsoft.Extensions.AI; on the command line <code>gascoigne mcp-proxy</code> covers any stdio server.</li>
+    <li><b>Browser snapshots:</b> the same engines run behind the SDK, so a shortened accessibility tree keeps every <code>ref</code> the agent may click.</li>
+  </ul>
+  <p class="fine">The wire contract is <a href="https://github.com/gascoigne-ai/gascoigne-sdk/blob/master/spec/protocol.md"><code>spec/protocol.md</code></a>,
+    the native ABI <a href="https://github.com/gascoigne-ai/gascoigne-sdk/blob/master/spec/native.md"><code>spec/native.md</code></a>.
+    <a href="https://github.com/gascoigne-ai/gascoigne-sdk">SDK repository</a>,
+    <a href="https://github.com/gascoigne-ai/gascoigne-sdk/blob/master/CHANGELOG.md">changelog</a>.</p>
+</section>
+
+</main>
+
+<footer>
+  <svg class="moon" data-saved="0.95" width="22" height="22" aria-hidden="true"></svg>
+  <p>gascoigne is open source under the <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/LICENSE">Apache License 2.0</a>.
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli">Source</a>,
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/docs/agents.md">agents guide</a> and
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/docs/cli.md">CLI reference</a>.</p>
+</footer>
+
+<script src="../assets/site.js?v=20261102"></script>
+</body>
+</html>

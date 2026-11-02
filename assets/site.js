@@ -312,7 +312,7 @@ if (sdk) {
   const file = sdk.querySelector(".sdk-file");
   const copy = sdk.querySelector("[data-copy-code]");
   const AUTO = "Python, Java (Spring AI) and .NET (Microsoft.Extensions.AI)";
-  let mode = "wrap", lang = "python", current = null;
+  let mode = sdk.dataset.defaultMode || "wrap", lang = "python", current = null;
 
   const render = () => {
     const name = langTabs.find(t => t.dataset.lang === lang).textContent;

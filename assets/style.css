@@ -692,3 +692,8 @@ code.cmd { display: block; width: max-content; max-width: 100%; overflow-x: auto
 .kicker::before { content: ""; display: inline-block; width: 0.5em; height: 0.5em; margin-right: 0.6em; border-radius: 50%; background: var(--term-hint); }
 .slogan { max-width: var(--measure); margin: 0 0 1.5rem; color: var(--muted); }
 .slogan b { color: var(--accent); font-family: var(--font-display); }
+
+/* SDK page: the same output before and after, side by side */
+.ba-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr)); gap: 1rem 1.5rem; margin: 0 0 1.5rem; }
+.snippet-fig { margin: 0; display: grid; gap: 0.5rem; align-content: start; min-width: 0; }
+.snippet-fig .snippet { margin: 0; }

@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>gascoigne 0.9.0 — smarter log folding and an SDK that runs in your process</title>
+<meta name="description" content="gascoigne 0.9.0 folds logs smarter, gives sources fetched raw a gentler route, lets mcp-review apply savings, and adds an in-process facade that powers the SDK native mode.">
+<meta property="og:title" content="gascoigne 0.9.0">
+<meta property="og:description" content="Smarter log folding, MCP auto-optimize and SDKs that run in your process.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23ECE4E2'/%3E%3Cpath d='M16 2A14 14 0 0 0 16 30A7 14 0 0 0 16 2Z' fill='%234A1A2C'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css?v=20261102">
+</head>
+<body>
+
+<svg width="0" height="0" class="defs" aria-hidden="true">
+  <defs>
+    <radialGradient id="moon-lit" cx="38%" cy="32%" r="72%"><stop offset="0" stop-color="#fffdfb"/><stop offset=".6" stop-color="#ece4e2"/><stop offset="1" stop-color="#c9bcbf"/></radialGradient>
+    <radialGradient id="moon-dark" cx="60%" cy="60%" r="70%"><stop offset="0" stop-color="#4a1a2c"/><stop offset="1" stop-color="#2a0c17"/></radialGradient>
+  </defs>
+</svg>
+
+<div class="night">
+<header class="top">
+  <a class="brand" href="../../">
+    <svg class="moon" data-saved="0.85" width="28" height="28" aria-hidden="true"></svg>
+    gascoigne
+  </a>
+  <nav>
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/CHANGELOG.md">Changelog</a>
+    <a href="../../sdk/">SDK</a>
+    <a href="https://github.com/gascoigne-ai">GitHub</a>
+  </nav>
+</header>
+
+
+<section class="hero release-hero">
+  <div class="hero-text">
+    <p class="fine"><time datetime="2026-11-02">2 November 2026</time></p>
+    <h1><span>gascoigne 0.9.0</span> <span>Smarter folding, and an engine you can embed.</span></h1>
+    <p class="lede">Logs fold by Drain templates, sources the agent keeps fetching raw get a gentler route,
+      <code>mcp-review</code> applies the savings it finds, and every SDK can run the engine inside your own process.</p>
+    <div class="oneliner">
+      <code id="up1">go install github.com/gascoigne-ai/gascoigne-cli/cmd/gascoigne@latest</code>
+      <button class="copy" data-copy="up1" type="button">Copy</button>
+    </div>
+    <p class="fine">Starting fresh? <a href="../../#install">Install it</a> first. Coming from 0.8.0: <a href="../0.8.0/">session-level savings</a>.</p>
+  </div>
+</section>
+</div>
+
+<main>
+
+<section id="new">
+  <h2>What's new</h2>
+
+  <h3>SDK 0.9.0: native mode</h3>
+  <p class="intro">The SDKs now share the CLI's version number. Every one of them (Python, TypeScript, Go, Java, .NET,
+    Rust) can load <code>libgascoigne</code> and run the engine in the application process: no server, no
+    <code>gascoigne</code> binary on the <code>PATH</code>. The Go CLI exposes the same pipeline as a public
+    <code>inproc</code> package. See the <a href="../../sdk/">SDK page</a> for examples.</p>
+
+  <h3>Log folding</h3>
+  <ul>
+    <li><code>miner: drain</code> folds lines that differ in a few words (host, user) by Drain template clusters; warnings and errors never merge.</li>
+    <li><code>outliers: mad</code> keeps spikes the 10x median rule misses, <code>bursts</code> says where a template's repeats cluster (<code>mostly lines 661–687</code>), and <code>rarity</code> keeps the entries standing for the fewest lines.</li>
+    <li>Codes stay apart: one <code>status=503</code> among <code>status=200</code> lines is no longer folded into them. <code>passes</code> picks the stages that run before templating.</li>
+    <li><code>truncate</code> can pick query lines by maximal marginal relevance (<code>query_diverse</code>), so near-identical matches do not fill the budget.</li>
+  </ul>
+
+  <h3>Sources fetched raw get a gentler route</h3>
+  <p class="intro">When the agent fetches the whole original after an optimized result, that source takes a
+    <code>gentle</code> route (the same chain, less aggressive) before it is bypassed. A whole family goes gentle
+    when too many of its results are fetched raw, and optimized runs forgive failures. <code>gain -refetch</code>
+    shows how often each family was fetched raw afterwards.</p>
+
+  <h3>MCP review applies what it finds</h3>
+  <ul>
+    <li>Servers and tools are sorted by usage, with suggestions: tools not called in 7 days to load on request, and advice for the agent's own config (switch an unused server off, <code>max_tools</code>, <code>trim_descriptions</code>).</li>
+    <li>The <em>Auto-optimize</em> button, or <code>gascoigne mcp-review -optimize</code>, adds the suggested lazy tools from the next session. Nothing is removed.</li>
+  </ul>
+
+  <h3>More</h3>
+  <ul>
+    <li><code>replay -set</code> compares settings on the same transcripts; pipelines list their active optimizers under <code>optimizers:</code>.</li>
+    <li>Advice on 1-hour cache pauses in <code>context</code>; <code>prompts</code> flags skills and subagents no transcript shows.</li>
+    <li>The dashboard opens the setup page once after an upgrade, and its Change button opens it with a token.</li>
+  </ul>
+</section>
+
+<section id="upgrade" class="band">
+  <h2>Upgrade</h2>
+  <div class="steps">
+    <div>
+      <h3>1. Install the new version</h3>
+      <div class="oneliner">
+        <code id="u-go">go install github.com/gascoigne-ai/gascoigne-cli/cmd/gascoigne@latest</code>
+        <button class="copy" data-copy="u-go" type="button">Copy</button>
+      </div>
+      <p class="fine">Or download an archive from the <a href="https://github.com/gascoigne-ai/gascoigne-cli/releases/tag/v0.9.0">release</a>.
+        The background server notices the new binary and restarts itself.</p>
+    </div>
+    <div>
+      <h3>2. Check two defaults</h3>
+      <p class="fine"><code>history.max_failures</code> is now 2 (was 1): the first failure gets the gentle route, the second bypasses.
+        Set it to 1 for the old behavior. The <code>passthrough</code> optimizer is gone; use <code>optimizers: []</code>
+        to leave an output as it is.</p>
+    </div>
+  </div>
+</section>
+
+<section id="more">
+  <h2>More</h2>
+  <p class="intro">The full list is in the
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/CHANGELOG.md">changelog</a>, and
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/releases/tag/v0.9.0">release notes and downloads</a>
+    are on GitHub. Back to the <a href="../../">gascoigne home page</a>.</p>
+</section>
+
+</main>
+
+<footer>
+  <svg class="moon" data-saved="0.95" width="22" height="22" aria-hidden="true"></svg>
+  <p>gascoigne is open source under the <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/LICENSE">Apache License 2.0</a>.
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli">Source</a>,
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/docs/agents.md">agents guide</a> and
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/docs/cli.md">CLI reference</a>.</p>
+</footer>
+
+<script src="../../assets/site.js?v=20261102"></script>
+</body>
+</html>
