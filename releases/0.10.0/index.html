@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>gascoigne 0.10.0 — your own optimizer, your own prices</title>
+<meta name="description" content="gascoigne 0.10.0 adds external optimizers, plan-or-API cost detection with prices of your own, a manual MCP mode, and SDKs that read their savings.">
+<meta property="og:title" content="gascoigne 0.10.0">
+<meta property="og:description" content="Run your own optimizer, set your own prices, choose manual MCP.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23ECE4E2'/%3E%3Cpath d='M16 2A14 14 0 0 0 16 30A7 14 0 0 0 16 2Z' fill='%234A1A2C'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/style.css?v=20261102">
+</head>
+<body>
+
+<svg width="0" height="0" class="defs" aria-hidden="true">
+  <defs>
+    <radialGradient id="moon-lit" cx="38%" cy="32%" r="72%"><stop offset="0" stop-color="#fffdfb"/><stop offset=".6" stop-color="#ece4e2"/><stop offset="1" stop-color="#c9bcbf"/></radialGradient>
+    <radialGradient id="moon-dark" cx="60%" cy="60%" r="70%"><stop offset="0" stop-color="#4a1a2c"/><stop offset="1" stop-color="#2a0c17"/></radialGradient>
+  </defs>
+</svg>
+
+<div class="night">
+<header class="top">
+  <a class="brand" href="../../">
+    <svg class="moon" data-saved="0.85" width="28" height="28" aria-hidden="true"></svg>
+    gascoigne
+  </a>
+  <nav>
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/CHANGELOG.md">Changelog</a>
+    <a href="../../sdk/">SDK</a>
+    <a href="https://github.com/gascoigne-ai">GitHub</a>
+  </nav>
+</header>
+
+
+<section class="hero release-hero">
+  <div class="hero-text">
+    <p class="fine"><time datetime="2026-11-05">5 November 2026</time></p>
+    <h1><span>gascoigne 0.10.0</span> <span>Your own optimizer, your own prices.</span></h1>
+    <p class="lede">Run a program of yours as an optimizer, let gascoigne tell a flat plan from an API key, and choose
+      whether your agent calls MCP itself. The SDKs move to 0.10.0 with it.</p>
+    <div class="oneliner">
+      <code id="up1">go install github.com/gascoigne-ai/gascoigne-cli/cmd/gascoigne@latest</code>
+      <button class="copy" data-copy="up1" type="button">Copy</button>
+    </div>
+    <p class="fine">Starting fresh? <a href="../../#install">Install it</a> first. Coming from 0.9.1: <a href="../0.9.1/">what 0.9.1 fixed</a>.</p>
+  </div>
+</section>
+</div>
+
+<main>
+
+<section id="new">
+  <h2>What's new</h2>
+
+  <h3>Your own optimizer</h3>
+  <p class="intro"><strong>What you get:</strong> a script or binary of yours shortens the output of the commands you
+    route to it, with no Go and no fork. It speaks text, JSON or RPC. The original stays retrievable through
+    <code>[raw:&lt;id&gt;]</code>, a failure returns the original output, and it is read from your own config only,
+    never from a repository's. See the
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/docs/external-optimizer.md">contract</a>.</p>
+
+  <h3>Plan or API, found out for you</h3>
+  <p class="intro"><strong>What you get:</strong> gascoigne looks at how each agent is signed in and leaves agents on a
+    flat plan out of the dollar figures; the Context page shows requests and context sizes for them instead.
+    <code>gascoigne pricing</code> sets prices of your own, from a price sheet or a URL that refreshes daily.</p>
+
+  <h3>Automatic or manual MCP</h3>
+  <p class="intro"><strong>What you get:</strong> <code>install -mcp manual</code> stops the hooks rewriting results, so
+    your agent calls gascoigne's tools itself. Automatic stays the default.</p>
+
+  <h3>Shorter results and guide</h3>
+  <p class="intro"><strong>What you get:</strong> shortened output ends with <code>[raw:&lt;id&gt;]</code> instead of a
+    hint with token counts, and the usage guide is short only.</p>
+
+  <h3>SDKs 0.10.0</h3>
+  <p class="intro"><strong>What you get:</strong> every SDK reads <code>totals</code>, <code>runs</code> and
+    <code>costs</code> of the savings it produced, and can keep its ledger in memory. See the
+    <a href="../../sdk/">SDK page</a>.</p>
+</section>
+
+<section id="upgrade" class="band">
+  <h2>Upgrade</h2>
+  <div class="steps">
+    <div>
+      <h3>1. Install the new version</h3>
+      <div class="oneliner">
+        <code id="u-go">go install github.com/gascoigne-ai/gascoigne-cli/cmd/gascoigne@latest</code>
+        <button class="copy" data-copy="u-go" type="button">Copy</button>
+      </div>
+      <p class="fine">Or download an archive from the <a href="https://github.com/gascoigne-ai/gascoigne-cli/releases/tag/v0.10.0">release</a>.
+        The background server notices the new binary and restarts itself.</p>
+    </div>
+    <div>
+      <h3>2. Check two defaults</h3>
+      <p class="fine">Billing is now detected per agent (<code>billing: auto</code>), so agents on a flat plan lose their
+        dollar figures. A saved <code>full</code> usage guide reads as <code>short</code>. Nothing else is migrated.</p>
+    </div>
+  </div>
+</section>
+
+<section id="more">
+  <h2>More</h2>
+  <p class="intro">The full list is in the
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/CHANGELOG.md">changelog</a>, and
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/releases/tag/v0.10.0">release notes and downloads</a>
+    are on GitHub. Back to the <a href="../../">gascoigne home page</a>.</p>
+</section>
+
+</main>
+
+<footer>
+  <svg class="moon" data-saved="0.95" width="22" height="22" aria-hidden="true"></svg>
+  <p>gascoigne is open source under the <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/LICENSE">Apache License 2.0</a>.
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli">Source</a>,
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/docs/agents.md">agents guide</a> and
+    <a href="https://github.com/gascoigne-ai/gascoigne-cli/blob/master/docs/cli.md">CLI reference</a>.</p>
+</footer>
+
+<script src="../../assets/site.js?v=20261102"></script>
+</body>
+</html>
